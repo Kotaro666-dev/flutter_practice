@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:online_supermarket/views/payment/payment_page.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/models/item.dart';
@@ -19,7 +20,6 @@ class HomePage extends StatelessWidget {
         key: key,
         create: (_context) => HomePageModel(
           store: store,
-          context: context,
         ),
         child: const HomePage._(),
       );
@@ -113,8 +113,12 @@ class ShoppingCartIcon extends StatelessWidget {
     final model = Provider.of<HomePageModel>(context);
     return GestureDetector(
       onTap: () {
-        // 会計ページに遷移
-        print(model.calculateSum());
+        Navigator.push<PaymentPage>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentPage(store: model.store),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(

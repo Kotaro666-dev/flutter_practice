@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:redux/redux.dart';
-import 'package:online_supermarket/models/item.dart';
 import 'package:online_supermarket/redux/action.dart';
 import 'package:online_supermarket/redux/state.dart';
 
 class HomePageModel extends ChangeNotifier {
   HomePageModel({
     @required Store<AppState> store,
-    @required BuildContext context,
-  })  : _store = store,
-        _context = context {
+  }) : _store = store {
     _initialize();
   }
 
   final Store<AppState> _store;
-  final BuildContext _context;
 
   void _initialize() {
     _totalItemCount = 0;
@@ -28,6 +23,8 @@ class HomePageModel extends ChangeNotifier {
 
   int _totalPrice;
   int get totalPrice => _totalPrice;
+
+  Store<AppState> get store => _store;
 
   bool isVisible() {
     for (final item in _store.state.itemList) {

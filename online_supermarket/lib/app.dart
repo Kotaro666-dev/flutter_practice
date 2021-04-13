@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/reducer.dart';
 import 'package:online_supermarket/redux/state.dart';
-import 'package:online_supermarket/views/home_page.dart';
+import 'package:online_supermarket/views/home/home_page.dart';
 
 class MyApp extends StatelessWidget {
   final Store<AppState> _store = Store<AppState>(
