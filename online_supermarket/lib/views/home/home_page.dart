@@ -44,53 +44,90 @@ class HomePage extends StatelessWidget {
               ),
               itemCount: stateItemList.length,
               itemBuilder: (context, index) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                return Stack(
                   children: [
-                    // Text(stateItemList[index].name),
-                    Image(
-                      width: 50,
-                      image: AssetImage(
-                        stateItemList[index].imagePath,
-                      ),
-                    ),
-                    Text('${stateItemList[index].price} 円'),
-                    // Text('${stateItemList[index].count} 個'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton(
-                            child: const Icon(
-                              Icons.remove,
+                    if (model.store.state.itemList[index].count != 0)
+                      Positioned(
+                        right: 70,
+                        top: 10,
+                        child: SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
+                            child: Center(
+                              child: Text(
+                                '${model.store.state.itemList[index].count}',
+                                style: const TextStyle(
+                                  color: Colors.white,
                                 ),
-                              ),
-                              primary: stateItemList[index].count != 0
-                                  ? Colors.redAccent
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              if (stateItemList[index].count == 0) {
-                                return;
-                              }
-                              model.onTapDecrementIcon(index);
-                            }),
-                        ElevatedButton(
-                          child: const Icon(Icons.add),
-                          style: ElevatedButton.styleFrom(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
                               ),
                             ),
                           ),
-                          onPressed: () {
-                            model.onTapIncrementIcon(index, context);
-                          },
+                        ),
+                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // Text(stateItemList[index].name),
+                        Image(
+                          width: 50,
+                          image: AssetImage(
+                            stateItemList[index].imagePath,
+                          ),
+                        ),
+                        Text('¥ ${stateItemList[index].price}'),
+                        // Text('${stateItemList[index].count} 個'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: ElevatedButton(
+                                  child: const Icon(
+                                    Icons.remove,
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.all(0),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                    ),
+                                    primary: stateItemList[index].count != 0
+                                        ? Colors.redAccent
+                                        : Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    if (stateItemList[index].count == 0) {
+                                      return;
+                                    }
+                                    model.onTapDecrementIcon(index);
+                                  }),
+                            ),
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: ElevatedButton(
+                                child: const Icon(Icons.add),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(30),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  model.onTapIncrementIcon(index, context);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -113,12 +150,7 @@ class ShoppingCartIcon extends StatelessWidget {
     final model = Provider.of<HomePageModel>(context);
     return GestureDetector(
       onTap: () {
-        Navigator.push<PaymentPage>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PaymentPage(store: model.store),
-          ),
-        );
+        model.onTapShoppingCartIcon(context);
       },
       child: Padding(
         padding: const EdgeInsets.only(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_supermarket/views/payment/payment_page.dart';
 
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/action.dart';
@@ -54,21 +55,23 @@ class HomePageModel extends ChangeNotifier {
 
   void _displaySnackBar(int index, BuildContext context) {
     final snackBar = SnackBar(
-        backgroundColor: Colors.lime,
-        duration: const Duration(milliseconds: 1500),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Image(
-              width: 50,
-              image: AssetImage(
-                _store.state.itemList[index].imagePath,
-              ),
+      backgroundColor: Colors.green,
+      duration: const Duration(milliseconds: 1500),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Image(
+            width: 50,
+            image: AssetImage(
+              _store.state.itemList[index].imagePath,
             ),
-            Text('${_store.state.itemList[index].price} 円'),
-            Text('$totalPrice 円'),
-          ],
-        ));
+          ),
+          Text('${_store.state.itemList[index].price} 円'),
+          Text('$totalPrice 円'),
+        ],
+      ),
+    );
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -81,5 +84,15 @@ class HomePageModel extends ChangeNotifier {
     _totalPrice -= _store.state.itemList[index].price;
     _totalItemCount--;
     notifyListeners();
+  }
+
+  void onTapShoppingCartIcon(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    Navigator.push<PaymentPage>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentPage(store: _store),
+      ),
+    );
   }
 }
