@@ -11,3 +11,13 @@ class DecrementItemAction {
 
   final Item updateItem;
 }
+
+class IncrementTotalSelectedItemCountAction {
+  IncrementTotalSelectedItemCountAction({this.totalItemSelectedCount});
+  int totalItemSelectedCount;
+}
+
+class DecrementTotalSelectedItemCountAction {
+  DecrementTotalSelectedItemCountAction({this.totalItemSelectedCount});
+  int totalItemSelectedCount;
+}

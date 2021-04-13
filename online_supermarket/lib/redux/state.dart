@@ -1,7 +1,7 @@
 import 'package:online_supermarket/models/item.dart';
 
 class AppState {
-  AppState({this.itemList});
+  AppState({this.itemList, this.totalSelectedItemCount});
 
   factory AppState.initialize() => AppState(
         itemList: <Item>[
@@ -46,7 +46,9 @@ class AppState {
               count: 0,
               price: 100),
         ],
+        totalSelectedItemCount: 0,
       );
 
   List<Item> itemList;
+  int totalSelectedItemCount;
 }
