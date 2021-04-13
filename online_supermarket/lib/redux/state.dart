@@ -31,20 +31,20 @@ class AppState {
               count: 0,
               price: 300),
           Item(
-              name: '豚肉',
-              imagePath: 'assets/images/pork.png',
+              name: '牛肉',
+              imagePath: 'assets/images/beef.png',
               count: 0,
-              price: 300),
+              price: 500),
           Item(
-              name: '豚肉',
-              imagePath: 'assets/images/pork.png',
+              name: '卵',
+              imagePath: 'assets/images/eggs.png',
               count: 0,
-              price: 300),
+              price: 200),
           Item(
-              name: '豚肉',
-              imagePath: 'assets/images/pork.png',
+              name: 'アボカド',
+              imagePath: 'assets/images/avocado.png',
               count: 0,
-              price: 300),
+              price: 100),
         ],
       );
 
