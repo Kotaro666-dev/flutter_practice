@@ -23,6 +23,8 @@ class PaymentPageModel extends ChangeNotifier {
   int _totalPrice;
   int get totalPrice => _totalPrice;
 
+  int get totalItemCount => _store.state.totalSelectedItemCount;
+
   void _initialize() {
     _itemList = _store.state.itemList;
     _calculateSum();
@@ -51,6 +53,9 @@ class PaymentPageModel extends ChangeNotifier {
     _totalPrice += _store.state.itemList[index].price;
     _store.dispatch(
         IncrementItemAction(updateItem: _store.state.itemList[index]));
+    // ignore: cascade_invocations
+    _store.dispatch(IncrementTotalSelectedItemCountAction(
+        totalItemSelectedCount: _store.state.totalSelectedItemCount));
     notifyListeners();
   }
 
@@ -58,6 +63,9 @@ class PaymentPageModel extends ChangeNotifier {
     _totalPrice -= _store.state.itemList[index].price;
     _store.dispatch(
         DecrementItemAction(updateItem: _store.state.itemList[index]));
+    // ignore: cascade_invocations
+    _store.dispatch(DecrementTotalSelectedItemCountAction(
+        totalItemSelectedCount: _store.state.totalSelectedItemCount));
     notifyListeners();
   }
 }

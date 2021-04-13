@@ -15,60 +15,56 @@ class HomePageModel extends ChangeNotifier {
   final Store<AppState> _store;
 
   void _initialize() {
-    _totalItemCount = 0;
-    _totalPrice = 0;
+    _calculateTotalPrice();
   }
-
-  int _totalItemCount;
-  int get totalItemCount => _totalItemCount;
 
   int _totalPrice;
   int get totalPrice => _totalPrice;
 
+  int get totalItemCount => _store.state.totalSelectedItemCount;
+
   Store<AppState> get store => _store;
 
-  bool isVisible() {
+  void _calculateTotalPrice() {
+    _totalPrice = 0;
     for (final item in _store.state.itemList) {
-      if (item.count != 0) {
-        return true;
-      }
+      _totalPrice += item.count * item.price;
     }
-    return false;
-  }
-
-  int calculateSum() {
-    var sum = 0;
-    for (final item in _store.state.itemList) {
-      sum += item.price * item.count;
-    }
-    return sum;
+    notifyListeners();
   }
 
   void onTapIncrementIcon(int index, BuildContext context) {
-    _totalPrice += _store.state.itemList[index].price;
-    _totalItemCount++;
+    _store
+      ..dispatch(IncrementItemAction(updateItem: _store.state.itemList[index]))
+      ..dispatch(IncrementTotalSelectedItemCountAction(
+          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+    _calculateTotalPrice();
     _displaySnackBar(index, context);
-    _store.dispatch(
-        IncrementItemAction(updateItem: _store.state.itemList[index]));
     notifyListeners();
   }
 
   void _displaySnackBar(int index, BuildContext context) {
     final snackBar = SnackBar(
-      backgroundColor: Colors.green,
-      duration: const Duration(milliseconds: 1500),
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Image(
-            width: 50,
-            image: AssetImage(
-              _store.state.itemList[index].imagePath,
+      backgroundColor: Colors.lightGreen,
+      duration: const Duration(milliseconds: 1000),
+      content: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Image(
+              width: 30,
+              image: AssetImage(
+                _store.state.itemList[index].imagePath,
+              ),
             ),
-          ),
-          Text('${_store.state.itemList[index].price} 円'),
-          Text('$totalPrice 円'),
-        ],
+            Text('小計（$totalItemCount 点)'),
+            Text(
+              '$_totalPrice 円',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -76,13 +72,15 @@ class HomePageModel extends ChangeNotifier {
   }
 
   void onTapDecrementIcon(int index) {
-    _store.dispatch(
-        DecrementItemAction(updateItem: _store.state.itemList[index]));
-    if (_totalItemCount == 0) {
+    _calculateTotalPrice();
+    _store
+      ..dispatch(DecrementItemAction(updateItem: _store.state.itemList[index]))
+      ..dispatch(DecrementTotalSelectedItemCountAction(
+          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+    notifyListeners();
+    if (_store.state.totalSelectedItemCount == 0) {
       return;
     }
-    _totalPrice -= _store.state.itemList[index].price;
-    _totalItemCount--;
     notifyListeners();
   }
 
@@ -93,6 +91,9 @@ class HomePageModel extends ChangeNotifier {
       MaterialPageRoute(
         builder: (context) => PaymentPage(store: _store),
       ),
-    );
+    ).then((value) {
+      /// PaymentPage から戻ってきたときに、追加/削除したアイテム個数や合計金額をアップデートするため
+      notifyListeners();
+    });
   }
 }

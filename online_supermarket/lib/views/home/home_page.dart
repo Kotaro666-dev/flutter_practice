@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:online_supermarket/views/payment/payment_page.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/models/item.dart';
@@ -27,9 +26,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<HomePageModel>(context);
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Market List'),
+        title: const Text('Market'),
         actions: const [
           ShoppingCartIcon(),
         ],
@@ -38,59 +38,102 @@ class HomePage extends StatelessWidget {
         converter: (store) => store.state.itemList,
         builder: (context, List<Item> stateItemList) {
           return SafeArea(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemCount: stateItemList.length,
-              itemBuilder: (context, index) {
-                return Stack(
-                  children: [
-                    if (model.store.state.itemList[index].count != 0)
-                      Positioned(
-                        right: 70,
-                        top: 10,
-                        child: SizedBox(
-                          height: 18,
-                          width: 18,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${model.store.state.itemList[index].count}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                ),
+                itemCount: stateItemList.length,
+                itemBuilder: (context, index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.5, 0.5),
+                          blurRadius: 1,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Image(
+                            width: width * 0.2,
+                            image: AssetImage(
+                              stateItemList[index].imagePath,
                             ),
                           ),
-                        ),
-                      ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        // Text(stateItemList[index].name),
-                        Image(
-                          width: 50,
-                          image: AssetImage(
-                            stateItemList[index].imagePath,
-                          ),
-                        ),
-                        Text('¥ ${stateItemList[index].price}'),
-                        // Text('${stateItemList[index].count} 個'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: ElevatedButton(
-                                  child: const Icon(
-                                    Icons.remove,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(stateItemList[index].name),
+                                  Text(
+                                    '¥ ${stateItemList[index].price}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
+                                ],
+                              ),
+                              if (model.store.state.itemList[index].count != 0)
+                                Text(
+                                  // ignore: lines_longer_than_80_chars
+                                  '${model.store.state.itemList[index].count} 個',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: ElevatedButton(
+                                    child: const Icon(
+                                      Icons.remove,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.all(0),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(30),
+                                        ),
+                                      ),
+                                      primary: stateItemList[index].count != 0
+                                          ? Colors.redAccent
+                                          : Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      if (stateItemList[index].count == 0) {
+                                        return;
+                                      }
+                                      model.onTapDecrementIcon(index);
+                                    }),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: ElevatedButton(
+                                  child: const Icon(Icons.add),
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     shape: const RoundedRectangleBorder(
@@ -98,42 +141,20 @@ class HomePage extends StatelessWidget {
                                         Radius.circular(30),
                                       ),
                                     ),
-                                    primary: stateItemList[index].count != 0
-                                        ? Colors.redAccent
-                                        : Colors.grey,
                                   ),
                                   onPressed: () {
-                                    if (stateItemList[index].count == 0) {
-                                      return;
-                                    }
-                                    model.onTapDecrementIcon(index);
-                                  }),
-                            ),
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: ElevatedButton(
-                                child: const Icon(Icons.add),
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(0),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
-                                    ),
-                                  ),
+                                    model.onTapIncrementIcon(index, context);
+                                  },
                                 ),
-                                onPressed: () {
-                                  model.onTapIncrementIcon(index, context);
-                                },
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                );
-              },
+                  );
+                },
+              ),
             ),
           );
         },
@@ -165,23 +186,24 @@ class ShoppingCartIcon extends StatelessWidget {
                 size: 30,
               ),
             ),
-            Positioned(
-              right: 0,
-              top: 5,
-              child: SizedBox(
-                height: 18,
-                width: 18,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text('${model.totalItemCount}'),
+            if (model.totalItemCount != 0)
+              Positioned(
+                right: 0,
+                top: 5,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.pinkAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text('${model.totalItemCount}'),
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

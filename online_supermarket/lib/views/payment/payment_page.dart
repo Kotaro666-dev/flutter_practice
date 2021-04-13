@@ -25,7 +25,6 @@ class PaymentPage extends StatelessWidget {
             builder: (BuildContext context) {
               final model = Provider.of<PaymentPageModel>(context);
               final width = MediaQuery.of(context).size.width;
-              final height = MediaQuery.of(context).size.height;
               if (model.isCartEmpty) {
                 return const Center(
                   child: Text('Cart is Empty'),
@@ -47,19 +46,74 @@ class PaymentPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          'アイテム数： 10',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                          ),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              'アイテム数： ',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '${model.totalItemCount} ',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const Text(
+                                              '点',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          '商品合計： ¥ ${model.totalPrice}',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              '商品合計： ',
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 70,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '${model.totalPrice}',
+                                                    style: const TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const Text(
+                                              '円',
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -71,7 +125,10 @@ class PaymentPage extends StatelessWidget {
                                 height: 50,
                                 child: ElevatedButton(
                                   onPressed: () {},
-                                  child: Text('CHECK OUT'),
+                                  child: const Text('CHECK OUT'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.redAccent,
+                                  ),
                                 ),
                               )
                             ],
@@ -156,6 +213,7 @@ class ItemListView extends StatelessWidget {
                                 Radius.circular(30),
                               ),
                             ),
+                            primary: Colors.redAccent,
                           ),
                           onPressed: () {
                             model.onTapDecrementIcon(index);
@@ -165,10 +223,15 @@ class ItemListView extends StatelessWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        '${model.itemList[index].count}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: 20,
+                        child: Center(
+                          child: Text(
+                            '${model.itemList[index].count}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
