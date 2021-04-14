@@ -67,14 +67,55 @@ class PaymentPageModel extends ChangeNotifier {
 
   Future<void> onTapProceedCheckOut() {}
 
-  void onTapEmptyCart() {
-    _store
-      ..dispatch(EmptyCartAction(itemList: _store.state.itemList))
-      ..dispatch(ResetTotalItemCountAction())
-      ..dispatch(ResetTotalPriceAction());
-    if (_store.state.totalItemCount == 0) {
-      _isCartEmpty = true;
-    }
-    notifyListeners();
+  Future<void> onTapEmptyCart(BuildContext context) async {
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'カートを空にしますか？',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: const Text(
+          'この操作は取り消せません',
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        actions: <Widget>[
+          SimpleDialogOption(
+            child: const Text(
+              'キャンセル',
+              style: TextStyle(
+                color: Colors.blueAccent,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          SimpleDialogOption(
+            child: const Text(
+              '空にする',
+              style: TextStyle(
+                color: Colors.blueAccent,
+              ),
+            ),
+            onPressed: () {
+              _store
+                ..dispatch(EmptyCartAction(itemList: _store.state.itemList))
+                ..dispatch(ResetTotalItemCountAction())
+                ..dispatch(ResetTotalPriceAction());
+              if (_store.state.totalItemCount == 0) {
+                _isCartEmpty = true;
+              }
+              notifyListeners();
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
