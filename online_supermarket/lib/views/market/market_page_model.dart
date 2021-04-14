@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_supermarket/models/item.dart';
 import 'package:online_supermarket/views/shoppingCart/shopping_cart_page.dart';
 
 import 'package:redux/redux.dart';
@@ -14,25 +15,35 @@ class MarketPageModel extends ChangeNotifier {
 
   final Store<AppState> _store;
 
-  void _initialize() {}
+  void _initialize() {
+    _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  PageController _pageController;
+  PageController get pageController => _pageController;
 
   int get totalItemCount => _store.state.totalItemCount;
 
   Store<AppState> get store => _store;
 
-  void onTapIncrementIcon(int index, BuildContext context) {
-    final item = _store.state.itemList[index];
+  void onTapIncrementIcon(Item item, BuildContext context) {
     _store
       ..dispatch(IncrementItemAction(updateItem: item))
       ..dispatch(IncrementTotalItemCountAction(
           totalItemCount: _store.state.totalItemCount))
       ..dispatch(UpdateTotalPriceAction(
           totalPrice: _store.state.totalPrice + item.price));
-    _displaySnackBar(index, context);
+    _displaySnackBar(item, context);
     notifyListeners();
   }
 
-  void _displaySnackBar(int index, BuildContext context) {
+  void _displaySnackBar(Item item, BuildContext context) {
     final snackBar = SnackBar(
       backgroundColor: Colors.lightGreen,
       duration: const Duration(milliseconds: 1000),
@@ -44,7 +55,7 @@ class MarketPageModel extends ChangeNotifier {
             Image(
               width: 30,
               image: AssetImage(
-                _store.state.itemList[index].imagePath,
+                item.imagePath,
               ),
             ),
             Text('小計（$totalItemCount 点)'),

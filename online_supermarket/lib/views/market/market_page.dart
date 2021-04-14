@@ -26,7 +26,6 @@ class MarketPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<MarketPageModel>(context);
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -35,106 +34,102 @@ class MarketPage extends StatelessWidget {
           ShoppingCartIcon(),
         ],
       ),
-      body: StoreConnector<AppState, List<Item>>(
-        converter: (store) => store.state.itemList,
-        builder: (context, List<Item> stateItemList) {
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 5,
-                ),
-                itemCount: stateItemList.length,
-                itemBuilder: (context, index) {
-                  return DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0.5, 0.5),
-                          blurRadius: 1,
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Image(
-                            width: width * 0.2,
-                            image: AssetImage(
-                              stateItemList[index].imagePath,
-                            ),
+      body: PageView(
+        controller: model.pageController,
+        children: const [
+          ItemPageView(category: MyCategory.vegetables),
+          ItemPageView(category: MyCategory.meat),
+          ItemPageView(category: MyCategory.fruits),
+        ],
+      ),
+      // body: ItemPageView(),
+    );
+  }
+}
+
+class ItemPageView extends StatelessWidget {
+  const ItemPageView({this.category});
+  final MyCategory category;
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<MarketPageModel>(context);
+    final width = MediaQuery.of(context).size.width;
+    return StoreConnector<AppState, List<Item>>(
+      converter: (store) => store.state.itemList,
+      builder: (context, List<Item> stateItemList) {
+        final itemList =
+            stateItemList.where((item) => item.category == category).toList();
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 5,
+              ),
+              itemCount: itemList.length,
+              itemBuilder: (context, index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.5, 0.5),
+                        blurRadius: 1,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image(
+                          width: width * 0.2,
+                          image: AssetImage(
+                            itemList[index].imagePath,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(stateItemList[index].name),
-                                  Text(
-                                    '¥ ${stateItemList[index].price}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              if (model.store.state.itemList[index].count != 0)
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(itemList[index].name),
                                 Text(
-                                  // ignore: lines_longer_than_80_chars
-                                  '${model.store.state.itemList[index].count} 個',
+                                  '¥ ${itemList[index].price}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: ElevatedButton(
-                                    child: const Icon(
-                                      Icons.remove,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.all(0),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(30),
-                                        ),
-                                      ),
-                                      primary: stateItemList[index].count != 0
-                                          ? Colors.redAccent
-                                          : Colors.grey,
-                                    ),
-                                    onPressed: () {
-                                      if (stateItemList[index].count == 0) {
-                                        return;
-                                      }
-                                      model.onTapDecrementIcon(index);
-                                    }),
+                              ],
+                            ),
+                            if (model.store.state.itemList[index].count != 0)
+                              Text(
+                                // ignore: lines_longer_than_80_chars
+                                '${model.store.state.itemList[index].count} 個',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: ElevatedButton(
-                                  child: const Icon(Icons.add),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: ElevatedButton(
+                                  child: const Icon(
+                                    Icons.remove,
+                                  ),
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     shape: const RoundedRectangleBorder(
@@ -142,24 +137,50 @@ class MarketPage extends StatelessWidget {
                                         Radius.circular(30),
                                       ),
                                     ),
+                                    primary: itemList[index].count != 0
+                                        ? Colors.redAccent
+                                        : Colors.grey,
                                   ),
                                   onPressed: () {
-                                    model.onTapIncrementIcon(index, context);
-                                  },
+                                    if (itemList[index].count == 0) {
+                                      return;
+                                    }
+                                    model.onTapDecrementIcon(index);
+                                  }),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: ElevatedButton(
+                                child: const Icon(Icons.add),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(30),
+                                    ),
+                                  ),
                                 ),
+                                onPressed: () {
+                                  model.onTapIncrementIcon(
+                                      itemList[index], context);
+                                },
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
