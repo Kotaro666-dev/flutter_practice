@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_supermarket/models/item.dart';
 import 'package:online_supermarket/redux/action.dart';
+import 'package:online_supermarket/views/payment/payment_page.dart';
 
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/state.dart';
@@ -65,7 +66,9 @@ class ShoppingCartPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onTapProceedCheckOut() {}
+  void onTapProceedCheckOut(BuildContext context) {
+    Navigator.pushNamed(context, PaymentPage.routeName, arguments: _store);
+  }
 
   Future<void> onTapEmptyCart(BuildContext context) async {
     await showDialog<AlertDialog>(

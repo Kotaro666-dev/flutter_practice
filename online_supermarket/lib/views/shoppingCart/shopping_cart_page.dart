@@ -108,8 +108,11 @@ class CheckOutButton extends StatelessWidget {
       width: width * 0.8,
       height: 50,
       child: ElevatedButton(
-        onPressed:
-            model.canProceedCheckOut() ? model.onTapProceedCheckOut : () {},
+        onPressed: () {
+          if (model.canProceedCheckOut()) {
+            model.onTapProceedCheckOut(context);
+          }
+        },
         child: const Text(
           'お支払いへ進む',
           style: TextStyle(
