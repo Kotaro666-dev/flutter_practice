@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:online_supermarket/redux/app_state_reducer.dart';
+import 'package:online_supermarket/views/payment/payment_page.dart';
 import 'package:online_supermarket/views/shoppingCart/shopping_cart_page.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/state.dart';
@@ -32,6 +33,10 @@ class MyApp extends StatelessWidget {
         if (settings.name == ShoppingCartPage.routeName) {
           return MaterialPageRoute<ShoppingCartPage>(
             builder: (context) => ShoppingCartPage(store: _store),
+          );
+        } else if (settings.name == PaymentPage.routeName) {
+          return MaterialPageRoute<PaymentPage>(
+            builder: (context) => PaymentPage(store: _store),
           );
         }
         return null;
