@@ -77,11 +77,10 @@ class HomePageModel extends ChangeNotifier {
 
   void onTapShoppingCartIcon(BuildContext context) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
-    Navigator.push<PaymentPage>(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => PaymentPage(store: _store),
-      ),
+      PaymentPage.routeName,
+      arguments: _store,
     ).then((value) {
       /// PaymentPage から戻ってきたときに、追加/削除したアイテム個数や合計金額をアップデートするため
       notifyListeners();

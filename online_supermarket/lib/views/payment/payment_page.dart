@@ -8,8 +8,9 @@ import '../../redux/state.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({this.store});
-
   final Store<AppState> store;
+
+  static const routeName = '/payment_page';
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
