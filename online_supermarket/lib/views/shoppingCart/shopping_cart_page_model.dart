@@ -5,8 +5,8 @@ import 'package:online_supermarket/redux/action.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/state.dart';
 
-class PaymentPageModel extends ChangeNotifier {
-  PaymentPageModel({
+class ShoppingCartPageModel extends ChangeNotifier {
+  ShoppingCartPageModel({
     @required Store<AppState> store,
   }) : _store = store {
     _initialize();
@@ -65,7 +65,7 @@ class PaymentPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> onTapProceedCheckOut() {}
+  void onTapProceedCheckOut() {}
 
   Future<void> onTapEmptyCart(BuildContext context) async {
     await showDialog<AlertDialog>(

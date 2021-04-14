@@ -5,10 +5,10 @@ import 'package:redux/redux.dart';
 import 'package:online_supermarket/models/item.dart';
 import 'package:online_supermarket/redux/state.dart';
 
-import 'home_page_model.dart';
+import 'market_page_model.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage._({Key key}) : super(key: key);
+class MarketPage extends StatelessWidget {
+  const MarketPage._({Key key}) : super(key: key);
 
   static Widget withDependencies({
     @required Store<AppState> store,
@@ -17,15 +17,15 @@ class HomePage extends StatelessWidget {
   }) =>
       ChangeNotifierProvider(
         key: key,
-        create: (_context) => HomePageModel(
+        create: (_context) => MarketPageModel(
           store: store,
         ),
-        child: const HomePage._(),
+        child: const MarketPage._(),
       );
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<HomePageModel>(context);
+    final model = Provider.of<MarketPageModel>(context);
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -169,7 +169,7 @@ class ShoppingCartIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<HomePageModel>(context);
+    final model = Provider.of<MarketPageModel>(context);
     return GestureDetector(
       onTap: () {
         model.onTapShoppingCartIcon(context);

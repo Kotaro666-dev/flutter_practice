@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:online_supermarket/views/payment/payment_page_model.dart';
+import 'package:online_supermarket/views/shoppingCart/shopping_cart_page_model.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/state.dart';
 
 import '../../redux/state.dart';
 
-class PaymentPage extends StatelessWidget {
-  const PaymentPage({this.store});
+class ShoppingCartPage extends StatelessWidget {
+  const ShoppingCartPage({this.store});
   final Store<AppState> store;
 
-  static const routeName = '/payment_page';
+  static const routeName = '/shopping_cart_page';
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => PaymentPageModel(
+      create: (context) => ShoppingCartPageModel(
         store: store,
       ),
       child: Builder(
         builder: (BuildContext context) {
-          final model = Provider.of<PaymentPageModel>(context);
+          final model = Provider.of<ShoppingCartPageModel>(context);
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.green,
@@ -102,7 +102,7 @@ class PaymentPage extends StatelessWidget {
 class CheckOutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<PaymentPageModel>(context);
+    final model = Provider.of<ShoppingCartPageModel>(context);
     final width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width * 0.8,
@@ -163,7 +163,7 @@ class CartEmptyMessage extends StatelessWidget {
 class ItemListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<PaymentPageModel>(context);
+    final model = Provider.of<ShoppingCartPageModel>(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return SizedBox(

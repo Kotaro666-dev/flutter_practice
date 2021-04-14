@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:online_supermarket/views/payment/payment_page.dart';
+import 'package:online_supermarket/views/shoppingCart/shopping_cart_page.dart';
 
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/action.dart';
 import 'package:online_supermarket/redux/state.dart';
 
-class HomePageModel extends ChangeNotifier {
-  HomePageModel({
+class MarketPageModel extends ChangeNotifier {
+  MarketPageModel({
     @required Store<AppState> store,
   }) : _store = store {
     _initialize();
@@ -79,7 +79,7 @@ class HomePageModel extends ChangeNotifier {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     Navigator.pushNamed(
       context,
-      PaymentPage.routeName,
+      ShoppingCartPage.routeName,
       arguments: _store,
     ).then((value) {
       /// PaymentPage から戻ってきたときに、追加/削除したアイテム個数や合計金額をアップデートするため
