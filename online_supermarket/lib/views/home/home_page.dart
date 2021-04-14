@@ -29,7 +29,8 @@ class HomePage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Market'),
+        backgroundColor: Colors.green,
+        title: const Text('市場'),
         actions: const [
           ShoppingCartIcon(),
         ],

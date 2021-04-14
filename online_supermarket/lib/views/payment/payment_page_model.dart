@@ -49,23 +49,33 @@ class PaymentPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canProceedCheckOut() {
+    if (_isCartEmpty) {
+      return false;
+    }
+    return true;
+  }
+
   void onTapIncrementIcon(int index) {
     _totalPrice += _store.state.itemList[index].price;
-    _store.dispatch(
-        IncrementItemAction(updateItem: _store.state.itemList[index]));
-    // ignore: cascade_invocations
-    _store.dispatch(IncrementTotalSelectedItemCountAction(
-        totalItemSelectedCount: _store.state.totalSelectedItemCount));
+    _store
+      ..dispatch(IncrementItemAction(updateItem: _store.state.itemList[index]))
+      ..dispatch(IncrementTotalSelectedItemCountAction(
+          totalItemSelectedCount: _store.state.totalSelectedItemCount));
     notifyListeners();
   }
 
   void onTapDecrementIcon(int index) {
     _totalPrice -= _store.state.itemList[index].price;
-    _store.dispatch(
-        DecrementItemAction(updateItem: _store.state.itemList[index]));
-    // ignore: cascade_invocations
-    _store.dispatch(DecrementTotalSelectedItemCountAction(
-        totalItemSelectedCount: _store.state.totalSelectedItemCount));
+    _store
+      ..dispatch(DecrementItemAction(updateItem: _store.state.itemList[index]))
+      ..dispatch(DecrementTotalSelectedItemCountAction(
+          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+    _checkIfCartIsEmpty();
     notifyListeners();
+  }
+
+  Future<void> onTapProceedCheckOut() {
+    _totalPrice = 0;
   }
 }

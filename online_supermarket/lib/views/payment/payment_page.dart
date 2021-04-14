@@ -16,29 +16,40 @@ class PaymentPage extends StatelessWidget {
       create: (context) => PaymentPageModel(
         store: store,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Payment'),
-        ),
-        body: SafeArea(
-          child: Builder(
-            builder: (BuildContext context) {
-              final model = Provider.of<PaymentPageModel>(context);
-              final width = MediaQuery.of(context).size.width;
-              if (model.isCartEmpty) {
-                return const Center(
-                  child: Text('Cart is Empty'),
-                );
-              }
-              return Column(
+      child: Builder(
+        builder: (BuildContext context) {
+          final model = Provider.of<PaymentPageModel>(context);
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.green,
+              title: const Text('カート'),
+              actions: [
+                Visibility(
+                  visible: !model.isCartEmpty,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      '空にする',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            body: SafeArea(
+              child: Column(
                 children: [
-                  ItemListView(),
+                  model.isCartEmpty ? CartEmptyMessage() : ItemListView(),
+                  const StraightLineDivider(),
                   Expanded(
                     child: Row(
                       children: [
                         Expanded(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 20),
@@ -49,88 +60,26 @@ class PaymentPage extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              'アイテム数： ',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 30,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    '${model.totalItemCount} ',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const Text(
-                                              '点',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
+                                        Text(
+                                          'アイテム数： ${model.totalItemCount} 点',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                          ),
                                         ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              '商品合計： ',
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 70,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    '${model.totalPrice}',
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const Text(
-                                              '円',
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
+                                        Text(
+                                          '商品合計： ¥${model.totalPrice}',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                width: width * 0.8,
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text('CHECK OUT'),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.redAccent,
-                                  ),
-                                ),
-                              )
+                              const StraightLineDivider(),
+                              CheckOutButton(),
                             ],
                           ),
                         ),
@@ -138,10 +87,71 @@ class PaymentPage extends StatelessWidget {
                     ),
                   ),
                 ],
-              );
-            },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CheckOutButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<PaymentPageModel>(context);
+    final width = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: width * 0.8,
+      height: 50,
+      child: ElevatedButton(
+        onPressed:
+            model.canProceedCheckOut() ? model.onTapProceedCheckOut : () {},
+        child: const Text(
+          'お支払いへ進む',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
           ),
         ),
+        style: ElevatedButton.styleFrom(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          primary: model.canProceedCheckOut()
+              ? Colors.redAccent
+              : Colors.grey.shade500,
+        ),
+      ),
+    );
+  }
+}
+
+class StraightLineDivider extends StatelessWidget {
+  const StraightLineDivider({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Divider(
+      height: 5,
+      thickness: 1,
+    );
+  }
+}
+
+class CartEmptyMessage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return SizedBox(
+      height: height * 0.65,
+      child: const Center(
+        child: Text('カートに商品はありません'),
       ),
     );
   }
@@ -154,7 +164,7 @@ class ItemListView extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: height * 0.7,
+      height: height * 0.65,
       child: ListView.builder(
         itemCount: model.itemList.length,
         itemBuilder: (BuildContext context, int index) {
