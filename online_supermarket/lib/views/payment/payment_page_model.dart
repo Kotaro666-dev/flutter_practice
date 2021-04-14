@@ -75,7 +75,14 @@ class PaymentPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> onTapProceedCheckOut() {
+  Future<void> onTapProceedCheckOut() {}
+
+  void onTapEmptyCart() {
     _totalPrice = 0;
+    _store
+      ..dispatch(EmptyCartAction(itemList: _store.state.itemList))
+      ..dispatch(ResetTotalSelectedItemCountAction(
+          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+    notifyListeners();
   }
 }

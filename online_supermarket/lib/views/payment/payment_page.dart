@@ -27,7 +27,7 @@ class PaymentPage extends StatelessWidget {
                 Visibility(
                   visible: !model.isCartEmpty,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: model.onTapEmptyCart,
                     child: const Text(
                       '空にする',
                       style: TextStyle(
