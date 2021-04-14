@@ -21,3 +21,13 @@ class DecrementTotalSelectedItemCountAction {
   DecrementTotalSelectedItemCountAction({this.totalItemSelectedCount});
   int totalItemSelectedCount;
 }
+
+class ResetTotalSelectedItemCountAction {
+  ResetTotalSelectedItemCountAction({this.totalItemSelectedCount});
+  int totalItemSelectedCount;
+}
+
+class EmptyCartAction {
+  EmptyCartAction({this.itemList});
+  final List<Item> itemList;
+}
