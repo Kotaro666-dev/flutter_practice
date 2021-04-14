@@ -14,31 +14,20 @@ class HomePageModel extends ChangeNotifier {
 
   final Store<AppState> _store;
 
-  void _initialize() {
-    _calculateTotalPrice();
-  }
+  void _initialize() {}
 
-  int _totalPrice;
-  int get totalPrice => _totalPrice;
-
-  int get totalItemCount => _store.state.totalSelectedItemCount;
+  int get totalItemCount => _store.state.totalItemCount;
 
   Store<AppState> get store => _store;
 
-  void _calculateTotalPrice() {
-    _totalPrice = 0;
-    for (final item in _store.state.itemList) {
-      _totalPrice += item.count * item.price;
-    }
-    notifyListeners();
-  }
-
   void onTapIncrementIcon(int index, BuildContext context) {
+    final item = _store.state.itemList[index];
     _store
-      ..dispatch(IncrementItemAction(updateItem: _store.state.itemList[index]))
-      ..dispatch(IncrementTotalSelectedItemCountAction(
-          totalItemSelectedCount: _store.state.totalSelectedItemCount));
-    _calculateTotalPrice();
+      ..dispatch(IncrementItemAction(updateItem: item))
+      ..dispatch(IncrementTotalItemCountAction(
+          totalItemCount: _store.state.totalItemCount))
+      ..dispatch(UpdateTotalPriceAction(
+          totalPrice: _store.state.totalPrice + item.price));
     _displaySnackBar(index, context);
     notifyListeners();
   }
@@ -60,7 +49,7 @@ class HomePageModel extends ChangeNotifier {
             ),
             Text('小計（$totalItemCount 点)'),
             Text(
-              '$_totalPrice 円',
+              '${_store.state.totalPrice} 円',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -72,13 +61,15 @@ class HomePageModel extends ChangeNotifier {
   }
 
   void onTapDecrementIcon(int index) {
-    _calculateTotalPrice();
+    final item = _store.state.itemList[index];
     _store
-      ..dispatch(DecrementItemAction(updateItem: _store.state.itemList[index]))
-      ..dispatch(DecrementTotalSelectedItemCountAction(
-          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+      ..dispatch(DecrementItemAction(updateItem: item))
+      ..dispatch(DecrementTotalItemCountAction(
+          totalItemCount: _store.state.totalItemCount))
+      ..dispatch(UpdateTotalPriceAction(
+          totalPrice: _store.state.totalPrice - item.price));
     notifyListeners();
-    if (_store.state.totalSelectedItemCount == 0) {
+    if (_store.state.totalItemCount == 0) {
       return;
     }
     notifyListeners();

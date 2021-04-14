@@ -20,33 +20,17 @@ class PaymentPageModel extends ChangeNotifier {
   bool _isCartEmpty;
   bool get isCartEmpty => _isCartEmpty;
 
-  int _totalPrice;
-  int get totalPrice => _totalPrice;
+  int get totalPrice => _store.state.totalPrice;
 
-  int get totalItemCount => _store.state.totalSelectedItemCount;
+  int get totalItemCount => _store.state.totalItemCount;
 
   void _initialize() {
     _itemList = _store.state.itemList;
-    _calculateSum();
-    _checkIfCartIsEmpty();
-  }
-
-  void _calculateSum() {
-    _totalPrice = 0;
-    for (final item in _store.state.itemList) {
-      _totalPrice += item.count * item.price;
+    if (_store.state.totalItemCount == 0) {
+      _isCartEmpty = true;
+    } else {
+      _isCartEmpty = false;
     }
-    notifyListeners();
-  }
-
-  void _checkIfCartIsEmpty() {
-    _isCartEmpty = true;
-    for (final item in _store.state.itemList) {
-      if (item.count != 0) {
-        _isCartEmpty = false;
-      }
-    }
-    notifyListeners();
   }
 
   bool canProceedCheckOut() {
@@ -57,32 +41,40 @@ class PaymentPageModel extends ChangeNotifier {
   }
 
   void onTapIncrementIcon(int index) {
-    _totalPrice += _store.state.itemList[index].price;
+    final item = _store.state.itemList[index];
     _store
-      ..dispatch(IncrementItemAction(updateItem: _store.state.itemList[index]))
-      ..dispatch(IncrementTotalSelectedItemCountAction(
-          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+      ..dispatch(IncrementItemAction(updateItem: item))
+      ..dispatch(IncrementTotalItemCountAction(
+          totalItemCount: _store.state.totalItemCount))
+      ..dispatch(UpdateTotalPriceAction(
+          totalPrice: _store.state.totalPrice + item.price));
     notifyListeners();
   }
 
   void onTapDecrementIcon(int index) {
-    _totalPrice -= _store.state.itemList[index].price;
+    final item = _store.state.itemList[index];
     _store
-      ..dispatch(DecrementItemAction(updateItem: _store.state.itemList[index]))
-      ..dispatch(DecrementTotalSelectedItemCountAction(
-          totalItemSelectedCount: _store.state.totalSelectedItemCount));
-    _checkIfCartIsEmpty();
+      ..dispatch(DecrementItemAction(updateItem: item))
+      ..dispatch(DecrementTotalItemCountAction(
+          totalItemCount: _store.state.totalItemCount))
+      ..dispatch(UpdateTotalPriceAction(
+          totalPrice: _store.state.totalPrice - item.price));
+    if (_store.state.totalItemCount == 0) {
+      _isCartEmpty = true;
+    }
     notifyListeners();
   }
 
   Future<void> onTapProceedCheckOut() {}
 
   void onTapEmptyCart() {
-    _totalPrice = 0;
     _store
       ..dispatch(EmptyCartAction(itemList: _store.state.itemList))
-      ..dispatch(ResetTotalSelectedItemCountAction(
-          totalItemSelectedCount: _store.state.totalSelectedItemCount));
+      ..dispatch(ResetTotalItemCountAction())
+      ..dispatch(ResetTotalPriceAction());
+    if (_store.state.totalItemCount == 0) {
+      _isCartEmpty = true;
+    }
     notifyListeners();
   }
 }
