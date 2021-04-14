@@ -12,22 +12,26 @@ class DecrementItemAction {
   final Item updateItem;
 }
 
-class IncrementTotalSelectedItemCountAction {
-  IncrementTotalSelectedItemCountAction({this.totalItemSelectedCount});
-  int totalItemSelectedCount;
-}
-
-class DecrementTotalSelectedItemCountAction {
-  DecrementTotalSelectedItemCountAction({this.totalItemSelectedCount});
-  int totalItemSelectedCount;
-}
-
-class ResetTotalSelectedItemCountAction {
-  ResetTotalSelectedItemCountAction({this.totalItemSelectedCount});
-  int totalItemSelectedCount;
-}
-
 class EmptyCartAction {
   EmptyCartAction({this.itemList});
   final List<Item> itemList;
 }
+
+class IncrementTotalItemCountAction {
+  IncrementTotalItemCountAction({this.totalItemCount});
+  int totalItemCount;
+}
+
+class DecrementTotalItemCountAction {
+  DecrementTotalItemCountAction({this.totalItemCount});
+  int totalItemCount;
+}
+
+class ResetTotalItemCountAction {}
+
+class UpdateTotalPriceAction {
+  UpdateTotalPriceAction({this.totalPrice});
+  final int totalPrice;
+}
+
+class ResetTotalPriceAction {}

@@ -30,15 +30,25 @@ List<Item> updateItemListReducer(List<Item> itemList, dynamic action) {
   return itemList;
 }
 
-int updateTotalSelectedItemCountReducer(int itemCount, dynamic action) {
-  if (action is IncrementTotalSelectedItemCountAction) {
-    return action.totalItemSelectedCount + 1;
+int updateTotalItemCountReducer(int totalItemCount, dynamic action) {
+  if (action is IncrementTotalItemCountAction) {
+    return action.totalItemCount + 1;
   }
-  if (action is DecrementTotalSelectedItemCountAction) {
-    return action.totalItemSelectedCount - 1;
+  if (action is DecrementTotalItemCountAction) {
+    return action.totalItemCount - 1;
   }
-  if (action is ResetTotalSelectedItemCountAction) {
-    return action.totalItemSelectedCount = 0;
+  if (action is ResetTotalItemCountAction) {
+    return 0;
   }
-  return itemCount;
+  return totalItemCount;
+}
+
+int updateTotalPriceReducer(int totalPrice, dynamic action) {
+  if (action is UpdateTotalPriceAction) {
+    return action.totalPrice;
+  }
+  if (action is ResetTotalPriceAction) {
+    return 0;
+  }
+  return totalPrice;
 }
