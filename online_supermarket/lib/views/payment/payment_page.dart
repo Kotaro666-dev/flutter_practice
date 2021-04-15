@@ -6,6 +6,11 @@ import 'package:online_supermarket/redux/state.dart';
 
 import '../../redux/state.dart';
 
+class PaymentPageArgument {
+  const PaymentPageArgument({this.store});
+  final Store<AppState> store;
+}
+
 class PaymentPage extends StatelessWidget {
   const PaymentPage({this.store});
   final Store<AppState> store;
@@ -23,7 +28,7 @@ class PaymentPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.green,
-              title: const Text('カート'),
+              title: const Text('お支払い'),
             ),
             body: SafeArea(
               child: Container(

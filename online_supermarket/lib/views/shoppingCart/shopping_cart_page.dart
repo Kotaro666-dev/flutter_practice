@@ -6,6 +6,11 @@ import 'package:online_supermarket/redux/state.dart';
 
 import '../../redux/state.dart';
 
+class ShoppingCartPageArgument {
+  const ShoppingCartPageArgument({this.store});
+  final Store<AppState> store;
+}
+
 class ShoppingCartPage extends StatelessWidget {
   const ShoppingCartPage({this.store});
   final Store<AppState> store;

@@ -67,7 +67,11 @@ class ShoppingCartPageModel extends ChangeNotifier {
   }
 
   void onTapProceedCheckOut(BuildContext context) {
-    Navigator.pushNamed(context, PaymentPage.routeName, arguments: _store);
+    Navigator.pushNamed(
+      context,
+      PaymentPage.routeName,
+      arguments: PaymentPageArgument(store: _store),
+    );
   }
 
   Future<void> onTapEmptyCart(BuildContext context) async {

@@ -91,7 +91,7 @@ class MarketPageModel extends ChangeNotifier {
     Navigator.pushNamed(
       context,
       ShoppingCartPage.routeName,
-      arguments: _store,
+      arguments: ShoppingCartPageArgument(store: _store),
     ).then((value) {
       /// PaymentPage から戻ってきたときに、追加/削除したアイテム個数や合計金額をアップデートするため
       notifyListeners();
