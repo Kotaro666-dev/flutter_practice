@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:provider/provider.dart';
@@ -25,24 +27,55 @@ class MarketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<MarketPageModel>(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: const Text('市場'),
-        actions: const [
-          ShoppingCartIcon(),
-        ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: const Text('市場'),
+          actions: const [
+            ShoppingCartIcon(),
+          ],
+          bottom: const TabBar(
+            indicatorColor: Colors.white,
+            tabs: [
+              TabItem(title: '野菜'),
+              TabItem(title: '肉'),
+              TabItem(title: '果物'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            ItemPageView(category: MyCategory.vegetables),
+            ItemPageView(category: MyCategory.meat),
+            ItemPageView(category: MyCategory.fruits),
+          ],
+        ),
+        // body: ItemPageView(),
       ),
-      body: PageView(
-        controller: model.pageController,
-        children: const [
-          ItemPageView(category: MyCategory.vegetables),
-          ItemPageView(category: MyCategory.meat),
-          ItemPageView(category: MyCategory.fruits),
-        ],
+    );
+  }
+}
+
+class TabItem extends StatelessWidget {
+  const TabItem({
+    Key key,
+    this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+      child: Text(
+        '$title',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       ),
-      // body: ItemPageView(),
     );
   }
 }
