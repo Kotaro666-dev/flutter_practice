@@ -44,6 +44,15 @@ class PaymentPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canProceedCheckOut() {
+    for (final card in _store.state.cardList) {
+      if (card.isSelected) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Future<void> onTapProceedCheckOut(BuildContext context) async {
     LoadingOverlay.of(context).during(milliseconds: 2000);
     Future.delayed(
@@ -61,7 +70,9 @@ class PaymentPageModel extends ChangeNotifier {
                       ..dispatch(
                           EmptyCartAction(itemList: _store.state.itemList))
                       ..dispatch(ResetTotalItemCountAction())
-                      ..dispatch(ResetTotalPriceAction());
+                      ..dispatch(ResetTotalPriceAction())
+                      ..dispatch(ResetSelectedCardItemAction(
+                          cardList: _store.state.cardList));
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   child: const Text('ホームへ戻る'),
