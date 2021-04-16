@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:online_supermarket/models/card.dart';
+import 'package:online_supermarket/progress_indicator.dart';
 import 'package:online_supermarket/redux/action.dart';
 
 import 'package:redux/redux.dart';
@@ -39,5 +42,35 @@ class PaymentPageModel extends ChangeNotifier {
     final card = _store.state.cardList[index];
     _store.dispatch(UpdateSelectedCardItemAction(cardItem: card));
     notifyListeners();
+  }
+
+  Future<void> onTapProceedCheckOut(BuildContext context) async {
+    LoadingOverlay.of(context).during(milliseconds: 2000);
+    Future.delayed(
+      const Duration(milliseconds: 2000),
+      () {
+        return showDialog<SimpleDialog>(
+          context: context,
+          builder: (BuildContext context) {
+            return SimpleDialog(
+              title: const Text('ご購入ありがとうございます。'),
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _store
+                      ..dispatch(
+                          EmptyCartAction(itemList: _store.state.itemList))
+                      ..dispatch(ResetTotalItemCountAction())
+                      ..dispatch(ResetTotalPriceAction());
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  },
+                  child: const Text('ホームへ戻る'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

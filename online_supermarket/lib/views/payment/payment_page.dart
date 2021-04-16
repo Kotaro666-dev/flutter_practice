@@ -172,7 +172,9 @@ class PaymentPage extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               primary: Colors.redAccent,
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              await model.onTapProceedCheckOut(context);
+                            },
                             child: const Text(
                               '支払う',
                               style: TextStyle(
