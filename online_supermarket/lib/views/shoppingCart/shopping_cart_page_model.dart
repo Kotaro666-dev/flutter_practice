@@ -34,13 +34,6 @@ class ShoppingCartPageModel extends ChangeNotifier {
     }
   }
 
-  bool canProceedCheckOut() {
-    if (_isCartEmpty) {
-      return false;
-    }
-    return true;
-  }
-
   void onTapIncrementIcon(int index) {
     final item = _store.state.itemList[index];
     _store

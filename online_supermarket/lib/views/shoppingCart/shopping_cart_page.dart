@@ -114,7 +114,7 @@ class CheckOutButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         onPressed: () {
-          if (model.canProceedCheckOut()) {
+          if (!model.isCartEmpty) {
             model.onTapProceedCheckOut(context);
           }
         },
@@ -132,9 +132,7 @@ class CheckOutButton extends StatelessWidget {
               Radius.circular(20),
             ),
           ),
-          primary: model.canProceedCheckOut()
-              ? Colors.redAccent
-              : Colors.grey.shade500,
+          primary: !model.isCartEmpty ? Colors.redAccent : Colors.grey.shade500,
         ),
       ),
     );
