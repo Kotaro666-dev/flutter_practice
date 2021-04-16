@@ -71,9 +71,9 @@ class MarketPageModel extends ChangeNotifier {
       backgroundColor: _getSnackBarBackgroundColor(item.category),
       duration: const Duration(milliseconds: 1000),
       content: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 50),
+        padding: const EdgeInsets.only(left: 20),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image(
               width: 30,
@@ -81,11 +81,26 @@ class MarketPageModel extends ChangeNotifier {
                 item.imagePath,
               ),
             ),
-            Text('小計（$totalItemCount 点)'),
-            Text(
-              '${_store.state.totalPrice} 円',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Text('小計（$totalItemCount 点)'),
+                const SizedBox(width: 10),
+                Text(
+                  '${_store.state.totalPrice} 円',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
+            IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            )
           ],
         ),
       ),
