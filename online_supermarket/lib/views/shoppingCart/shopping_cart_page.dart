@@ -30,21 +30,7 @@ class ShoppingCartPage extends StatelessWidget {
               backgroundColor: Colors.green,
               title: const Text('カート'),
               actions: [
-                Visibility(
-                  visible: !model.isCartEmpty,
-                  child: TextButton(
-                    onPressed: () async {
-                      await model.onTapEmptyCart(context);
-                    },
-                    child: const Text(
-                      '空にする',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
+                EmptyCartTextButton(),
               ],
             ),
             body: SafeArea(
@@ -59,33 +45,7 @@ class ShoppingCartPage extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          'アイテム数： ${model.totalItemCount} 点',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text(
-                                          '商品合計： ¥${model.totalPrice}',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              CartItemCard(),
                               const StraightLineDivider(),
                               CheckOutButton(),
                             ],
@@ -99,6 +59,61 @@ class ShoppingCartPage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class EmptyCartTextButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<ShoppingCartPageModel>(context);
+    return Visibility(
+      visible: !model.isCartEmpty,
+      child: TextButton(
+        onPressed: () async {
+          await model.onTapEmptyCart(context);
+        },
+        child: const Text(
+          '空にする',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CartItemCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<ShoppingCartPageModel>(context);
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'アイテム数： ${model.totalItemCount} 点',
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                '商品合計： ¥${model.totalPrice}',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
