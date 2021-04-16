@@ -5,8 +5,8 @@ enum CardType {
   maestro,
 }
 
-class Card {
-  Card({
+class PaymentCard {
+  PaymentCard({
     this.cardType,
     this.number,
     this.expirationDate,
@@ -18,13 +18,13 @@ class Card {
   final String expirationDate;
   bool isSelected;
 
-  Card copyWith({
+  PaymentCard copyWith({
     CardType cardType,
     String number,
     String expirationDate,
     bool isSelected,
   }) {
-    return Card(
+    return PaymentCard(
       cardType: cardType ?? this.cardType,
       number: number ?? this.number,
       expirationDate: expirationDate ?? this.expirationDate,
