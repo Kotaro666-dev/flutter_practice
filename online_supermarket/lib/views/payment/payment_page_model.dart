@@ -1,17 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:online_supermarket/constants/constant.dart';
 import 'package:online_supermarket/models/card.dart';
 import 'package:online_supermarket/progress_indicator.dart';
 import 'package:online_supermarket/redux/action.dart';
 
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/state.dart';
-
-const visaImagePath = 'assets/images/card/visa.png';
-const masterCardImagePath = 'assets/images/card/mastercard.png';
-const americanExpressImagePath = 'assets/images/card/american-express.png';
-const maestroImagePath = 'assets/images/card/maestro.png';
 
 class PaymentPageModel extends ChangeNotifier {
   PaymentPageModel({
@@ -29,8 +25,9 @@ class PaymentPageModel extends ChangeNotifier {
       return americanExpressImagePath;
     } else if (cardType == CardType.maestro) {
       return maestroImagePath;
+    } else {
+      return defaultImagePath;
     }
-    return 'カード';
   }
 
   String getCardNumber(String cardNumber) {
@@ -38,7 +35,6 @@ class PaymentPageModel extends ChangeNotifier {
   }
 
   void onTapCard(int index) {
-    print('onTapped');
     final card = _store.state.cardList[index];
     _store.dispatch(UpdateSelectedCardItemAction(cardItem: card));
     notifyListeners();
