@@ -1,3 +1,4 @@
+import 'package:online_supermarket/models/card.dart';
 import 'package:online_supermarket/models/item.dart';
 import 'package:online_supermarket/redux/action.dart';
 
@@ -51,4 +52,17 @@ int updateTotalPriceReducer(int totalPrice, dynamic action) {
     return 0;
   }
   return totalPrice;
+}
+
+List<Card> updateSelectedCardReducer(List<Card> cardList, dynamic action) {
+  if (action is UpdateSelectedCardItemAction) {
+    action.cardItem.isSelected = true;
+    return cardList
+        .map(
+          (card) => card.number == action.cardItem.number
+              ? action.cardItem
+              : card.copyWith(isSelected: false),
+        )
+        .toList();
+  }
 }

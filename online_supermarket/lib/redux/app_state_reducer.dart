@@ -6,5 +6,6 @@ AppState appReducer(AppState state, dynamic action) {
     itemList: updateItemListReducer(state.itemList, action),
     totalItemCount: updateTotalItemCountReducer(state.totalItemCount, action),
     totalPrice: updateTotalPriceReducer(state.totalPrice, action),
+    cardList: updateSelectedCardReducer(state.cardList, action),
   );
 }

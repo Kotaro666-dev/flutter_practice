@@ -1,3 +1,4 @@
+import 'package:online_supermarket/models/card.dart';
 import 'package:online_supermarket/models/item.dart';
 
 class IncrementItemAction {
@@ -35,3 +36,8 @@ class UpdateTotalPriceAction {
 }
 
 class ResetTotalPriceAction {}
+
+class UpdateSelectedCardItemAction {
+  UpdateSelectedCardItemAction({this.cardItem});
+  final Card cardItem;
+}
