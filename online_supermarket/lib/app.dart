@@ -22,6 +22,19 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+
+          /// タップ時のリップルエフェクト（splashColor）を発生させないようにする。
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.resolveWith(
+                (states) {
+                  return states.contains(MaterialState.pressed)
+                      ? Colors.transparent
+                      : null;
+                },
+              ),
+            ),
+          ),
         ),
         debugShowCheckedModeBanner: false,
         home: MarketPage.withDependencies(
