@@ -66,5 +66,11 @@ List<PaymentCard> updateSelectedCardReducer(
         )
         .toList();
   }
+  if (action is ResetSelectedCardItemAction) {
+    for (final card in action.cardList) {
+      card.isSelected = false;
+    }
+    return action.cardList;
+  }
   return cardList;
 }

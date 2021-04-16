@@ -41,3 +41,8 @@ class UpdateSelectedCardItemAction {
   UpdateSelectedCardItemAction({this.cardItem});
   final PaymentCard cardItem;
 }
+
+class ResetSelectedCardItemAction {
+  ResetSelectedCardItemAction({this.cardList});
+  final List<PaymentCard> cardList;
+}
