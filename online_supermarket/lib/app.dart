@@ -15,34 +15,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: StoreProvider(
-        store: _store,
-        child: MarketPage.withDependencies(
+    return StoreProvider<AppState>(
+      store: _store,
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: MarketPage.withDependencies(
           store: _store,
           context: context,
         ),
+        onGenerateRoute: (settings) {
+          if (settings.name == ShoppingCartPage.routeName) {
+            final argument = settings.arguments as ShoppingCartPageArgument;
+            return MaterialPageRoute<ShoppingCartPage>(
+              builder: (context) => ShoppingCartPage(store: argument.store),
+            );
+          } else if (settings.name == PaymentPage.routeName) {
+            final argument = settings.arguments as PaymentPageArgument;
+            return MaterialPageRoute<PaymentPage>(
+              builder: (context) => PaymentPage(store: argument.store),
+            );
+          }
+          return null;
+        },
       ),
-      onGenerateRoute: (settings) {
-        if (settings.name == ShoppingCartPage.routeName) {
-          final argument = settings.arguments as ShoppingCartPageArgument;
-          return MaterialPageRoute<ShoppingCartPage>(
-            builder: (context) => ShoppingCartPage(store: argument.store),
-          );
-        } else if (settings.name == PaymentPage.routeName) {
-          final argument = settings.arguments as PaymentPageArgument;
-          return MaterialPageRoute<PaymentPage>(
-            builder: (context) => PaymentPage(store: argument.store),
-          );
-        }
-        return null;
-      },
     );
   }
 }
