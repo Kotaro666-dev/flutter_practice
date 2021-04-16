@@ -54,7 +54,8 @@ int updateTotalPriceReducer(int totalPrice, dynamic action) {
   return totalPrice;
 }
 
-List<Card> updateSelectedCardReducer(List<Card> cardList, dynamic action) {
+List<PaymentCard> updateSelectedCardReducer(
+    List<PaymentCard> cardList, dynamic action) {
   if (action is UpdateSelectedCardItemAction) {
     action.cardItem.isSelected = true;
     return cardList
@@ -65,4 +66,5 @@ List<Card> updateSelectedCardReducer(List<Card> cardList, dynamic action) {
         )
         .toList();
   }
+  return cardList;
 }

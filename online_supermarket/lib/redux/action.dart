@@ -39,5 +39,5 @@ class ResetTotalPriceAction {}
 
 class UpdateSelectedCardItemAction {
   UpdateSelectedCardItemAction({this.cardItem});
-  final Card cardItem;
+  final PaymentCard cardItem;
 }

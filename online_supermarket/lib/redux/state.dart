@@ -21,5 +21,5 @@ class AppState {
   List<Item> itemList;
   int totalItemCount;
   int totalPrice;
-  List<Card> cardList;
+  List<PaymentCard> cardList;
 }
