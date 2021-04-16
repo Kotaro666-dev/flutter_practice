@@ -89,15 +89,15 @@ class PaymentPage extends StatelessWidget {
                                               left: 10,
                                             ),
                                             child: SizedBox(
-                                              width: 20,
-                                              height: 20,
+                                              width: 15,
+                                              height: 15,
                                               child: DecoratedBox(
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                   border: Border.all(
-                                                    width: 3,
-                                                    color: Colors.green,
+                                                    width: 2,
+                                                    color: Colors.grey,
                                                   ),
                                                   color: Colors.white,
                                                 ),
@@ -106,10 +106,10 @@ class PaymentPage extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                              left: 10,
+                                              left: 20,
                                             ),
                                             child: Image(
-                                              width: 30,
+                                              width: 40,
                                               image: AssetImage(
                                                 model.getCardImagePath(
                                                     card.cardType),
@@ -123,6 +123,8 @@ class PaymentPage extends StatelessWidget {
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   model.getCardNumber(
