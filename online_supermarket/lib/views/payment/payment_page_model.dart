@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_supermarket/models/card.dart';
+import 'package:online_supermarket/redux/action.dart';
 
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/redux/state.dart';
@@ -26,11 +27,17 @@ class PaymentPageModel extends ChangeNotifier {
     } else if (cardType == CardType.maestro) {
       return maestroImagePath;
     }
+    return 'カード';
   }
 
   String getCardNumber(String cardNumber) {
     return 'XXXX-XXXX-${cardNumber.substring(10)}';
   }
 
-  void onTapCard() {}
+  void onTapCard(int index) {
+    print('onTapped');
+    final card = _store.state.cardList[index];
+    _store.dispatch(UpdateSelectedCardItemAction(cardItem: card));
+    notifyListeners();
+  }
 }
