@@ -1,11 +1,11 @@
 # online_supermarket
 
-State Management Practice
+State Management Practice with Redux
 
 # Reference
 
 - [flutter_redux](https://pub.dev/packages/flutter_redux)
- -[Reduxアーキテクチャでのflutter](https://qiita.com/ko2ic/items/97aeaa4bdbaa6a7e6cbe)
+- [Reduxアーキテクチャでのflutter](https://qiita.com/ko2ic/items/97aeaa4bdbaa6a7e6cbe)
 - [Flutter Redux - Single Source of Truth - State Management](https://www.youtube.com/watch?v=60_2HlagOzg)
 
 
