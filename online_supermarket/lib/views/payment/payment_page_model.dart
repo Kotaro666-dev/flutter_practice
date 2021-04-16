@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:online_supermarket/constants/constant.dart';
@@ -50,48 +51,59 @@ class PaymentPageModel extends ChangeNotifier {
   }
 
   Future<void> onTapProceedCheckOut(BuildContext context) async {
-    LoadingOverlay.of(context).during(milliseconds: 2000);
+    const indicatorDisplayingTime = 2000;
+    LoadingOverlay.of(context).during(milliseconds: indicatorDisplayingTime);
     Future.delayed(
-      const Duration(milliseconds: 2000),
+      const Duration(milliseconds: indicatorDisplayingTime),
       () {
-        return showDialog<AlertDialog>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text(
-                'ご購入ありがとうございます。',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
+        return showFinishProceedingPurchaseDialog(context);
+      },
+    );
+  }
+
+  Future<AlertDialog> showFinishProceedingPurchaseDialog(BuildContext context) {
+    return showDialog<AlertDialog>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'ご購入ありがとうございます。',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('支払いが正常に完了しました。'),
+              const SizedBox(
+                height: 50,
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('支払いが正常に完了しました。'),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          _resetStateAndGoHome(context);
-                        },
-                        child: const Text('ホーム画面へ戻る'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
-                        ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _resetStateAndGoHome(context);
+                    },
+                    child: const Text(
+                      'ホーム画面へ戻る',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      shape: kElevatedButtonBorderRadius,
+                    ),
                   ),
                 ],
               ),
-            );
-          },
+            ],
+          ),
         );
       },
     );

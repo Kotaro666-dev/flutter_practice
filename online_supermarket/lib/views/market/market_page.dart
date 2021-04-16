@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:online_supermarket/constants/constant.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 import 'package:online_supermarket/models/item.dart';
@@ -165,11 +166,7 @@ class ItemPageView extends StatelessWidget {
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.all(0),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
-                                    ),
-                                  ),
+                                  shape: kElevatedButtonBorderRadius,
                                   primary: itemList[index].count != 0
                                       ? Colors.redAccent
                                       : Colors.grey,
@@ -191,11 +188,7 @@ class ItemPageView extends StatelessWidget {
                                 child: const Icon(Icons.add),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.all(0),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
-                                    ),
-                                  ),
+                                  shape: kElevatedButtonBorderRadius,
                                 ),
                                 onPressed: () {
                                   model.onTapIncrementIcon(

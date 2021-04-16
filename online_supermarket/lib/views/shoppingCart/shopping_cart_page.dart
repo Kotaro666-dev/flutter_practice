@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_supermarket/constants/constant.dart';
 import 'package:online_supermarket/views/shoppingCart/shopping_cart_page_model.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
@@ -134,19 +135,11 @@ class CheckOutButton extends StatelessWidget {
           }
         },
         child: const Text(
-          'お支払いへ進む',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
+          '支払いへ進む',
+          style: kElevatedButtonTextStyle,
         ),
         style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
-          ),
+          shape: kElevatedButtonBorderRadius,
           primary: !model.isCartEmpty ? Colors.redAccent : Colors.grey.shade500,
         ),
       ),
@@ -175,7 +168,12 @@ class CartEmptyMessage extends StatelessWidget {
     return SizedBox(
       height: height * 0.65,
       child: const Center(
-        child: Text('カートに商品はありません'),
+        child: Text(
+          'カートの中身は空です',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
@@ -242,11 +240,7 @@ class ItemListView extends StatelessWidget {
                           child: const Icon(Icons.remove),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(0),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
-                              ),
-                            ),
+                            shape: kElevatedButtonBorderRadius,
                             primary: Colors.redAccent,
                           ),
                           onPressed: () {
@@ -278,11 +272,7 @@ class ItemListView extends StatelessWidget {
                           child: const Icon(Icons.add),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(0),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
-                              ),
-                            ),
+                            shape: kElevatedButtonBorderRadius,
                           ),
                           onPressed: () {
                             model.onTapIncrementIcon(index);

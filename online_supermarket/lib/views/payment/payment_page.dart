@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:online_supermarket/constants/constant.dart';
 import 'package:online_supermarket/models/card.dart';
 import 'package:online_supermarket/views/payment/payment_page_model.dart';
 import 'package:provider/provider.dart';
@@ -188,6 +189,7 @@ class ProceedCheckOutButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: model.canProceedCheckOut() ? Colors.redAccent : Colors.grey,
+          shape: kElevatedButtonBorderRadius,
         ),
         onPressed: () async {
           if (model.canProceedCheckOut()) {
@@ -196,9 +198,7 @@ class ProceedCheckOutButton extends StatelessWidget {
         },
         child: const Text(
           '支払う',
-          style: TextStyle(
-            fontSize: 18,
-          ),
+          style: kElevatedButtonTextStyle,
         ),
       ),
     );
