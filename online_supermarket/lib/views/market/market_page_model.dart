@@ -43,6 +43,16 @@ class MarketPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onTapDecrementIcon(Item item) {
+    _store
+      ..dispatch(DecrementItemAction(updateItem: item))
+      ..dispatch(DecrementTotalItemCountAction(
+          totalItemCount: _store.state.totalItemCount))
+      ..dispatch(UpdateTotalPriceAction(
+          totalPrice: _store.state.totalPrice - item.price));
+    notifyListeners();
+  }
+
   void _displaySnackBar(Item item, BuildContext context) {
     final snackBar = SnackBar(
       backgroundColor: Colors.lightGreen,
@@ -69,21 +79,6 @@ class MarketPageModel extends ChangeNotifier {
     );
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void onTapDecrementIcon(int index) {
-    final item = _store.state.itemList[index];
-    _store
-      ..dispatch(DecrementItemAction(updateItem: item))
-      ..dispatch(DecrementTotalItemCountAction(
-          totalItemCount: _store.state.totalItemCount))
-      ..dispatch(UpdateTotalPriceAction(
-          totalPrice: _store.state.totalPrice - item.price));
-    notifyListeners();
-    if (_store.state.totalItemCount == 0) {
-      return;
-    }
-    notifyListeners();
   }
 
   void onTapShoppingCartIcon(BuildContext context) {

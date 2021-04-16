@@ -143,10 +143,10 @@ class ItemPageView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            if (model.store.state.itemList[index].count != 0)
+                            if (itemList[index].count != 0)
                               Text(
                                 // ignore: lines_longer_than_80_chars
-                                '${model.store.state.itemList[index].count} 個',
+                                '${itemList[index].count} 個',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -160,26 +160,26 @@ class ItemPageView extends StatelessWidget {
                               width: 30,
                               height: 30,
                               child: ElevatedButton(
-                                  child: const Icon(
-                                    Icons.remove,
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(0),
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(30),
-                                      ),
+                                child: const Icon(
+                                  Icons.remove,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(30),
                                     ),
-                                    primary: itemList[index].count != 0
-                                        ? Colors.redAccent
-                                        : Colors.grey,
                                   ),
-                                  onPressed: () {
-                                    if (itemList[index].count == 0) {
-                                      return;
-                                    }
-                                    model.onTapDecrementIcon(index);
-                                  }),
+                                  primary: itemList[index].count != 0
+                                      ? Colors.redAccent
+                                      : Colors.grey,
+                                ),
+                                onPressed: () {
+                                  if (itemList[index].count != 0) {
+                                    model.onTapDecrementIcon(itemList[index]);
+                                  }
+                                },
+                              ),
                             ),
                             const SizedBox(
                               width: 20,
