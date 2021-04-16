@@ -58,30 +58,55 @@ class PaymentPageModel extends ChangeNotifier {
     Future.delayed(
       const Duration(milliseconds: 2000),
       () {
-        return showDialog<SimpleDialog>(
+        return showDialog<AlertDialog>(
           context: context,
+          barrierDismissible: false,
           builder: (BuildContext context) {
-            return SimpleDialog(
-              title: const Text('ご購入ありがとうございます。'),
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _store
-                      ..dispatch(
-                          EmptyCartAction(itemList: _store.state.itemList))
-                      ..dispatch(ResetTotalItemCountAction())
-                      ..dispatch(ResetTotalPriceAction())
-                      ..dispatch(ResetSelectedCardItemAction(
-                          cardList: _store.state.cardList));
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  },
-                  child: const Text('ホームへ戻る'),
+            return AlertDialog(
+              title: const Text(
+                'ご購入ありがとうございます。',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
-              ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('支払いが正常に完了しました。'),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _resetStateAndGoHome(context);
+                        },
+                        child: const Text('ホーム画面へ戻る'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           },
         );
       },
     );
+  }
+
+  void _resetStateAndGoHome(BuildContext context) {
+    _store
+      ..dispatch(EmptyCartAction(itemList: _store.state.itemList))
+      ..dispatch(ResetTotalItemCountAction())
+      ..dispatch(ResetTotalPriceAction())
+      ..dispatch(ResetSelectedCardItemAction(cardList: _store.state.cardList));
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 }
