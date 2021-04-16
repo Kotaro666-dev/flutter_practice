@@ -17,3 +17,7 @@ const kElevatedButtonTextStyle = const TextStyle(
   fontSize: 20,
   color: Colors.white,
 );
+
+const Color kVegetableColor = Color(0xFF74A84E);
+const Color kMeatColor = Color(0xFFFCB79A);
+const Color kFruitsColor = Color(0xFFEAC738);

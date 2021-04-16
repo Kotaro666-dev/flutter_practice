@@ -243,7 +243,7 @@ class ShoppingCartIcon extends StatelessWidget {
                   width: 20,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: Colors.pinkAccent,
+                      color: Colors.red,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(

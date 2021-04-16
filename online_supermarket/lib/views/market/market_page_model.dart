@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_supermarket/constants/constant.dart';
 import 'package:online_supermarket/models/item.dart';
 import 'package:online_supermarket/views/shoppingCart/shopping_cart_page.dart';
 
@@ -53,9 +54,21 @@ class MarketPageModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Color _getSnackBarBackgroundColor(MyCategory category) {
+    if (category == MyCategory.vegetables) {
+      return kVegetableColor;
+    } else if (category == MyCategory.meat) {
+      return kMeatColor;
+    } else if (category == MyCategory.fruits) {
+      return kFruitsColor;
+    } else {
+      return Colors.lightGreen;
+    }
+  }
+
   void _displaySnackBar(Item item, BuildContext context) {
     final snackBar = SnackBar(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: _getSnackBarBackgroundColor(item.category),
       duration: const Duration(milliseconds: 1000),
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50),
