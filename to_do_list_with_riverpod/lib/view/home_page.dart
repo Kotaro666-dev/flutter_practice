@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/riverpod/providers.dart';
 
+import '../riverpod/providers.dart';
+
 class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final notifier = watch(homePageNotifier);
+    final notifier = watch(homePageProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
