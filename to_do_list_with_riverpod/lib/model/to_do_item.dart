@@ -1,4 +1,5 @@
 enum Deadline {
+  unselected,
   today,
   tomorrow,
   thisWeek,

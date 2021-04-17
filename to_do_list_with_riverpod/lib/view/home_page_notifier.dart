@@ -18,8 +18,12 @@ class HomePageNotifier extends ChangeNotifier {
   bool _isActive;
   bool get isActive => _isActive;
 
+  Deadline _selectedDeadlineType;
+  Deadline get selectedDeadlineType => _selectedDeadlineType;
+
   void _initialize() {
     _toDoList = toDoStaticLists;
+    _selectedDeadlineType = Deadline.unselected;
     _textEditingController = TextEditingController();
     _isActive = false;
     notifyListeners();
@@ -45,13 +49,14 @@ class HomePageNotifier extends ChangeNotifier {
     final newToDo = ToDoItem(
       id: _toDoList.isEmpty ? 1 : _toDoList.last.id + 1,
       content: _content,
-      deadline: Deadline.tomorrow,
+      deadline: _selectedDeadlineType,
       isDone: false,
     );
     _toDoList.add(newToDo);
     notifyListeners();
     _textEditingController.clear();
     _content = '';
+    _selectedDeadlineType = Deadline.unselected;
     _isActive = false;
     notifyListeners();
   }
@@ -65,27 +70,32 @@ class HomePageNotifier extends ChangeNotifier {
       return 'This Week';
     } else if (deadline == Deadline.thisMonth) {
       return 'This Month';
-    } else {
-      return '';
+    } else if (deadline == Deadline.unselected) {
+      return 'unSelected';
     }
   }
 
   Color getDeadlineColor(Deadline deadline) {
     if (deadline == Deadline.today) {
-      return todayColor;
+      return kTodayColor;
     } else if (deadline == Deadline.tomorrow) {
-      return tomorrowColor;
+      return kTomorrowColor;
     } else if (deadline == Deadline.thisWeek) {
-      return thisWeekColor;
+      return kThisWeekColor;
     } else if (deadline == Deadline.thisMonth) {
-      return thisMonthColor;
-    } else {
-      return Colors.white;
+      return kThisMonthColor;
+    } else if (deadline == Deadline.unselected) {
+      return Colors.grey.shade800;
     }
   }
 
   void onTapToDoDone(int id) {
     _toDoList.removeWhere((item) => item.id == id);
+    notifyListeners();
+  }
+
+  void onTapDeadlineCard(Deadline deadline) {
+    _selectedDeadlineType = deadline;
     notifyListeners();
   }
 }
