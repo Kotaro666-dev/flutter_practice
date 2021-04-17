@@ -67,4 +67,38 @@ class HomePageNotifier extends ChangeNotifier {
     _toDoList.removeWhere((item) => item.id == id);
     notifyListeners();
   }
+
+  void onTapAddToDoButton(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 300,
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              color: Colors.white54,
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: _textEditingController,
+                    onChanged: onChanged,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_upward_sharp),
+                    onPressed: () {
+                      onTapSubmitButton(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

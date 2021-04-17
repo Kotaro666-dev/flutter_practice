@@ -106,37 +106,7 @@ class HomePage extends ConsumerWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          showModalBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: 300,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: Colors.white54,
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        TextField(
-                          controller: notifier.textEditingController,
-                          onChanged: notifier.onChanged,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_upward_sharp),
-                          onPressed: () {
-                            notifier.onTapSubmitButton(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
+          notifier.onTapAddToDoButton(context);
         },
       ),
     );
