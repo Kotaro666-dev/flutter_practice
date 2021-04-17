@@ -3,14 +3,27 @@ import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
 
 class HomePageNotifier extends ChangeNotifier {
-  final List<ToDoItem> _toDoList = toDoStaticLists;
+  HomePageNotifier() {
+    _initialize();
+  }
+  List<ToDoItem> _toDoList;
   List<ToDoItem> get toDoList => _toDoList;
 
-  String _content;
+  String _content = '';
   String get content => _content;
 
-  final TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _textEditingController;
   TextEditingController get textEditingController => _textEditingController;
+
+  bool _isActive;
+  bool get isActive => _isActive;
+
+  void _initialize() {
+    _toDoList = toDoStaticLists;
+    _textEditingController = TextEditingController();
+    _isActive = false;
+    notifyListeners();
+  }
 
   @override
   void dispose() {
@@ -20,6 +33,12 @@ class HomePageNotifier extends ChangeNotifier {
 
   void onChanged(String content) {
     _content = content;
+    if (_content.isNotEmpty) {
+      _isActive = true;
+    } else {
+      _isActive = false;
+    }
+    notifyListeners();
   }
 
   void onTapSubmitButton(BuildContext context) {
@@ -32,7 +51,9 @@ class HomePageNotifier extends ChangeNotifier {
     _toDoList.add(newToDo);
     notifyListeners();
     _textEditingController.clear();
-    Navigator.pop(context);
+    _content = '';
+    _isActive = false;
+    notifyListeners();
   }
 
   String getDeadlineText(Deadline deadline) {
@@ -66,39 +87,5 @@ class HomePageNotifier extends ChangeNotifier {
   void onTapToDoDone(int id) {
     _toDoList.removeWhere((item) => item.id == id);
     notifyListeners();
-  }
-
-  void onTapAddToDoButton(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 300,
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: Colors.white54,
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  TextField(
-                    controller: _textEditingController,
-                    onChanged: onChanged,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_upward_sharp),
-                    onPressed: () {
-                      onTapSubmitButton(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }

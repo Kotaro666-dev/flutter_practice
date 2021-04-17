@@ -72,7 +72,7 @@ class HomePage extends ConsumerWidget {
                         ),
                         const SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.only(left: 35),
+                          padding: const EdgeInsets.only(left: 45),
                           child: Row(
                             children: [
                               Icon(
@@ -105,10 +105,78 @@ class HomePage extends ConsumerWidget {
           Icons.add,
           color: Colors.white,
         ),
-        onPressed: () {
-          notifier.onTapAddToDoButton(context);
+        onPressed: () async {
+          await _buildOnTapAddToDoButton(context);
         },
       ),
+    );
+  }
+
+  Future<void> _buildOnTapAddToDoButton(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 200,
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              color: Colors.black26,
+            ),
+            child: Consumer(builder: (BuildContext context, watch, child) {
+              final notifier = watch(homePageProvider);
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: TextField(
+                        controller: notifier.textEditingController,
+                        onChanged: notifier.onChanged,
+                        autofocus: true,
+                        cursorColor: Colors.red,
+                        cursorHeight: 20,
+                        decoration: const InputDecoration(
+                          hintText: 'Add a task',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                        ),
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor:
+                          notifier.isActive ? Colors.red : Colors.grey,
+                      radius: 15,
+                      child: IconButton(
+                        padding: const EdgeInsets.all(0),
+                        splashColor: Colors.transparent,
+                        color: Colors.white,
+                        icon: const Icon(Icons.arrow_upward_sharp),
+                        onPressed: () {
+                          if (notifier.isActive) {
+                            notifier.onTapSubmitButton(context);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }
