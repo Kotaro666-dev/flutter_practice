@@ -6,6 +6,9 @@ class HomePageNotifier extends ChangeNotifier {
   HomePageNotifier() {
     _initialize();
   }
+  GlobalKey<AnimatedListState> _listKey;
+  GlobalKey<AnimatedListState> get listKey => _listKey;
+
   List<ToDoItem> _toDoList;
   List<ToDoItem> get toDoList => _toDoList;
 
@@ -23,6 +26,7 @@ class HomePageNotifier extends ChangeNotifier {
 
   void _initialize() {
     _toDoList = toDoStaticLists;
+    _listKey = GlobalKey<AnimatedListState>();
     _selectedDeadlineType = Deadline.unselected;
     _textEditingController = TextEditingController();
     _isActive = false;
@@ -72,6 +76,8 @@ class HomePageNotifier extends ChangeNotifier {
       return 'This Month';
     } else if (deadline == Deadline.unselected) {
       return 'unSelected';
+    } else {
+      return '';
     }
   }
 
@@ -86,6 +92,8 @@ class HomePageNotifier extends ChangeNotifier {
       return kThisMonthColor;
     } else if (deadline == Deadline.unselected) {
       return Colors.grey.shade800;
+    } else {
+      return Colors.white;
     }
   }
 
@@ -96,6 +104,11 @@ class HomePageNotifier extends ChangeNotifier {
 
   void onTapDeadlineCard(Deadline deadline) {
     _selectedDeadlineType = deadline;
+    notifyListeners();
+  }
+
+  void resetDeadlineCard() {
+    _selectedDeadlineType = Deadline.unselected;
     notifyListeners();
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
 import 'package:to_do_list_with_riverpod/riverpod/providers.dart';
+import 'package:to_do_list_with_riverpod/view/home_page_notifier.dart';
 
 import '../riverpod/providers.dart';
 
@@ -17,7 +18,7 @@ class HomePage extends ConsumerWidget {
       body: notifier.toDoList.isEmpty
           ? const Center(
               child: Text(
-                'ToDoList is Empty',
+                'Your ToDo list is empty',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -25,85 +26,12 @@ class HomePage extends ConsumerWidget {
               ),
             )
           : SafeArea(
-              child: ListView.builder(
-                itemCount: notifier.toDoList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final item = notifier.toDoList[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: leftPadding),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      notifier.onTapToDoDone(item.id);
-                                    },
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                          width: 1,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      '${item.content}',
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                              height: item.deadline != Deadline.unselected
-                                  ? 10
-                                  : 0),
-                          if (item.deadline != Deadline.unselected)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 45),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today_outlined,
-                                    size: 15,
-                                    color: notifier
-                                        .getDeadlineColor(item.deadline),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    notifier.getDeadlineText(item.deadline),
-                                    style: TextStyle(
-                                      color: notifier
-                                          .getDeadlineColor(item.deadline),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          const SizedBox(height: 10),
-                          const StraightLineDivider(),
-                        ],
-                      ),
-                    ),
-                  );
+              child: AnimatedList(
+                key: notifier.listKey,
+                initialItemCount: notifier.toDoList.length,
+                itemBuilder: (BuildContext context, int index,
+                    Animation<double> animation) {
+                  return _buildAnimatedListView(animation, notifier, index);
                 },
               ),
             ),
@@ -120,85 +48,206 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _buildOnTapAddToDoButton(BuildContext context) {
-    return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 180,
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: Colors.black26,
-            ),
-            child: Consumer(builder: (BuildContext context, watch, child) {
-              final notifier = watch(homePageProvider);
-              return Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: TextField(
-                          controller: notifier.textEditingController,
-                          onChanged: notifier.onChanged,
-                          autofocus: true,
-                          cursorColor: Colors.red,
-                          cursorHeight: 20,
-                          decoration: const InputDecoration(
-                            hintText: 'Add a task',
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
+  SizeTransition _buildAnimatedListView(
+    Animation<double> animation,
+    HomePageNotifier notifier,
+    int index,
+  ) {
+    final item = notifier.toDoList[index];
+    return SizeTransition(
+      sizeFactor: animation,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: leftPadding),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: GestureDetector(
+                        onTap: () {
+                          notifier.onTapToDoDone(item.id);
+                          final nextIndex = index == notifier.toDoList.length
+                              ? index - 1
+                              : index;
+                          final duration =
+                              index == notifier.toDoList.length ? 0 : 300;
+                          notifier.listKey.currentState.removeItem(
+                            index,
+                            (BuildContext context,
+                                Animation<double> animation) {
+                              /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
+                              return FadeTransition(
+                                opacity: CurvedAnimation(
+                                    parent: animation,
+                                    curve: const Interval(0.5, 1)),
+                                child: SizeTransition(
+                                  sizeFactor: CurvedAnimation(
+                                      parent: animation,
+                                      curve: const Interval(0, 1)),
+                                  axisAlignment: 0,
+                                  child: _buildAnimatedListView(
+                                      animation, notifier, nextIndex),
+                                ),
+                              );
+                            },
+                            duration: Duration(milliseconds: duration),
+                          );
+                        },
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          DeadlineCard(type: Deadline.today),
-                          DeadlineCard(type: Deadline.tomorrow),
-                          DeadlineCard(type: Deadline.thisWeek),
-                          DeadlineCard(type: Deadline.thisMonth),
-                        ],
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          '${item.content}',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: item.deadline != Deadline.unselected ? 10 : 0),
+              if (item.deadline != Deadline.unselected)
+                Padding(
+                  padding: const EdgeInsets.only(left: 45),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 15,
+                        color: notifier.getDeadlineColor(item.deadline),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        notifier.getDeadlineText(item.deadline),
+                        style: TextStyle(
+                          color: notifier.getDeadlineColor(item.deadline),
+                        ),
                       ),
                     ],
                   ),
-                  Positioned(
-                    bottom: 30,
-                    right: 30,
-                    child: CircleAvatar(
-                      backgroundColor:
-                          notifier.isActive ? Colors.red : Colors.grey,
-                      radius: 15,
-                      child: IconButton(
-                        padding: const EdgeInsets.all(0),
-                        splashColor: Colors.transparent,
-                        color: Colors.white,
-                        icon: const Icon(Icons.arrow_upward_sharp),
-                        onPressed: () {
-                          if (notifier.isActive) {
-                            notifier.onTapSubmitButton(context);
-                          }
-                        },
-                      ),
-                    ),
-                  )
-                ],
-              );
-            }),
+                ),
+              const SizedBox(height: 10),
+              const StraightLineDivider(),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _buildOnTapAddToDoButton(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Consumer(
+          builder: (BuildContext context, watch, child) {
+            final notifier = watch(homePageProvider);
+            return GestureDetector(
+              onTap: () => notifier.resetDeadlineCard,
+              child: SizedBox(
+                height: 180,
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    color: Colors.black26,
+                  ),
+                  child: Stack(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: TextField(
+                              controller: notifier.textEditingController,
+                              onChanged: notifier.onChanged,
+                              autofocus: true,
+                              cursorColor: Colors.red,
+                              cursorHeight: 20,
+                              decoration: const InputDecoration(
+                                hintText: 'Add a task',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                                border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              DeadlineCard(deadlineType: Deadline.today),
+                              DeadlineCard(deadlineType: Deadline.tomorrow),
+                              DeadlineCard(deadlineType: Deadline.thisWeek),
+                              DeadlineCard(deadlineType: Deadline.thisMonth),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        bottom: 30,
+                        right: 30,
+                        child: CircleAvatar(
+                          backgroundColor:
+                              notifier.isActive ? Colors.red : Colors.grey,
+                          radius: 15,
+                          child: IconButton(
+                            padding: const EdgeInsets.all(0),
+                            splashColor: Colors.transparent,
+                            color: Colors.white,
+                            icon: const Icon(Icons.arrow_upward_sharp),
+                            onPressed: () {
+                              if (notifier.isActive) {
+                                if (notifier.toDoList.isNotEmpty) {
+                                  notifier.listKey.currentState.insertItem(
+                                    notifier.toDoList.length,
+                                    duration: const Duration(milliseconds: 200),
+                                  );
+                                }
+                                notifier.onTapSubmitButton(context);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -207,28 +256,28 @@ class HomePage extends ConsumerWidget {
 
 class DeadlineCard extends ConsumerWidget {
   const DeadlineCard({
-    this.type,
+    this.deadlineType,
     Key key,
   }) : super(key: key);
 
-  final Deadline type;
+  final Deadline deadlineType;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final notifier = watch(homePageProvider);
-    final color = notifier.getDeadlineColor(type);
+    final color = notifier.getDeadlineColor(deadlineType);
     return GestureDetector(
-      onTap: () => notifier.onTapDeadlineCard(type),
+      onTap: () => notifier.onTapDeadlineCard(deadlineType),
       child: SizedBox(
         height: 40,
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
               // color: Colors.grey.shade800,
-              color: type == notifier.selectedDeadlineType
+              color: deadlineType == notifier.selectedDeadlineType
                   ? color
                   : Colors.grey.shade800,
-              width: 1,
+              width: 2,
             ),
             borderRadius: BorderRadius.circular(5),
           ),
@@ -239,7 +288,7 @@ class DeadlineCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${notifier.getDeadlineText(type)}',
+                    '${notifier.getDeadlineText(deadlineType)}',
                     style: TextStyle(
                       color: color,
                     ),
