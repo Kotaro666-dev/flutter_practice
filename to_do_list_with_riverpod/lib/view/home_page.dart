@@ -15,18 +15,10 @@ class HomePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('To Do List'),
       ),
-      body: notifier.toDoList.isEmpty
-          ? const Center(
-              child: Text(
-                'Your ToDo list is empty',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          : SafeArea(
-              child: AnimatedList(
+      body: SafeArea(
+        child: notifier.toDoList.isEmpty
+            ? const ShowToDoListEmpty()
+            : AnimatedList(
                 key: notifier.listKey,
                 initialItemCount: notifier.toDoList.length,
                 itemBuilder: (BuildContext context, int index,
@@ -34,7 +26,7 @@ class HomePage extends ConsumerWidget {
                   return _buildAnimatedListView(animation, notifier, index);
                 },
               ),
-            ),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
         child: const Icon(
@@ -42,7 +34,10 @@ class HomePage extends ConsumerWidget {
           color: Colors.white,
         ),
         onPressed: () async {
-          await _buildOnTapAddToDoButton(context);
+          await _buildOnTapAddToDoButton(
+            context,
+            notifier.resetSelectedDeadlineCard,
+          );
         },
       ),
     );
@@ -69,8 +64,8 @@ class HomePage extends ConsumerWidget {
                       width: 20,
                       height: 20,
                       child: GestureDetector(
-                        onTap: () {
-                          notifier.onTapToDoDone(item.id);
+                        onTap: () async {
+                          notifier.onTapCompleteToDoItem(item.id);
                           final nextIndex = index == notifier.toDoList.length
                               ? index - 1
                               : index;
@@ -81,19 +76,8 @@ class HomePage extends ConsumerWidget {
                             (BuildContext context,
                                 Animation<double> animation) {
                               /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
-                              return FadeTransition(
-                                opacity: CurvedAnimation(
-                                    parent: animation,
-                                    curve: const Interval(0.5, 1)),
-                                child: SizeTransition(
-                                  sizeFactor: CurvedAnimation(
-                                      parent: animation,
-                                      curve: const Interval(0, 1)),
-                                  axisAlignment: 0,
-                                  child: _buildAnimatedListView(
-                                      animation, notifier, nextIndex),
-                                ),
-                              );
+                              return removeToDoItemAnimation(
+                                  animation, notifier, nextIndex);
                             },
                             duration: Duration(milliseconds: duration),
                           );
@@ -155,7 +139,24 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _buildOnTapAddToDoButton(BuildContext context) {
+  FadeTransition removeToDoItemAnimation(
+      Animation<double> animation, HomePageNotifier notifier, int nextIndex) {
+    return FadeTransition(
+      opacity:
+          CurvedAnimation(parent: animation, curve: const Interval(0.5, 1)),
+      child: SizeTransition(
+        sizeFactor:
+            CurvedAnimation(parent: animation, curve: const Interval(0, 1)),
+        axisAlignment: 0,
+        child: _buildAnimatedListView(animation, notifier, nextIndex),
+      ),
+    );
+  }
+
+  Future<void> _buildOnTapAddToDoButton(
+    BuildContext context,
+    VoidCallback resetDeadlineCard,
+  ) {
     return showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -163,7 +164,7 @@ class HomePage extends ConsumerWidget {
           builder: (BuildContext context, watch, child) {
             final notifier = watch(homePageProvider);
             return GestureDetector(
-              onTap: () => notifier.resetDeadlineCard,
+              onTap: () => notifier.resetSelectedDeadlineCard,
               child: SizedBox(
                 height: 180,
                 child: DecoratedBox(
@@ -250,6 +251,27 @@ class HomePage extends ConsumerWidget {
           },
         );
       },
+    ).whenComplete(() {
+      resetDeadlineCard();
+    });
+  }
+}
+
+class ShowToDoListEmpty extends StatelessWidget {
+  const ShowToDoListEmpty({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Your ToDo list is empty',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }
@@ -267,7 +289,7 @@ class DeadlineCard extends ConsumerWidget {
     final notifier = watch(homePageProvider);
     final color = notifier.getDeadlineColor(deadlineType);
     return GestureDetector(
-      onTap: () => notifier.onTapDeadlineCard(deadlineType),
+      onTap: () => notifier.onTapSelectDeadlineCard(deadlineType),
       child: SizedBox(
         height: 40,
         child: DecoratedBox(

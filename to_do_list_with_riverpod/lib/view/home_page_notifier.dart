@@ -97,17 +97,17 @@ class HomePageNotifier extends ChangeNotifier {
     }
   }
 
-  void onTapToDoDone(int id) {
+  void onTapCompleteToDoItem(int id) {
     _toDoList.removeWhere((item) => item.id == id);
     notifyListeners();
   }
 
-  void onTapDeadlineCard(Deadline deadline) {
+  void onTapSelectDeadlineCard(Deadline deadline) {
     _selectedDeadlineType = deadline;
     notifyListeners();
   }
 
-  void resetDeadlineCard() {
+  void resetSelectedDeadlineCard() {
     _selectedDeadlineType = Deadline.unselected;
     notifyListeners();
   }
