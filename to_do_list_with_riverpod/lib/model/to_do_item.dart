@@ -32,8 +32,7 @@ class ToDoItem {
 List<ToDoItem> toDoStaticLists = [
   ToDoItem(
     id: 1,
-    content:
-        'This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.',
+    content: 'This is 1.This is 1.This is 1.This is 1.This is 1.This is 1.',
     deadline: Deadline.today,
     isDone: false,
   ),

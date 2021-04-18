@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_list_with_riverpod/view/home_page.dart';
+import 'package:to_do_list_with_riverpod/view/home_page/home_page.dart';
 
 class MyApp extends StatelessWidget {
   @override

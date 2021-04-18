@@ -3,14 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
 import 'package:to_do_list_with_riverpod/riverpod/providers.dart';
-import 'package:to_do_list_with_riverpod/view/home_page_notifier.dart';
+import 'package:to_do_list_with_riverpod/riverpod/to_do_list_notifier.dart';
+import 'package:to_do_list_with_riverpod/utilitiy/utilities.dart';
+import 'package:to_do_list_with_riverpod/view/home_page/home_page_model.dart';
 
-import '../riverpod/providers.dart';
+import '../../riverpod/providers.dart';
 
 class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final notifier = watch(homePageProvider);
+    final notifier = watch(toDoListProvider);
+    final model = watch(homePageProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
@@ -19,11 +22,12 @@ class HomePage extends ConsumerWidget {
         child: notifier.toDoList.isEmpty
             ? const ShowToDoListEmpty()
             : AnimatedList(
-                key: notifier.listKey,
+                key: model.listKey,
                 initialItemCount: notifier.toDoList.length,
                 itemBuilder: (BuildContext context, int index,
                     Animation<double> animation) {
-                  return _buildAnimatedListView(animation, notifier, index);
+                  return _buildAnimatedListView(
+                      animation, model, notifier, index);
                 },
               ),
       ),
@@ -36,7 +40,7 @@ class HomePage extends ConsumerWidget {
         onPressed: () async {
           await _buildOnTapAddNewToDoButton(
             context,
-            notifier.resetModalBottomSheet,
+            model.resetModalBottomSheet,
           );
         },
       ),
@@ -45,7 +49,8 @@ class HomePage extends ConsumerWidget {
 
   SizeTransition _buildAnimatedListView(
     Animation<double> animation,
-    HomePageNotifier notifier,
+    HomePageModel model,
+    ToDoListNotifier notifier,
     int index,
   ) {
     final item = notifier.toDoList[index];
@@ -65,19 +70,19 @@ class HomePage extends ConsumerWidget {
                       height: 20,
                       child: GestureDetector(
                         onTap: () async {
-                          notifier.onTapCompleteToDoItem(item.id);
+                          notifier.removeNewToDoItem(item.id);
                           final nextIndex = index == notifier.toDoList.length
                               ? index - 1
                               : index;
                           final duration =
                               index == notifier.toDoList.length ? 0 : 300;
-                          notifier.listKey.currentState.removeItem(
+                          model.listKey.currentState.removeItem(
                             index,
                             (BuildContext context,
                                 Animation<double> animation) {
                               /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
                               return removeToDoItemAnimation(
-                                  animation, notifier, nextIndex);
+                                  animation, model, notifier, nextIndex);
                             },
                             duration: Duration(milliseconds: duration),
                           );
@@ -118,13 +123,13 @@ class HomePage extends ConsumerWidget {
                       Icon(
                         Icons.calendar_today_outlined,
                         size: 15,
-                        color: notifier.getDeadlineColor(item.deadline),
+                        color: model.getDeadlineColor(item.deadline),
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        notifier.getDeadlineText(item.deadline),
+                        model.getDeadlineText(item.deadline),
                         style: TextStyle(
-                          color: notifier.getDeadlineColor(item.deadline),
+                          color: model.getDeadlineColor(item.deadline),
                         ),
                       ),
                     ],
@@ -139,8 +144,8 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  FadeTransition removeToDoItemAnimation(
-      Animation<double> animation, HomePageNotifier notifier, int nextIndex) {
+  FadeTransition removeToDoItemAnimation(Animation<double> animation,
+      HomePageModel model, ToDoListNotifier notifier, int nextIndex) {
     return FadeTransition(
       opacity:
           CurvedAnimation(parent: animation, curve: const Interval(0.5, 1)),
@@ -148,7 +153,7 @@ class HomePage extends ConsumerWidget {
         sizeFactor:
             CurvedAnimation(parent: animation, curve: const Interval(0, 1)),
         axisAlignment: 0,
-        child: _buildAnimatedListView(animation, notifier, nextIndex),
+        child: _buildAnimatedListView(animation, model, notifier, nextIndex),
       ),
     );
   }
@@ -163,9 +168,10 @@ class HomePage extends ConsumerWidget {
       builder: (BuildContext context) {
         return Consumer(
           builder: (BuildContext context, watch, child) {
-            final notifier = watch(homePageProvider);
+            final model = watch(homePageProvider);
+            final notifier = watch(toDoListProvider);
             return GestureDetector(
-              onTap: () => notifier.resetSelectedDeadlineCard,
+              onTap: () => model.resetSelectedDeadlineCard,
               child: SizedBox(
                 height: 150,
                 child: DecoratedBox(
@@ -178,8 +184,8 @@ class HomePage extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: TextField(
-                          controller: notifier.textEditingController,
-                          onChanged: notifier.onChanged,
+                          controller: model.textEditingController,
+                          onChanged: model.onChanged,
                           autofocus: true,
                           cursorColor: Colors.red,
                           cursorHeight: 20,
@@ -216,7 +222,7 @@ class HomePage extends ConsumerWidget {
                           children: [
                             CircleAvatar(
                               backgroundColor:
-                                  notifier.isActive ? Colors.red : Colors.grey,
+                                  model.isActive ? Colors.red : Colors.grey,
                               radius: 15,
                               child: IconButton(
                                 padding: const EdgeInsets.all(0),
@@ -224,15 +230,15 @@ class HomePage extends ConsumerWidget {
                                 color: Colors.white,
                                 icon: const Icon(Icons.arrow_upward_sharp),
                                 onPressed: () {
-                                  if (notifier.isActive) {
+                                  if (model.isActive) {
                                     if (notifier.toDoList.isNotEmpty) {
-                                      notifier.listKey.currentState.insertItem(
+                                      model.listKey.currentState.insertItem(
                                         notifier.toDoList.length,
                                         duration:
                                             const Duration(milliseconds: 200),
                                       );
                                     }
-                                    notifier.onTapSubmitButton(context);
+                                    model.onTapSubmitButton(context, notifier);
                                   }
                                 },
                               ),
@@ -318,22 +324,6 @@ class DeadlineCard extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class StraightLineDivider extends StatelessWidget {
-  const StraightLineDivider({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Divider(
-      height: 5,
-      thickness: 1,
-      indent: leftPadding,
-      endIndent: 5,
     );
   }
 }
