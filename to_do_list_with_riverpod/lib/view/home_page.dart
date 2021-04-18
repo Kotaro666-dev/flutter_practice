@@ -34,9 +34,9 @@ class HomePage extends ConsumerWidget {
           color: Colors.white,
         ),
         onPressed: () async {
-          await _buildOnTapAddToDoButton(
+          await _buildOnTapAddNewToDoButton(
             context,
-            notifier.resetSelectedDeadlineCard,
+            notifier.resetModalBottomSheet,
           );
         },
       ),
@@ -153,12 +153,13 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _buildOnTapAddToDoButton(
+  Future<void> _buildOnTapAddNewToDoButton(
     BuildContext context,
-    VoidCallback resetDeadlineCard,
+    VoidCallback resetModalBottomSheet,
   ) {
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Consumer(
           builder: (BuildContext context, watch, child) {
@@ -166,81 +167,77 @@ class HomePage extends ConsumerWidget {
             return GestureDetector(
               onTap: () => notifier.resetSelectedDeadlineCard,
               child: SizedBox(
-                height: 180,
+                height: 150,
                 child: DecoratedBox(
                   decoration: const BoxDecoration(
                     color: Colors.black26,
                   ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: TextField(
-                              controller: notifier.textEditingController,
-                              onChanged: notifier.onChanged,
-                              autofocus: true,
-                              cursorColor: Colors.red,
-                              cursorHeight: 20,
-                              decoration: const InputDecoration(
-                                hintText: 'Add a task',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
-                                ),
-                                border: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
-                                ),
-                              ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: TextField(
+                          controller: notifier.textEditingController,
+                          onChanged: notifier.onChanged,
+                          autofocus: true,
+                          cursorColor: Colors.red,
+                          cursorHeight: 20,
+                          decoration: const InputDecoration(
+                            hintText: 'Add a task',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
-                              DeadlineCard(deadlineType: Deadline.today),
-                              DeadlineCard(deadlineType: Deadline.tomorrow),
-                              DeadlineCard(deadlineType: Deadline.thisWeek),
-                              DeadlineCard(deadlineType: Deadline.thisMonth),
-                            ],
-                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          DeadlineCard(deadlineType: Deadline.today),
+                          DeadlineCard(deadlineType: Deadline.tomorrow),
+                          DeadlineCard(deadlineType: Deadline.thisWeek),
+                          DeadlineCard(deadlineType: Deadline.thisMonth),
                         ],
                       ),
-                      Positioned(
-                        bottom: 30,
-                        right: 30,
-                        child: CircleAvatar(
-                          backgroundColor:
-                              notifier.isActive ? Colors.red : Colors.grey,
-                          radius: 15,
-                          child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            splashColor: Colors.transparent,
-                            color: Colors.white,
-                            icon: const Icon(Icons.arrow_upward_sharp),
-                            onPressed: () {
-                              if (notifier.isActive) {
-                                if (notifier.toDoList.isNotEmpty) {
-                                  notifier.listKey.currentState.insertItem(
-                                    notifier.toDoList.length,
-                                    duration: const Duration(milliseconds: 200),
-                                  );
-                                }
-                                notifier.onTapSubmitButton(context);
-                              }
-                            },
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15, bottom: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor:
+                                  notifier.isActive ? Colors.red : Colors.grey,
+                              radius: 15,
+                              child: IconButton(
+                                padding: const EdgeInsets.all(0),
+                                splashColor: Colors.transparent,
+                                color: Colors.white,
+                                icon: const Icon(Icons.arrow_upward_sharp),
+                                onPressed: () {
+                                  if (notifier.isActive) {
+                                    if (notifier.toDoList.isNotEmpty) {
+                                      notifier.listKey.currentState.insertItem(
+                                        notifier.toDoList.length,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                      );
+                                    }
+                                    notifier.onTapSubmitButton(context);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -252,7 +249,7 @@ class HomePage extends ConsumerWidget {
         );
       },
     ).whenComplete(() {
-      resetDeadlineCard();
+      resetModalBottomSheet();
     });
   }
 }
@@ -304,7 +301,7 @@ class DeadlineCard extends ConsumerWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

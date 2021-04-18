@@ -111,4 +111,12 @@ class HomePageNotifier extends ChangeNotifier {
     _selectedDeadlineType = Deadline.unselected;
     notifyListeners();
   }
+
+  void resetModalBottomSheet() {
+    _textEditingController.clear();
+    _content = '';
+    _selectedDeadlineType = Deadline.unselected;
+    _isActive = false;
+    notifyListeners();
+  }
 }
