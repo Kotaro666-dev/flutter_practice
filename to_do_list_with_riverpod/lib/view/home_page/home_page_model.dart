@@ -7,7 +7,7 @@ import 'package:to_do_list_with_riverpod/view/task_list_page/task_list_page.dart
 class HomePageModel extends ChangeNotifier
     with GetDeadlineDetailsMixin, AddToDoMixin {
   HomePageModel() {
-    initialize();
+    initialize(Deadline.unselected);
   }
 
   void onTapDeadlineListItem(BuildContext context, Deadline deadlineType) {

@@ -14,8 +14,11 @@ mixin AddToDoMixin on ChangeNotifier {
   Deadline _selectedDeadlineType;
   Deadline get selectedDeadlineType => _selectedDeadlineType;
 
-  void initialize() {
-    _selectedDeadlineType = Deadline.unselected;
+  Deadline _currentPage;
+
+  void initialize(Deadline deadline) {
+    _selectedDeadlineType = deadline;
+    _currentPage = deadline;
     _textEditingController = TextEditingController();
     _isActive = false;
     notifyListeners();
@@ -40,7 +43,7 @@ mixin AddToDoMixin on ChangeNotifier {
   void onTapSubmitButton(BuildContext context) {
     _textEditingController.clear();
     _content = '';
-    _selectedDeadlineType = Deadline.unselected;
+    _selectedDeadlineType = _currentPage;
     _isActive = false;
     notifyListeners();
   }
@@ -51,14 +54,14 @@ mixin AddToDoMixin on ChangeNotifier {
   }
 
   void resetSelectedDeadlineCard() {
-    _selectedDeadlineType = Deadline.unselected;
+    _selectedDeadlineType = _currentPage;
     notifyListeners();
   }
 
   void resetModalBottomSheet() {
     _textEditingController.clear();
     _content = '';
-    _selectedDeadlineType = Deadline.unselected;
+    _selectedDeadlineType = _currentPage;
     _isActive = false;
     notifyListeners();
   }

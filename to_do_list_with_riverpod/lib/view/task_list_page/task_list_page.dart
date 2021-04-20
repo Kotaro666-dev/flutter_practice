@@ -22,7 +22,7 @@ class TaskListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final model = watch(taskListPageModelProvider);
+    final model = watch(taskListPageModelProvider(deadlineType));
     final listNotifier = watch(deadlineListProvider);
     return Scaffold(
       appBar: AppBar(
@@ -188,7 +188,7 @@ class TaskListPage extends ConsumerWidget {
       builder: (BuildContext context) {
         return Consumer(
           builder: (BuildContext context, watch, child) {
-            final model = watch(taskListPageModelProvider);
+            final model = watch(taskListPageModelProvider(deadlineType));
             final listNotifier = watch(deadlineListProvider);
             return GestureDetector(
               onTap: () => model.resetSelectedDeadlineCard,
@@ -228,11 +228,15 @@ class TaskListPage extends ConsumerWidget {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          DeadlineCard(deadlineType: Deadline.today),
-                          DeadlineCard(deadlineType: Deadline.tomorrow),
-                          DeadlineCard(deadlineType: Deadline.thisWeek),
-                          DeadlineCard(deadlineType: Deadline.thisMonth),
+                        children: [
+                          DeadlineCard(
+                              deadlineType: Deadline.today, model: model),
+                          DeadlineCard(
+                              deadlineType: Deadline.tomorrow, model: model),
+                          DeadlineCard(
+                              deadlineType: Deadline.thisWeek, model: model),
+                          DeadlineCard(
+                              deadlineType: Deadline.thisMonth, model: model),
                         ],
                       ),
                       Padding(
@@ -314,24 +318,25 @@ class ShowToDoListEmpty extends StatelessWidget {
 class DeadlineCard extends ConsumerWidget {
   const DeadlineCard({
     this.deadlineType,
+    this.model,
     Key key,
   }) : super(key: key);
 
   final Deadline deadlineType;
+  final TaskListPageModel model;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final notifier = watch(taskListPageModelProvider);
-    final color = notifier.getDeadlineColor(deadlineType);
+    final color = model.getDeadlineColor(deadlineType);
     return GestureDetector(
-      onTap: () => notifier.onTapSelectDeadlineCard(deadlineType),
+      onTap: () => model.onTapSelectDeadlineCard(deadlineType),
       child: SizedBox(
         height: 40,
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
               // color: Colors.grey.shade800,
-              color: deadlineType == notifier.selectedDeadlineType
+              color: deadlineType == model.selectedDeadlineType
                   ? color
                   : Colors.grey.shade800,
               width: 2,
@@ -345,7 +350,7 @@ class DeadlineCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${notifier.getDeadlineText(deadlineType)}',
+                    '${model.getDeadlineText(deadlineType)}',
                     style: TextStyle(
                       color: color,
                     ),
