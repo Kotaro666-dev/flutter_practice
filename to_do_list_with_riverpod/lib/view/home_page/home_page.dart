@@ -1,45 +1,55 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
-import 'package:to_do_list_with_riverpod/riverpod/deadline_list_notifier.dart';
-import 'package:to_do_list_with_riverpod/riverpod/providers.dart';
 import 'package:to_do_list_with_riverpod/utilitiy/utilities.dart';
-import 'package:to_do_list_with_riverpod/view/home_page/home_page_model.dart';
 
 import '../../riverpod/providers.dart';
 
-class HomePageArgument {
-  HomePageArgument({this.deadlineType});
-  final Deadline deadlineType;
-}
-
 class HomePage extends ConsumerWidget {
-  const HomePage({this.deadlineType});
-  final Deadline deadlineType;
-
-  static const routeName = '/home_page';
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final model = watch(homePageProvider);
-    final listNotifier = watch(deadlineListProvider);
+    final notifier = watch(deadlineListProvider);
+    final model = watch(categoryPageProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${model.getDeadlineText(deadlineType)}'),
+        title: const Text('ToDo List'),
       ),
-      body: SafeArea(
-        child: listNotifier.getToDoList(deadlineType).isEmpty
-            ? const ShowToDoListEmpty()
-            : AnimatedList(
-                key: listNotifier.listKey,
-                initialItemCount: listNotifier.getToDoList(deadlineType).length,
-                itemBuilder: (BuildContext context, int index,
-                    Animation<double> animation) {
-                  return _buildAnimatedListView(
-                      animation, model, listNotifier, index);
-                },
-              ),
+      body: Center(
+        child: Column(
+          children: [
+            DeadlineListItem(
+              title: 'Today',
+              count: notifier.deadlineList.todayList.length,
+              type: Deadline.today,
+            ),
+            const StraightLineDivider(),
+            DeadlineListItem(
+              title: 'Tomorrow',
+              count: notifier.deadlineList.tomorrowList.length,
+              type: Deadline.tomorrow,
+            ),
+            const StraightLineDivider(),
+            DeadlineListItem(
+              title: 'This Week',
+              count: notifier.deadlineList.thisWeekList.length,
+              type: Deadline.thisWeek,
+            ),
+            const StraightLineDivider(),
+            DeadlineListItem(
+              title: 'This Month',
+              count: notifier.deadlineList.thisMonthList.length,
+              type: Deadline.thisMonth,
+            ),
+            const StraightLineDivider(),
+            DeadlineListItem(
+              title: 'Unknown',
+              count: notifier.deadlineList.unselectedList.length,
+              type: Deadline.unselected,
+            ),
+            const StraightLineDivider(),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
@@ -57,124 +67,6 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  SizeTransition _buildAnimatedListView(
-    Animation<double> animation,
-    HomePageModel model,
-    DeadlineListNotifier listNotifier,
-    int index,
-  ) {
-    final item = listNotifier.getToDoList(deadlineType)[index];
-    return SizeTransition(
-      sizeFactor: animation,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: leftPadding),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: GestureDetector(
-                        onTap: () async {
-                          listNotifier.removeNewToDoItem(
-                            id: item.id,
-                            deadlineType: deadlineType,
-                          );
-                          final nextIndex = index ==
-                                  listNotifier.getToDoList(deadlineType).length
-                              ? index - 1
-                              : index;
-                          final duration = index ==
-                                  listNotifier.getToDoList(deadlineType).length
-                              ? 0
-                              : 300;
-                          listNotifier.listKey.currentState.removeItem(
-                            index,
-                            (BuildContext context,
-                                Animation<double> animation) {
-                              /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
-                              return removeToDoItemAnimation(
-                                  animation, model, listNotifier, nextIndex);
-                            },
-                            duration: Duration(milliseconds: duration),
-                          );
-                        },
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          '${item.content}',
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: item.deadline != Deadline.unselected ? 10 : 0),
-              if (item.deadline != Deadline.unselected)
-                Padding(
-                  padding: const EdgeInsets.only(left: 45),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today_outlined,
-                        size: 15,
-                        color: model.getDeadlineColor(item.deadline),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        model.getDeadlineText(item.deadline),
-                        style: TextStyle(
-                          color: model.getDeadlineColor(item.deadline),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              const SizedBox(height: 10),
-              const StraightLineDivider(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  FadeTransition removeToDoItemAnimation(Animation<double> animation,
-      HomePageModel model, DeadlineListNotifier listNotifier, int nextIndex) {
-    return FadeTransition(
-      opacity:
-          CurvedAnimation(parent: animation, curve: const Interval(0.5, 1)),
-      child: SizeTransition(
-        sizeFactor:
-            CurvedAnimation(parent: animation, curve: const Interval(0, 1)),
-        axisAlignment: 0,
-        child:
-            _buildAnimatedListView(animation, model, listNotifier, nextIndex),
-      ),
-    );
-  }
-
   Future<void> _buildOnTapAddNewToDoButton(
     BuildContext context,
     VoidCallback resetModalBottomSheet,
@@ -185,7 +77,7 @@ class HomePage extends ConsumerWidget {
       builder: (BuildContext context) {
         return Consumer(
           builder: (BuildContext context, watch, child) {
-            final model = watch(homePageProvider);
+            final model = watch(categoryPageProvider);
             final listNotifier = watch(deadlineListProvider);
             return GestureDetector(
               onTap: () => model.resetSelectedDeadlineCard,
@@ -248,21 +140,6 @@ class HomePage extends ConsumerWidget {
                                 icon: const Icon(Icons.arrow_upward_sharp),
                                 onPressed: () {
                                   if (model.isActive) {
-                                    final isSafeAnimateList = listNotifier
-                                            .getToDoList(deadlineType)
-                                            .isNotEmpty &&
-                                        deadlineType ==
-                                            model.selectedDeadlineType;
-                                    if (isSafeAnimateList) {
-                                      listNotifier.listKey.currentState
-                                          .insertItem(
-                                        listNotifier
-                                            .getToDoList(deadlineType)
-                                            .length,
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                      );
-                                    }
                                     listNotifier.addNewToDoItem(
                                         content: model.content,
                                         selectedDeadlineType:
@@ -289,19 +166,49 @@ class HomePage extends ConsumerWidget {
   }
 }
 
-class ShowToDoListEmpty extends StatelessWidget {
-  const ShowToDoListEmpty({
+class DeadlineListItem extends ConsumerWidget {
+  const DeadlineListItem({
     Key key,
+    @required this.title,
+    @required this.count,
+    @required this.type,
   }) : super(key: key);
 
+  final String title;
+  final int count;
+  final Deadline type;
+
   @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Your ToDo list is empty',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+  Widget build(BuildContext context, ScopedReader watch) {
+    final model = watch(categoryPageProvider);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        model.onTapDeadlineListItem(context, type);
+      },
+      child: SizedBox(
+        height: 50,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$title',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                '$count',
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -318,17 +225,16 @@ class DeadlineCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final notifier = watch(homePageProvider);
-    final color = notifier.getDeadlineColor(deadlineType);
+    final model = watch(categoryPageProvider);
+    final color = model.getDeadlineColor(deadlineType);
     return GestureDetector(
-      onTap: () => notifier.onTapSelectDeadlineCard(deadlineType),
+      onTap: () => model.onTapSelectDeadlineCard(deadlineType),
       child: SizedBox(
         height: 40,
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
-              // color: Colors.grey.shade800,
-              color: deadlineType == notifier.selectedDeadlineType
+              color: deadlineType == model.selectedDeadlineType
                   ? color
                   : Colors.grey.shade800,
               width: 2,
@@ -342,7 +248,7 @@ class DeadlineCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${notifier.getDeadlineText(deadlineType)}',
+                    '${model.getDeadlineText(deadlineType)}',
                     style: TextStyle(
                       color: color,
                     ),
