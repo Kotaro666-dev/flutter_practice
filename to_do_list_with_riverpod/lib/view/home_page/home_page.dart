@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
+import 'package:to_do_list_with_riverpod/riverpod/deadline_category_notifier.dart';
 import 'package:to_do_list_with_riverpod/riverpod/providers.dart';
-import 'package:to_do_list_with_riverpod/riverpod/to_do_list_notifier.dart';
 import 'package:to_do_list_with_riverpod/utilitiy/utilities.dart';
 import 'package:to_do_list_with_riverpod/view/home_page/home_page_model.dart';
 
@@ -22,18 +22,18 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final notifier = watch(toDoListProvider);
     final model = watch(homePageProvider);
+    final notifier = watch(deadlineListProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('To Do List'),
+        title: Text('${model.getDeadlineText(deadlineType)}'),
       ),
       body: SafeArea(
-        child: notifier.toDoList.isEmpty
+        child: notifier.getToDoList(deadlineType).isEmpty
             ? const ShowToDoListEmpty()
             : AnimatedList(
-                key: model.listKey,
-                initialItemCount: notifier.toDoList.length,
+                key: notifier.listKey,
+                initialItemCount: notifier.getToDoList(deadlineType).length,
                 itemBuilder: (BuildContext context, int index,
                     Animation<double> animation) {
                   return _buildAnimatedListView(
@@ -60,10 +60,10 @@ class HomePage extends ConsumerWidget {
   SizeTransition _buildAnimatedListView(
     Animation<double> animation,
     HomePageModel model,
-    ToDoListNotifier notifier,
+    DeadlineListNotifier notifier,
     int index,
   ) {
-    final item = notifier.toDoList[index];
+    final item = notifier.getToDoList(deadlineType)[index];
     return SizeTransition(
       sizeFactor: animation,
       child: Padding(
@@ -80,13 +80,19 @@ class HomePage extends ConsumerWidget {
                       height: 20,
                       child: GestureDetector(
                         onTap: () async {
-                          notifier.removeNewToDoItem(item.id);
-                          final nextIndex = index == notifier.toDoList.length
-                              ? index - 1
-                              : index;
+                          notifier.removeNewToDoItem(
+                            id: item.id,
+                            deadlineType: deadlineType,
+                          );
+                          final nextIndex =
+                              index == notifier.getToDoList(deadlineType).length
+                                  ? index - 1
+                                  : index;
                           final duration =
-                              index == notifier.toDoList.length ? 0 : 300;
-                          model.listKey.currentState.removeItem(
+                              index == notifier.getToDoList(deadlineType).length
+                                  ? 0
+                                  : 300;
+                          notifier.listKey.currentState.removeItem(
                             index,
                             (BuildContext context,
                                 Animation<double> animation) {
@@ -155,7 +161,7 @@ class HomePage extends ConsumerWidget {
   }
 
   FadeTransition removeToDoItemAnimation(Animation<double> animation,
-      HomePageModel model, ToDoListNotifier notifier, int nextIndex) {
+      HomePageModel model, DeadlineListNotifier notifier, int nextIndex) {
     return FadeTransition(
       opacity:
           CurvedAnimation(parent: animation, curve: const Interval(0.5, 1)),
@@ -179,7 +185,7 @@ class HomePage extends ConsumerWidget {
         return Consumer(
           builder: (BuildContext context, watch, child) {
             final model = watch(homePageProvider);
-            final notifier = watch(toDoListProvider);
+            final notifier = watch(deadlineListProvider);
             return GestureDetector(
               onTap: () => model.resetSelectedDeadlineCard,
               child: SizedBox(
@@ -241,14 +247,25 @@ class HomePage extends ConsumerWidget {
                                 icon: const Icon(Icons.arrow_upward_sharp),
                                 onPressed: () {
                                   if (model.isActive) {
-                                    if (notifier.toDoList.isNotEmpty) {
-                                      model.listKey.currentState.insertItem(
-                                        notifier.toDoList.length,
+                                    final isSafeAnimateList = notifier
+                                            .getToDoList(deadlineType)
+                                            .isNotEmpty &&
+                                        deadlineType ==
+                                            model.selectedDeadlineType;
+                                    if (isSafeAnimateList) {
+                                      notifier.listKey.currentState.insertItem(
+                                        notifier
+                                            .getToDoList(deadlineType)
+                                            .length,
                                         duration:
                                             const Duration(milliseconds: 200),
                                       );
                                     }
-                                    model.onTapSubmitButton(context, notifier);
+                                    notifier.addNewToDoItem(
+                                        content: model.content,
+                                        selectedDeadlineType:
+                                            model.selectedDeadlineType);
+                                    model.onTapSubmitButton(context);
                                   }
                                 },
                               ),

@@ -2,10 +2,10 @@ import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
 
 class DeadlineList {
   DeadlineList({
-    this.todayList = const [],
-    this.tomorrowList = const [],
-    this.thisWeekList = const [],
-    this.thisMonthList = const [],
+    this.todayList,
+    this.tomorrowList,
+    this.thisWeekList,
+    this.thisMonthList,
   });
 
   List<ToDoItem> todayList;

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
-import 'package:to_do_list_with_riverpod/riverpod/to_do_list_notifier.dart';
 
 class HomePageModel extends ChangeNotifier {
   HomePageModel() {
     _initialize();
   }
-  GlobalKey<AnimatedListState> _listKey;
-  GlobalKey<AnimatedListState> get listKey => _listKey;
 
   String _content = '';
   String get content => _content;
@@ -23,7 +20,6 @@ class HomePageModel extends ChangeNotifier {
   Deadline get selectedDeadlineType => _selectedDeadlineType;
 
   void _initialize() {
-    _listKey = GlobalKey<AnimatedListState>();
     _selectedDeadlineType = Deadline.unselected;
     _textEditingController = TextEditingController();
     _isActive = false;
@@ -46,8 +42,7 @@ class HomePageModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onTapSubmitButton(BuildContext context, ToDoListNotifier notifier) {
-    notifier.addNewToDoItem(content, _selectedDeadlineType);
+  void onTapSubmitButton(BuildContext context) {
     _textEditingController.clear();
     _content = '';
     _selectedDeadlineType = Deadline.unselected;
