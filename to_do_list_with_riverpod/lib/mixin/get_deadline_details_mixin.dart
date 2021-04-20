@@ -8,11 +8,11 @@ mixin GetDeadlineDetailsMixin {
       return 'Today';
     } else if (deadline == Deadline.tomorrow) {
       return 'Tomorrow';
-    } else if (deadline == Deadline.thisWeek) {
+    } else if (deadline == Deadline.next7days) {
       return 'Next 7 Days';
-    } else if (deadline == Deadline.thisMonth) {
+    } else if (deadline == Deadline.duringThisMonth) {
       return 'During This Month';
-    } else if (deadline == Deadline.unselected) {
+    } else if (deadline == Deadline.undecided) {
       return 'Undecided';
     } else {
       return '';
@@ -24,11 +24,11 @@ mixin GetDeadlineDetailsMixin {
       return 'Today';
     } else if (deadline == Deadline.tomorrow) {
       return 'Tomorrow';
-    } else if (deadline == Deadline.thisWeek) {
+    } else if (deadline == Deadline.next7days) {
       return 'Next 7 Days';
-    } else if (deadline == Deadline.thisMonth) {
+    } else if (deadline == Deadline.duringThisMonth) {
       return 'During This Month';
-    } else if (deadline == Deadline.unselected) {
+    } else if (deadline == Deadline.undecided) {
       return 'Undecided';
     } else {
       return '';
@@ -40,11 +40,11 @@ mixin GetDeadlineDetailsMixin {
       return kTodayColor;
     } else if (deadline == Deadline.tomorrow) {
       return kTomorrowColor;
-    } else if (deadline == Deadline.thisWeek) {
+    } else if (deadline == Deadline.next7days) {
       return kThisWeekColor;
-    } else if (deadline == Deadline.thisMonth) {
+    } else if (deadline == Deadline.duringThisMonth) {
       return kThisMonthColor;
-    } else if (deadline == Deadline.unselected) {
+    } else if (deadline == Deadline.undecided) {
       return Colors.grey.shade800;
     } else {
       return Colors.white;

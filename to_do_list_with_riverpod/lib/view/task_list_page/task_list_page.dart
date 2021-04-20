@@ -129,8 +129,8 @@ class TaskListPage extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(height: item.deadline != Deadline.unselected ? 10 : 0),
-              if (item.deadline != Deadline.unselected)
+              SizedBox(height: item.deadline != Deadline.undecided ? 10 : 0),
+              if (item.deadline != Deadline.undecided)
                 Padding(
                   padding: const EdgeInsets.only(left: 45),
                   child: Row(
@@ -266,10 +266,11 @@ class TaskListPage extends ConsumerWidget {
                                 deadlineType: Deadline.tomorrow, model: model),
                             const SizedBox(width: 10),
                             DeadlineCard(
-                                deadlineType: Deadline.thisWeek, model: model),
+                                deadlineType: Deadline.next7days, model: model),
                             const SizedBox(width: 10),
                             DeadlineCard(
-                                deadlineType: Deadline.thisMonth, model: model),
+                                deadlineType: Deadline.duringThisMonth,
+                                model: model),
                             const SizedBox(width: 10),
                           ],
                         ),

@@ -1,9 +1,9 @@
 enum Deadline {
-  unselected,
+  undecided,
   today,
   tomorrow,
-  thisWeek,
-  thisMonth,
+  next7days,
+  duringThisMonth,
 }
 
 class ToDoItem {

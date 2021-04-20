@@ -16,11 +16,11 @@ class DeadlineListNotifier extends ChangeNotifier {
   void _initialize() {
     _deadlineList = DeadlineList();
     _deadlineList
-      ..todayList = []
-      ..tomorrowList = []
-      ..thisWeekList = []
-      ..thisMonthList = []
-      ..unselectedList = [];
+      ..todayList = mockTodayList
+      ..tomorrowList = mockTomorrowList
+      ..next7DaysList = mockThisWeekList
+      ..duringThisMonthList = mockThisMonthList
+      ..undecided = [];
     _listKey = GlobalKey<AnimatedListState>();
   }
 
@@ -29,12 +29,12 @@ class DeadlineListNotifier extends ChangeNotifier {
       return _deadlineList.todayList;
     } else if (deadline == Deadline.tomorrow) {
       return _deadlineList.tomorrowList;
-    } else if (deadline == Deadline.thisWeek) {
-      return _deadlineList.thisWeekList;
-    } else if (deadline == Deadline.thisMonth) {
-      return _deadlineList.thisMonthList;
-    } else if (deadline == Deadline.unselected) {
-      return _deadlineList.unselectedList;
+    } else if (deadline == Deadline.next7days) {
+      return _deadlineList.next7DaysList;
+    } else if (deadline == Deadline.duringThisMonth) {
+      return _deadlineList.duringThisMonthList;
+    } else if (deadline == Deadline.undecided) {
+      return _deadlineList.undecided;
     }
     return null;
   }
