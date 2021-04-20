@@ -40,6 +40,13 @@ class CategoryPage extends ConsumerWidget {
               count: notifier.deadlineList.thisMonthList.length,
               type: Deadline.thisMonth,
             ),
+            const StraightLineDivider(),
+            DeadlineListItem(
+              title: 'Unknown',
+              count: notifier.deadlineList.unselectedList.length,
+              type: Deadline.unselected,
+            ),
+            const StraightLineDivider(),
           ],
         ),
       ),

@@ -19,7 +19,8 @@ class DeadlineListNotifier extends ChangeNotifier {
       ..todayList = []
       ..tomorrowList = []
       ..thisWeekList = []
-      ..thisMonthList = [];
+      ..thisMonthList = []
+      ..unselectedList = [];
     _listKey = GlobalKey<AnimatedListState>();
   }
 
@@ -32,6 +33,8 @@ class DeadlineListNotifier extends ChangeNotifier {
       return _deadlineList.thisWeekList;
     } else if (deadline == Deadline.thisMonth) {
       return _deadlineList.thisMonthList;
+    } else if (deadline == Deadline.unselected) {
+      return _deadlineList.unselectedList;
     }
     return null;
   }

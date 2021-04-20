@@ -60,7 +60,7 @@ class HomePageModel extends ChangeNotifier {
     } else if (deadline == Deadline.thisMonth) {
       return 'This Month';
     } else if (deadline == Deadline.unselected) {
-      return 'unSelected';
+      return 'Unknown';
     } else {
       return '';
     }

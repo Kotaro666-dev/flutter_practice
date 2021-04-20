@@ -6,10 +6,12 @@ class DeadlineList {
     this.tomorrowList,
     this.thisWeekList,
     this.thisMonthList,
+    this.unselectedList,
   });
 
   List<ToDoItem> todayList;
   List<ToDoItem> tomorrowList;
   List<ToDoItem> thisWeekList;
   List<ToDoItem> thisMonthList;
+  List<ToDoItem> unselectedList;
 }
