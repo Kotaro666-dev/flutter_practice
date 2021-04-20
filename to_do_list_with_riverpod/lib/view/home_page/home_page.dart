@@ -10,7 +10,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final notifier = watch(deadlineListProvider);
-    final model = watch(categoryPageProvider);
+    final model = watch(homePageModelProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('ToDo List'),
@@ -77,7 +77,7 @@ class HomePage extends ConsumerWidget {
       builder: (BuildContext context) {
         return Consumer(
           builder: (BuildContext context, watch, child) {
-            final model = watch(categoryPageProvider);
+            final model = watch(homePageModelProvider);
             final listNotifier = watch(deadlineListProvider);
             return GestureDetector(
               onTap: () => model.resetSelectedDeadlineCard,
@@ -180,7 +180,7 @@ class DeadlineListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final model = watch(categoryPageProvider);
+    final model = watch(homePageModelProvider);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -225,7 +225,7 @@ class DeadlineCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final model = watch(categoryPageProvider);
+    final model = watch(homePageModelProvider);
     final color = model.getDeadlineColor(deadlineType);
     return GestureDetector(
       onTap: () => model.onTapSelectDeadlineCard(deadlineType),

@@ -22,7 +22,7 @@ class TaskListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final model = watch(homePageProvider);
+    final model = watch(taskListPageModelProvider);
     final listNotifier = watch(deadlineListProvider);
     return Scaffold(
       appBar: AppBar(
@@ -188,7 +188,7 @@ class TaskListPage extends ConsumerWidget {
       builder: (BuildContext context) {
         return Consumer(
           builder: (BuildContext context, watch, child) {
-            final model = watch(homePageProvider);
+            final model = watch(taskListPageModelProvider);
             final listNotifier = watch(deadlineListProvider);
             return GestureDetector(
               onTap: () => model.resetSelectedDeadlineCard,
@@ -321,7 +321,7 @@ class DeadlineCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final notifier = watch(homePageProvider);
+    final notifier = watch(taskListPageModelProvider);
     final color = notifier.getDeadlineColor(deadlineType);
     return GestureDetector(
       onTap: () => notifier.onTapSelectDeadlineCard(deadlineType),
