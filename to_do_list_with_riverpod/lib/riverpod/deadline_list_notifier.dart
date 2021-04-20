@@ -48,9 +48,16 @@ class DeadlineListNotifier extends ChangeNotifier {
       id: list.isEmpty ? 1 : list.last.id + 1,
       content: content,
       deadline: selectedDeadlineType,
-      isDone: false,
+      isSelected: false,
     );
     getToDoList(selectedDeadlineType).add(newToDo);
+    notifyListeners();
+  }
+
+  void setItemIsSelectedTrue({int id, Deadline deadlineType}) {
+    final targetIndex =
+        getToDoList(deadlineType).indexWhere((item) => item.id == id);
+    getToDoList(deadlineType)[targetIndex].isSelected = true;
     notifyListeners();
   }
 

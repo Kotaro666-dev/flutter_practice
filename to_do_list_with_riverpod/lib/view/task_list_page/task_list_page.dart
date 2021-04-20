@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
@@ -79,38 +80,36 @@ class TaskListPage extends ConsumerWidget {
                       width: 20,
                       height: 20,
                       child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () async {
-                          listNotifier.removeNewToDoItem(
-                            id: item.id,
-                            deadlineType: deadlineType,
-                          );
-                          final nextIndex = index ==
-                                  listNotifier.getToDoList(deadlineType).length
-                              ? index - 1
-                              : index;
-                          final duration = index ==
-                                  listNotifier.getToDoList(deadlineType).length
-                              ? 0
-                              : 300;
-                          listNotifier.listKey.currentState.removeItem(
-                            index,
-                            (BuildContext context,
-                                Animation<double> animation) {
-                              /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
-                              return removeToDoItemAnimation(
-                                  animation, model, listNotifier, nextIndex);
-                            },
-                            duration: Duration(milliseconds: duration),
-                          );
+                          HapticFeedback.lightImpact();
+                          _startRemoveAnimation(
+                              listNotifier, item, index, model);
                         },
                         child: DecoratedBox(
                           decoration: BoxDecoration(
+                            color: listNotifier
+                                    .getToDoList(deadlineType)[index]
+                                    .isSelected
+                                ? Colors.white
+                                : Colors.grey[800],
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
                               width: 1,
                               color: Colors.white,
                             ),
                           ),
+                          child: listNotifier
+                                  .getToDoList(deadlineType)[index]
+                                  .isSelected
+                              ? FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.grey[800],
+                                  ),
+                                )
+                              : Container(),
                         ),
                       ),
                     ),
@@ -158,6 +157,35 @@ class TaskListPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _startRemoveAnimation(DeadlineListNotifier listNotifier, ToDoItem item,
+      int index, TaskListPageModel model) {
+    listNotifier.setItemIsSelectedTrue(
+      id: item.id,
+      deadlineType: deadlineType,
+    );
+    final nextIndex = index == listNotifier.getToDoList(deadlineType).length - 1
+        ? index - 1
+        : index;
+    const duration = 400;
+    Future<void>.delayed(const Duration(milliseconds: duration)).then((_) => {
+          listNotifier.listKey.currentState.removeItem(
+            index,
+            (BuildContext context, Animation<double> animation) {
+              /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
+              return removeToDoItemAnimation(
+                  animation, model, listNotifier, nextIndex);
+            },
+            duration: const Duration(milliseconds: duration),
+          )
+        });
+    Future<void>.delayed(const Duration(milliseconds: duration)).then((_) => {
+          listNotifier.removeNewToDoItem(
+            id: item.id,
+            deadlineType: deadlineType,
+          )
+        });
   }
 
   FadeTransition removeToDoItemAnimation(
