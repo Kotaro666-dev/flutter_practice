@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
 import 'package:to_do_list_with_riverpod/utilitiy/utilities.dart';
-import 'package:to_do_list_with_riverpod/view/home_page/home_page.dart';
 
 import '../../riverpod/providers.dart';
 
@@ -13,7 +12,9 @@ class CategoryPage extends ConsumerWidget {
     final notifier = watch(deadlineListProvider);
     final model = watch(categoryPageProvider);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('ToDo List'),
+      ),
       body: Center(
         child: Column(
           children: [
@@ -180,10 +181,9 @@ class DeadlineListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final model = watch(categoryPageProvider);
-    final deadlineTypeNotifier = watch(deadlineTypeProvider);
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
-        deadlineTypeNotifier.deadlineType = type;
         model.onTapDeadlineListItem(context, type);
       },
       child: SizedBox(
