@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do_list_with_riverpod/constants/constant.dart';
 import 'package:to_do_list_with_riverpod/model/to_do_item.dart';
-import 'package:to_do_list_with_riverpod/riverpod/deadline_category_notifier.dart';
+import 'package:to_do_list_with_riverpod/riverpod/deadline_list_notifier.dart';
 import 'package:to_do_list_with_riverpod/riverpod/providers.dart';
 import 'package:to_do_list_with_riverpod/utilitiy/utilities.dart';
 import 'package:to_do_list_with_riverpod/view/home_page/home_page_model.dart';
@@ -23,21 +23,21 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final model = watch(homePageProvider);
-    final notifier = watch(deadlineListProvider);
+    final listNotifier = watch(deadlineListProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('${model.getDeadlineText(deadlineType)}'),
       ),
       body: SafeArea(
-        child: notifier.getToDoList(deadlineType).isEmpty
+        child: listNotifier.getToDoList(deadlineType).isEmpty
             ? const ShowToDoListEmpty()
             : AnimatedList(
-                key: notifier.listKey,
-                initialItemCount: notifier.getToDoList(deadlineType).length,
+                key: listNotifier.listKey,
+                initialItemCount: listNotifier.getToDoList(deadlineType).length,
                 itemBuilder: (BuildContext context, int index,
                     Animation<double> animation) {
                   return _buildAnimatedListView(
-                      animation, model, notifier, index);
+                      animation, model, listNotifier, index);
                 },
               ),
       ),
@@ -60,10 +60,10 @@ class HomePage extends ConsumerWidget {
   SizeTransition _buildAnimatedListView(
     Animation<double> animation,
     HomePageModel model,
-    DeadlineListNotifier notifier,
+    DeadlineListNotifier listNotifier,
     int index,
   ) {
-    final item = notifier.getToDoList(deadlineType)[index];
+    final item = listNotifier.getToDoList(deadlineType)[index];
     return SizeTransition(
       sizeFactor: animation,
       child: Padding(
@@ -80,25 +80,25 @@ class HomePage extends ConsumerWidget {
                       height: 20,
                       child: GestureDetector(
                         onTap: () async {
-                          notifier.removeNewToDoItem(
+                          listNotifier.removeNewToDoItem(
                             id: item.id,
                             deadlineType: deadlineType,
                           );
-                          final nextIndex =
-                              index == notifier.getToDoList(deadlineType).length
-                                  ? index - 1
-                                  : index;
-                          final duration =
-                              index == notifier.getToDoList(deadlineType).length
-                                  ? 0
-                                  : 300;
-                          notifier.listKey.currentState.removeItem(
+                          final nextIndex = index ==
+                                  listNotifier.getToDoList(deadlineType).length
+                              ? index - 1
+                              : index;
+                          final duration = index ==
+                                  listNotifier.getToDoList(deadlineType).length
+                              ? 0
+                              : 300;
+                          listNotifier.listKey.currentState.removeItem(
                             index,
                             (BuildContext context,
                                 Animation<double> animation) {
                               /// Animation Reference: https://medium.com/flutter-community/the-magic-of-animatedlist-18afb2ba564c
                               return removeToDoItemAnimation(
-                                  animation, model, notifier, nextIndex);
+                                  animation, model, listNotifier, nextIndex);
                             },
                             duration: Duration(milliseconds: duration),
                           );
@@ -161,7 +161,7 @@ class HomePage extends ConsumerWidget {
   }
 
   FadeTransition removeToDoItemAnimation(Animation<double> animation,
-      HomePageModel model, DeadlineListNotifier notifier, int nextIndex) {
+      HomePageModel model, DeadlineListNotifier listNotifier, int nextIndex) {
     return FadeTransition(
       opacity:
           CurvedAnimation(parent: animation, curve: const Interval(0.5, 1)),
@@ -169,7 +169,8 @@ class HomePage extends ConsumerWidget {
         sizeFactor:
             CurvedAnimation(parent: animation, curve: const Interval(0, 1)),
         axisAlignment: 0,
-        child: _buildAnimatedListView(animation, model, notifier, nextIndex),
+        child:
+            _buildAnimatedListView(animation, model, listNotifier, nextIndex),
       ),
     );
   }
@@ -185,7 +186,7 @@ class HomePage extends ConsumerWidget {
         return Consumer(
           builder: (BuildContext context, watch, child) {
             final model = watch(homePageProvider);
-            final notifier = watch(deadlineListProvider);
+            final listNotifier = watch(deadlineListProvider);
             return GestureDetector(
               onTap: () => model.resetSelectedDeadlineCard,
               child: SizedBox(
@@ -247,21 +248,22 @@ class HomePage extends ConsumerWidget {
                                 icon: const Icon(Icons.arrow_upward_sharp),
                                 onPressed: () {
                                   if (model.isActive) {
-                                    final isSafeAnimateList = notifier
+                                    final isSafeAnimateList = listNotifier
                                             .getToDoList(deadlineType)
                                             .isNotEmpty &&
                                         deadlineType ==
                                             model.selectedDeadlineType;
                                     if (isSafeAnimateList) {
-                                      notifier.listKey.currentState.insertItem(
-                                        notifier
+                                      listNotifier.listKey.currentState
+                                          .insertItem(
+                                        listNotifier
                                             .getToDoList(deadlineType)
                                             .length,
                                         duration:
                                             const Duration(milliseconds: 200),
                                       );
                                     }
-                                    notifier.addNewToDoItem(
+                                    listNotifier.addNewToDoItem(
                                         content: model.content,
                                         selectedDeadlineType:
                                             model.selectedDeadlineType);
