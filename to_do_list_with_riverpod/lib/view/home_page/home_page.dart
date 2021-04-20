@@ -9,7 +9,17 @@ import 'package:to_do_list_with_riverpod/view/home_page/home_page_model.dart';
 
 import '../../riverpod/providers.dart';
 
+class HomePageArgument {
+  HomePageArgument({this.deadlineType});
+  final Deadline deadlineType;
+}
+
 class HomePage extends ConsumerWidget {
+  const HomePage({this.deadlineType});
+  final Deadline deadlineType;
+
+  static const routeName = '/home_page';
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final notifier = watch(toDoListProvider);
