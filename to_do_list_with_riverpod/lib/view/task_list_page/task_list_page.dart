@@ -27,7 +27,7 @@ class TaskListPage extends ConsumerWidget {
     final listNotifier = watch(deadlineListProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${model.getDeadlineText(deadlineType)}'),
+        title: Text('${model.getDeadlineAppBarTitle(deadlineType)}'),
       ),
       body: SafeArea(
         child: listNotifier.getToDoList(deadlineType).isEmpty
@@ -254,18 +254,25 @@ class TaskListPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          DeadlineCard(
-                              deadlineType: Deadline.today, model: model),
-                          DeadlineCard(
-                              deadlineType: Deadline.tomorrow, model: model),
-                          DeadlineCard(
-                              deadlineType: Deadline.thisWeek, model: model),
-                          DeadlineCard(
-                              deadlineType: Deadline.thisMonth, model: model),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            DeadlineCard(
+                                deadlineType: Deadline.today, model: model),
+                            const SizedBox(width: 10),
+                            DeadlineCard(
+                                deadlineType: Deadline.tomorrow, model: model),
+                            const SizedBox(width: 10),
+                            DeadlineCard(
+                                deadlineType: Deadline.thisWeek, model: model),
+                            const SizedBox(width: 10),
+                            DeadlineCard(
+                                deadlineType: Deadline.thisMonth, model: model),
+                            const SizedBox(width: 10),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15, bottom: 15),

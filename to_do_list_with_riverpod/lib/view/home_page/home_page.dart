@@ -13,7 +13,7 @@ class HomePage extends ConsumerWidget {
     final model = watch(homePageModelProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ToDo List'),
+        title: const Text('To-Do List'),
       ),
       body: Center(
         child: Column(
@@ -31,19 +31,19 @@ class HomePage extends ConsumerWidget {
             ),
             const StraightLineDivider(),
             DeadlineListItem(
-              title: 'This Week',
+              title: 'Next 7 Days',
               count: notifier.deadlineList.thisWeekList.length,
               type: Deadline.thisWeek,
             ),
             const StraightLineDivider(),
             DeadlineListItem(
-              title: 'This Month',
+              title: 'During This Month',
               count: notifier.deadlineList.thisMonthList.length,
               type: Deadline.thisMonth,
             ),
             const StraightLineDivider(),
             DeadlineListItem(
-              title: 'Unknown',
+              title: 'Undecided',
               count: notifier.deadlineList.unselectedList.length,
               type: Deadline.unselected,
             ),
@@ -115,14 +115,21 @@ class HomePage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          DeadlineCard(deadlineType: Deadline.today),
-                          DeadlineCard(deadlineType: Deadline.tomorrow),
-                          DeadlineCard(deadlineType: Deadline.thisWeek),
-                          DeadlineCard(deadlineType: Deadline.thisMonth),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: const [
+                            SizedBox(width: 10),
+                            DeadlineCard(deadlineType: Deadline.today),
+                            SizedBox(width: 10),
+                            DeadlineCard(deadlineType: Deadline.tomorrow),
+                            SizedBox(width: 10),
+                            DeadlineCard(deadlineType: Deadline.thisWeek),
+                            SizedBox(width: 10),
+                            DeadlineCard(deadlineType: Deadline.thisMonth),
+                            SizedBox(width: 10),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15, bottom: 15),
