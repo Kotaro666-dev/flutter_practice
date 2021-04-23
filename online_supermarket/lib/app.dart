@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:online_supermarket/redux/app_state_reducer.dart';
+import 'package:online_supermarket/views/home_page/home_page.dart';
 import 'package:online_supermarket/views/payment/payment_page.dart';
 import 'package:online_supermarket/views/shoppingCart/shopping_cart_page.dart';
 import 'package:redux/redux.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: MarketPage.withDependencies(
+        home: HomePage.withDependencies(
           store: _store,
           context: context,
         ),
