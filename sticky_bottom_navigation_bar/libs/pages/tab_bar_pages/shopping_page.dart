@@ -13,7 +13,12 @@ class ShoppingPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('ShoppingPage'),
+            Text(
+              'ShoppingPage',
+              style: TextStyle(
+                fontSize: 30,
+              ),
+            ),
           ],
         ),
       ),

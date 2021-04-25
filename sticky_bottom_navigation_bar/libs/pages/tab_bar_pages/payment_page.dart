@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SettingsPage extends StatelessWidget {
-  static const routeName = '/settings_page';
+class PaymentPage extends StatelessWidget {
+  static const routeName = '/payment_page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SettingsPage'),
+        title: Text('PaymentPage'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('SettingsPage'),
+            Text(
+              'PaymentPage',
+              style: TextStyle(
+                fontSize: 30,
+              ),
+            ),
           ],
         ),
       ),

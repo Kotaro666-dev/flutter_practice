@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
-import 'payment_page.dart';
-import 'settings_page.dart';
-import 'shopping_page.dart';
+import '../../router/router.dart';
+import '../tab_bar_pages/home_page.dart';
+import '../tab_bar_pages/payment_page.dart';
+import '../tab_bar_pages/settings_page.dart';
+import '../tab_bar_pages/shopping_page.dart';
 
 class TabBarPage extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class TabBarPage extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'market',
+            label: 'shopping',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.payment),
@@ -34,30 +35,35 @@ class TabBarPage extends StatelessWidget {
         switch (index) {
           case 0:
             return CupertinoTabView(
+              routes: appRoutes,
               builder: (context) {
                 return CupertinoPageScaffold(child: HomePage());
               },
             );
           case 1:
             return CupertinoTabView(
+              routes: appRoutes,
               builder: (context) {
                 return CupertinoPageScaffold(child: ShoppingPage());
               },
             );
           case 2:
             return CupertinoTabView(
+              routes: appRoutes,
               builder: (context) {
                 return CupertinoPageScaffold(child: PaymentPage());
               },
             );
           case 3:
             return CupertinoTabView(
+              routes: appRoutes,
               builder: (context) {
                 return CupertinoPageScaffold(child: SettingsPage());
               },
             );
           default:
             return CupertinoTabView(
+              routes: appRoutes,
               builder: (context) {
                 return CupertinoPageScaffold(child: HomePage());
               },

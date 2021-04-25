@@ -15,13 +15,18 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('HomePage'),
+            Text(
+              'HomePage',
+              style: TextStyle(
+                fontSize: 30,
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, SettingsPage.routeName);
               },
-              child: Text('Go To Settings'),
-            )
+              child: Text('Go To SettingsPage'),
+            ),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'router.dart';
-import 'tab_bar_page.dart';
+import 'router/router.dart';
+import 'pages/initial_page/initial_page.dart';
 
 class MyApp extends StatelessWidget {
   @override
