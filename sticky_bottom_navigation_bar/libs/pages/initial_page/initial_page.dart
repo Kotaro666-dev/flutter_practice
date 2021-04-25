@@ -35,6 +35,7 @@ class TabBarPage extends StatelessWidget {
         switch (index) {
           case 0:
             return CupertinoTabView(
+              /// routes にルートを渡してあげることで、各ページ先でpushNamedを可能にする
               routes: appRoutes,
               builder: (context) {
                 return CupertinoPageScaffold(child: HomePage());
