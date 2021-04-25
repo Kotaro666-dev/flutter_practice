@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ShoppingPage extends StatelessWidget {
+  static const routeName = '/shopping_page';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

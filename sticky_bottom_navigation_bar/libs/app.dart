@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'router.dart';
 import 'tab_bar_page.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: TabBarPage(),
+      onGenerateRoute: MyRouter.generateRoute,
     );
   }
 }

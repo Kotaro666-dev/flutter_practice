@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PaymentPage extends StatelessWidget {
+  static const routeName = '/payment_page';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
