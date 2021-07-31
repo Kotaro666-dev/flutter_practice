@@ -36,32 +36,59 @@ class _HomePage extends StatelessWidget {
             top: 100,
           ),
           child: Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Column(
-                children: [
-                  Text('コンテンツ内容'),
-                  Divider(
-                    height: 0,
-                    thickness: 1.0,
-                    color: Colors.blueAccent,
+            child: Column(
+              children: [
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Card(
+                    elevation: 3.0,
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Text('コンテンツ詳細'),
+                        SizedBox(height: 10),
+                        Divider(
+                          height: 0,
+                          thickness: 1.0,
+                          color: Colors.blueAccent,
+                        ),
+                        SizeTransition(
+                          sizeFactor: model.animation,
+                          axisAlignment: 1.0,
+                          child: Text(content),
+                        ),
+                        Divider(
+                          height: 0,
+                          thickness: 1.0,
+                          color: Colors.blueAccent,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: model.onTapTextButton,
+                            child: model.isOpened ? Text('とじる') : Text('ひらく'),
+                            style: ButtonStyle(
+                              overlayColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                      (state) {
+                                return Colors.transparent;
+                              }),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizeTransition(
-                    sizeFactor: model.animation,
-                    axisAlignment: 1.0,
-                    child: Text(content),
-                  ),
-                  Divider(
-                    height: 0,
-                    thickness: 1.0,
-                    color: Colors.blueAccent,
-                  ),
-                  TextButton(
-                    onPressed: model.onTapTextButton,
-                    child: model.isOpened ? Text('とじる') : Text('ひらく'),
-                  ),
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(),
+                )
+              ],
             ),
           ),
         ),
