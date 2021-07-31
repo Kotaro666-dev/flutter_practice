@@ -53,17 +53,19 @@ class _HomePage extends StatelessWidget {
                         SizedBox(height: 10),
                         Divider(
                           height: 0,
-                          thickness: 1.0,
                           color: Colors.blueAccent,
                         ),
                         SizeTransition(
                           sizeFactor: model.animation,
                           axisAlignment: 1.0,
-                          child: Text(content),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 15),
+                            child: Text(content),
+                          ),
                         ),
                         Divider(
                           height: 0,
-                          thickness: 1.0,
                           color: Colors.blueAccent,
                         ),
                         Align(
