@@ -162,7 +162,7 @@ class ItemPageView extends StatelessWidget {
                               height: 30,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(0),
+                                  padding: EdgeInsets.zero,
                                   shape: kElevatedButtonBorderRadius,
                                   primary: itemList[index].count != 0
                                       ? Colors.redAccent
@@ -186,7 +186,7 @@ class ItemPageView extends StatelessWidget {
                               height: 30,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(0),
+                                  padding: EdgeInsets.zero,
                                   shape: kElevatedButtonBorderRadius,
                                 ),
                                 onPressed: () {

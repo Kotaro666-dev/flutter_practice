@@ -241,7 +241,7 @@ class ItemListView extends StatelessWidget {
                             model.onTapDecrementIcon(index);
                           },
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(0),
+                            padding: EdgeInsets.zero,
                             shape: kElevatedButtonBorderRadius,
                             primary: Colors.redAccent,
                           ),
@@ -273,7 +273,7 @@ class ItemListView extends StatelessWidget {
                             model.onTapIncrementIcon(index);
                           },
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(0),
+                            padding: EdgeInsets.zero,
                             shape: kElevatedButtonBorderRadius,
                           ),
                           child: const Icon(Icons.add),
