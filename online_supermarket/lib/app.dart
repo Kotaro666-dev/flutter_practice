@@ -45,12 +45,12 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: (settings) {
           if (settings.name == ShoppingCartPage.routeName) {
-            final argument = settings.arguments as ShoppingCartPageArgument;
+            final argument = settings.arguments! as ShoppingCartPageArgument;
             return MaterialPageRoute<ShoppingCartPage>(
               builder: (context) => ShoppingCartPage(store: argument.store),
             );
           } else if (settings.name == PaymentPage.routeName) {
-            final argument = settings.arguments as PaymentPageArgument;
+            final argument = settings.arguments! as PaymentPageArgument;
             return MaterialPageRoute<PaymentPage>(
               builder: (context) => PaymentPage(store: argument.store),
             );
