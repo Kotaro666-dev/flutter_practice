@@ -11,14 +11,14 @@ import '../../redux/state.dart';
 
 class PaymentPageArgument {
   const PaymentPageArgument({
-    this.store,
+    required this.store,
   });
   final Store<AppState> store;
 }
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({
-    this.store,
+    required this.store,
   });
   final Store<AppState> store;
 
@@ -139,7 +139,7 @@ class PaymentCardSection extends StatelessWidget {
                             child: Image(
                               width: 40,
                               image: AssetImage(
-                                model.getCardImagePath(card.cardType),
+                                model.getCardImagePath(card.cardType!),
                               ),
                             ),
                           ),
@@ -207,7 +207,7 @@ class ProceedCheckOutButton extends StatelessWidget {
 
 class StraightLineDivider extends StatelessWidget {
   const StraightLineDivider({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

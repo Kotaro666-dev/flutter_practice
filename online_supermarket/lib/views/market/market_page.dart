@@ -11,12 +11,12 @@ import 'package:online_supermarket/redux/state.dart';
 import 'market_page_model.dart';
 
 class MarketPage extends StatelessWidget {
-  const MarketPage._({Key key}) : super(key: key);
+  const MarketPage._({Key? key}) : super(key: key);
 
   static Widget withDependencies({
-    @required Store<AppState> store,
-    @required BuildContext context,
-    Key key,
+    required Store<AppState> store,
+    required BuildContext context,
+    Key? key,
   }) =>
       ChangeNotifierProvider(
         key: key,
@@ -61,8 +61,8 @@ class MarketPage extends StatelessWidget {
 
 class TabItem extends StatelessWidget {
   const TabItem({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
   }) : super(key: key);
 
   final String title;
@@ -82,7 +82,7 @@ class TabItem extends StatelessWidget {
 }
 
 class ItemPageView extends StatelessWidget {
-  const ItemPageView({this.category});
+  const ItemPageView({required this.category});
   final MyCategory category;
   @override
   Widget build(BuildContext context) {
@@ -212,7 +212,7 @@ class ItemPageView extends StatelessWidget {
 }
 
 class ShoppingCartIcon extends StatelessWidget {
-  const ShoppingCartIcon({Key key}) : super(key: key);
+  const ShoppingCartIcon({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

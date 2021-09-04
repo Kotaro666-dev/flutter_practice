@@ -5,10 +5,10 @@ import 'package:online_supermarket/models/payment_card_data_base.dart';
 
 class AppState {
   AppState({
-    this.itemList,
-    this.totalItemCount,
-    this.totalPrice,
-    this.cardList,
+    required this.itemList,
+    required this.totalItemCount,
+    required this.totalPrice,
+    required this.cardList,
   });
 
   factory AppState.initialize() => AppState(

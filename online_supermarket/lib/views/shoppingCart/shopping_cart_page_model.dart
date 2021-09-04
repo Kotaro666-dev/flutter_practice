@@ -8,17 +8,17 @@ import 'package:online_supermarket/redux/state.dart';
 
 class ShoppingCartPageModel extends ChangeNotifier {
   ShoppingCartPageModel({
-    @required Store<AppState> store,
+    required Store<AppState> store,
   }) : _store = store {
     _initialize();
   }
 
   final Store<AppState> _store;
 
-  List<Item> _itemList;
+  late List<Item> _itemList;
   List<Item> get itemList => _itemList;
 
-  bool _isCartEmpty;
+  bool _isCartEmpty = false;
   bool get isCartEmpty => _isCartEmpty;
 
   int get totalPrice => _store.state.totalPrice;
@@ -29,8 +29,6 @@ class ShoppingCartPageModel extends ChangeNotifier {
     _itemList = _store.state.itemList;
     if (_store.state.totalItemCount == 0) {
       _isCartEmpty = true;
-    } else {
-      _isCartEmpty = false;
     }
   }
 

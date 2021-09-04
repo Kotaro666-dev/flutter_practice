@@ -12,7 +12,7 @@ import 'package:online_supermarket/redux/state.dart';
 
 class PaymentPageModel extends ChangeNotifier {
   PaymentPageModel({
-    @required Store<AppState> store,
+    required Store<AppState> store,
   }) : _store = store {}
 
   final Store<AppState> _store;
@@ -52,7 +52,7 @@ class PaymentPageModel extends ChangeNotifier {
 
   Future<void> onTapProceedCheckOut(BuildContext context) async {
     const indicatorDisplayingTime = 2000;
-    LoadingOverlay.of(context).during(milliseconds: indicatorDisplayingTime);
+    LoadingOverlay.of(context).during(indicatorDisplayingTime);
     Future.delayed(
       const Duration(milliseconds: indicatorDisplayingTime),
       () {
@@ -61,7 +61,7 @@ class PaymentPageModel extends ChangeNotifier {
     );
   }
 
-  Future<AlertDialog> showFinishProceedingPurchaseDialog(BuildContext context) {
+  Future<void> showFinishProceedingPurchaseDialog(BuildContext context) {
     return showDialog<AlertDialog>(
       context: context,
       barrierDismissible: false,

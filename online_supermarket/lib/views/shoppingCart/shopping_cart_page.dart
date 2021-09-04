@@ -8,12 +8,12 @@ import 'package:online_supermarket/redux/state.dart';
 import '../../redux/state.dart';
 
 class ShoppingCartPageArgument {
-  const ShoppingCartPageArgument({this.store});
+  const ShoppingCartPageArgument({required this.store});
   final Store<AppState> store;
 }
 
 class ShoppingCartPage extends StatelessWidget {
-  const ShoppingCartPage({this.store});
+  const ShoppingCartPage({required this.store});
   final Store<AppState> store;
 
   static const routeName = '/shopping_cart_page';
@@ -149,7 +149,7 @@ class CheckOutButton extends StatelessWidget {
 
 class StraightLineDivider extends StatelessWidget {
   const StraightLineDivider({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

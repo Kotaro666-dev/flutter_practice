@@ -9,16 +9,10 @@ import 'package:online_supermarket/redux/state.dart';
 
 class MarketPageModel extends ChangeNotifier {
   MarketPageModel({
-    @required Store<AppState> store,
-  }) : _store = store {
-    _initialize();
-  }
+    required Store<AppState> store,
+  }) : _store = store;
 
   final Store<AppState> _store;
-
-  void _initialize() {
-    _pageController = PageController(initialPage: 0);
-  }
 
   @override
   void dispose() {
@@ -26,7 +20,7 @@ class MarketPageModel extends ChangeNotifier {
     super.dispose();
   }
 
-  PageController _pageController;
+  final PageController _pageController = PageController(initialPage: 0);
   PageController get pageController => _pageController;
 
   int get totalItemCount => _store.state.totalItemCount;
@@ -68,7 +62,7 @@ class MarketPageModel extends ChangeNotifier {
 
   void _displaySnackBar(Item item, BuildContext context) {
     final snackBar = SnackBar(
-      backgroundColor: _getSnackBarBackgroundColor(item.category),
+      backgroundColor: _getSnackBarBackgroundColor(item.category!),
       duration: const Duration(milliseconds: 1000),
       content: Padding(
         padding: const EdgeInsets.only(left: 20),

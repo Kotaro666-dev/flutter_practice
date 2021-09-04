@@ -6,25 +6,25 @@ enum MyCategory {
 
 class Item {
   Item({
-    this.name,
-    this.imagePath,
-    this.count,
-    this.price,
+    this.name = '',
+    this.imagePath = '',
+    this.count = 0,
+    this.price = 0,
     this.category,
   });
 
   String name;
   String imagePath;
-  int count = 0;
+  int count;
   int price;
-  MyCategory category;
+  MyCategory? category;
 
   Item copyWith({
-    String name,
-    String imagePath,
-    int count,
-    int price,
-    MyCategory category,
+    String? name,
+    String? imagePath,
+    int? count,
+    int? price,
+    MyCategory? category,
   }) {
     return Item(
       name: name ?? this.name,

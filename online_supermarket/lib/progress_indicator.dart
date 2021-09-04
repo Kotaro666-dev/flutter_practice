@@ -28,7 +28,7 @@ class LoadingOverlay {
     );
   }
 
-  void during({int milliseconds}) {
+  void during(int milliseconds) {
     show();
     Timer(Duration(milliseconds: milliseconds), hide);
   }
