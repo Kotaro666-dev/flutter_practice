@@ -83,23 +83,17 @@ class ShoppingCartPageModel extends ChangeNotifier {
         ),
         actions: <Widget>[
           SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: const Text(
               'キャンセル',
               style: TextStyle(
                 color: Colors.blueAccent,
               ),
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           ),
           SimpleDialogOption(
-            child: const Text(
-              '空にする',
-              style: TextStyle(
-                color: Colors.blueAccent,
-              ),
-            ),
             onPressed: () {
               _store
                 ..dispatch(EmptyCartAction(itemList: _store.state.itemList))
@@ -111,6 +105,12 @@ class ShoppingCartPageModel extends ChangeNotifier {
               notifyListeners();
               Navigator.pop(context);
             },
+            child: const Text(
+              '空にする',
+              style: TextStyle(
+                color: Colors.blueAccent,
+              ),
+            ),
           ),
         ],
       ),

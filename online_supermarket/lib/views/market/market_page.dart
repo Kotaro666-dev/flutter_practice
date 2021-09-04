@@ -161,9 +161,6 @@ class ItemPageView extends StatelessWidget {
                               width: 30,
                               height: 30,
                               child: ElevatedButton(
-                                child: const Icon(
-                                  Icons.remove,
-                                ),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.all(0),
                                   shape: kElevatedButtonBorderRadius,
@@ -176,6 +173,9 @@ class ItemPageView extends StatelessWidget {
                                     model.onTapDecrementIcon(itemList[index]);
                                   }
                                 },
+                                child: const Icon(
+                                  Icons.remove,
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -185,7 +185,6 @@ class ItemPageView extends StatelessWidget {
                               width: 30,
                               height: 30,
                               child: ElevatedButton(
-                                child: const Icon(Icons.add),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.all(0),
                                   shape: kElevatedButtonBorderRadius,
@@ -194,6 +193,7 @@ class ItemPageView extends StatelessWidget {
                                   model.onTapIncrementIcon(
                                       itemList[index], context);
                                 },
+                                child: const Icon(Icons.add),
                               ),
                             ),
                           ],

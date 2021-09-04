@@ -13,7 +13,7 @@ import 'package:online_supermarket/redux/state.dart';
 class PaymentPageModel extends ChangeNotifier {
   PaymentPageModel({
     required Store<AppState> store,
-  }) : _store = store {}
+  }) : _store = store;
 
   final Store<AppState> _store;
 
@@ -89,15 +89,15 @@ class PaymentPageModel extends ChangeNotifier {
                     onPressed: () {
                       _resetStateAndGoHome(context);
                     },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      shape: kElevatedButtonBorderRadius,
+                    ),
                     child: const Text(
                       'ホーム画面へ戻る',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      shape: kElevatedButtonBorderRadius,
                     ),
                   ),
                 ],

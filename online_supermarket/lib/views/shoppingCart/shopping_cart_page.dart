@@ -134,13 +134,13 @@ class CheckOutButton extends StatelessWidget {
             model.onTapProceedCheckOut(context);
           }
         },
-        child: const Text(
-          '支払いへ進む',
-          style: kElevatedButtonTextStyle,
-        ),
         style: ElevatedButton.styleFrom(
           shape: kElevatedButtonBorderRadius,
           primary: !model.isCartEmpty ? Colors.redAccent : Colors.grey.shade500,
+        ),
+        child: const Text(
+          '支払いへ進む',
+          style: kElevatedButtonTextStyle,
         ),
       ),
     );
@@ -237,15 +237,15 @@ class ItemListView extends StatelessWidget {
                         width: 30,
                         height: 30,
                         child: ElevatedButton(
-                          child: const Icon(Icons.remove),
+                          onPressed: () {
+                            model.onTapDecrementIcon(index);
+                          },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(0),
                             shape: kElevatedButtonBorderRadius,
                             primary: Colors.redAccent,
                           ),
-                          onPressed: () {
-                            model.onTapDecrementIcon(index);
-                          },
+                          child: const Icon(Icons.remove),
                         ),
                       ),
                       const SizedBox(
@@ -269,14 +269,14 @@ class ItemListView extends StatelessWidget {
                         width: 30,
                         height: 30,
                         child: ElevatedButton(
-                          child: const Icon(Icons.add),
+                          onPressed: () {
+                            model.onTapIncrementIcon(index);
+                          },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(0),
                             shape: kElevatedButtonBorderRadius,
                           ),
-                          onPressed: () {
-                            model.onTapIncrementIcon(index);
-                          },
+                          child: const Icon(Icons.add),
                         ),
                       ),
                     ],
