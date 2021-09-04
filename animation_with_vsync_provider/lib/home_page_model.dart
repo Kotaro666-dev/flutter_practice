@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 
 class HomePageModel with ChangeNotifier {
   HomePageModel({
-    @required this.vsync,
+    required this.vsync,
   }) {
     _animationController = AnimationController(
       vsync: vsync,
       duration: const Duration(milliseconds: 500),
     );
     _animation =
-        Tween<double>(begin: 1.0, end: 0.0).animate(_animationController);
+        Tween<double>(begin: 1.0, end: 0.0).animate(_animationController!);
   }
 
   final TickerProvider vsync;
 
-  AnimationController _animationController;
-  AnimationController get animationController => _animationController;
+  AnimationController? _animationController;
+  AnimationController get animationController => _animationController!;
 
-  Animation<double> _animation;
-  Animation<double> get animation => _animation;
+  Animation<double>? _animation;
+  Animation<double> get animation => _animation!;
 
   bool _isOpened = true;
   bool get isOpened => _isOpened;
@@ -26,9 +26,10 @@ class HomePageModel with ChangeNotifier {
   @override
   void dispose() {
     if (_animationController != null) {
-      _animationController.dispose();
+      _animationController!.dispose();
       _animationController = null;
     }
+
     super.dispose();
   }
 
@@ -39,9 +40,9 @@ class HomePageModel with ChangeNotifier {
 
   void onTapTextButton() {
     if (_isOpened) {
-      _animationController.forward().whenComplete(() => _toggleIsOpened());
+      _animationController!.forward().whenComplete(() => _toggleIsOpened());
     } else {
-      _animationController.reverse().whenComplete(() => _toggleIsOpened());
+      _animationController!.reverse().whenComplete(() => _toggleIsOpened());
     }
   }
 }
