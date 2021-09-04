@@ -6,13 +6,13 @@ const americanExpressImagePath = 'assets/images/card/american-express.png';
 const maestroImagePath = 'assets/images/card/maestro.png';
 const defaultImagePath = 'assets/images/card/defalut-card.png';
 
-const kElevatedButtonBorderRadius = const RoundedRectangleBorder(
+const kElevatedButtonBorderRadius = RoundedRectangleBorder(
   borderRadius: BorderRadius.all(
     Radius.circular(30),
   ),
 );
 
-const kElevatedButtonTextStyle = const TextStyle(
+const kElevatedButtonTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 20,
   color: Colors.white,

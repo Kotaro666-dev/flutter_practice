@@ -71,7 +71,7 @@ class TabItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tab(
       child: Text(
-        '$title',
+        title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
@@ -82,7 +82,10 @@ class TabItem extends StatelessWidget {
 }
 
 class ItemPageView extends StatelessWidget {
-  const ItemPageView({required this.category});
+  const ItemPageView({
+    Key? key,
+    required this.category,
+  }) : super(key: key);
   final MyCategory category;
   @override
   Widget build(BuildContext context) {

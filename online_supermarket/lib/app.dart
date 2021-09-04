@@ -8,6 +8,8 @@ import 'package:online_supermarket/redux/state.dart';
 import 'package:online_supermarket/views/market/market_page.dart';
 
 class MyApp extends StatelessWidget {
+  MyApp({Key? key}) : super(key: key);
+
   final Store<AppState> _store = Store<AppState>(
     appReducer,
     initialState: AppState.initialize(),

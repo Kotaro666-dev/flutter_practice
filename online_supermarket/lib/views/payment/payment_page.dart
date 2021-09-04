@@ -18,8 +18,9 @@ class PaymentPageArgument {
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({
+    Key? key,
     required this.store,
-  });
+  }) : super(key: key);
   final Store<AppState> store;
 
   static const routeName = '/payment_page';
@@ -63,12 +64,12 @@ class PaymentPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       flex: 6,
                       child: PaymentCardSection(),
                     ),
                     const SizedBox(height: 10),
-                    ProceedCheckOutButton(),
+                    const ProceedCheckOutButton(),
                   ],
                 ),
               ),
@@ -81,6 +82,7 @@ class PaymentPage extends StatelessWidget {
 }
 
 class PaymentCardSection extends StatelessWidget {
+  const PaymentCardSection({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<PaymentPageModel>(context);
@@ -179,6 +181,8 @@ class PaymentCardSection extends StatelessWidget {
 }
 
 class ProceedCheckOutButton extends StatelessWidget {
+  const ProceedCheckOutButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<PaymentPageModel>(context);

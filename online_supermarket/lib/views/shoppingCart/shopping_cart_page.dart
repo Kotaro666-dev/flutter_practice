@@ -13,7 +13,10 @@ class ShoppingCartPageArgument {
 }
 
 class ShoppingCartPage extends StatelessWidget {
-  const ShoppingCartPage({required this.store});
+  const ShoppingCartPage({
+    Key? key,
+    required this.store,
+  }) : super(key: key);
   final Store<AppState> store;
 
   static const routeName = '/shopping_cart_page';
@@ -30,14 +33,16 @@ class ShoppingCartPage extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.green,
               title: const Text('カート'),
-              actions: [
+              actions: const [
                 EmptyCartTextButton(),
               ],
             ),
             body: SafeArea(
               child: Column(
                 children: [
-                  model.isCartEmpty ? CartEmptyMessage() : ItemListView(),
+                  model.isCartEmpty
+                      ? const CartEmptyMessage()
+                      : const ItemListView(),
                   const StraightLineDivider(),
                   Expanded(
                     child: Row(
@@ -45,9 +50,9 @@ class ShoppingCartPage extends StatelessWidget {
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
+                            children: const [
                               CartItemCard(),
-                              const StraightLineDivider(),
+                              StraightLineDivider(),
                               CheckOutButton(),
                             ],
                           ),
@@ -66,6 +71,8 @@ class ShoppingCartPage extends StatelessWidget {
 }
 
 class EmptyCartTextButton extends StatelessWidget {
+  const EmptyCartTextButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<ShoppingCartPageModel>(context);
@@ -88,6 +95,8 @@ class EmptyCartTextButton extends StatelessWidget {
 }
 
 class CartItemCard extends StatelessWidget {
+  const CartItemCard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<ShoppingCartPageModel>(context);
@@ -121,6 +130,8 @@ class CartItemCard extends StatelessWidget {
 }
 
 class CheckOutButton extends StatelessWidget {
+  const CheckOutButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<ShoppingCartPageModel>(context);
@@ -162,6 +173,8 @@ class StraightLineDivider extends StatelessWidget {
 }
 
 class CartEmptyMessage extends StatelessWidget {
+  const CartEmptyMessage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -180,6 +193,8 @@ class CartEmptyMessage extends StatelessWidget {
 }
 
 class ItemListView extends StatelessWidget {
+  const ItemListView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<ShoppingCartPageModel>(context);
