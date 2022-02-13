@@ -9,6 +9,14 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final count = ref.watch(counterProvider);
     final notifier = ref.read(counterProvider.notifier);
+
+    ref.listen<int>(counterProvider, (int? previousCount, int newCount) {
+      if (newCount == 10) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You reached to 10.')),
+        );
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text("Riverpod"),
