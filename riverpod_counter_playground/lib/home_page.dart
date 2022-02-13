@@ -23,6 +23,11 @@ class HomePage extends ConsumerWidget {
               '$_count',
               style: Theme.of(context).textTheme.headline4,
             ),
+            ElevatedButton(
+                onPressed: () {
+                  ref.read(counterProvider.state).state = 0;
+                },
+                child: const Text("Reset"))
           ],
         ),
       ),
