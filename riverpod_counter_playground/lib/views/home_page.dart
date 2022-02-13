@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_counter_playground/providers.dart';
+import 'package:riverpod_counter_playground/provider/providers.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _count = ref.watch(counterProvider.state).state;
+    final count = ref.watch(counterProvider);
+    final notifier = ref.read(counterProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Riverpod"),
@@ -20,12 +21,12 @@ class HomePage extends ConsumerWidget {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_count',
+              '$count',
               style: Theme.of(context).textTheme.headline4,
             ),
             ElevatedButton(
                 onPressed: () {
-                  ref.read(counterProvider.state).state = 0;
+                  notifier.reset();
                 },
                 child: const Text("Reset"))
           ],
@@ -33,7 +34,7 @@ class HomePage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ref.read(counterProvider.state).state++;
+          notifier.increment();
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),

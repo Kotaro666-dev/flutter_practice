@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_counter_playground/home_page.dart';
+
+import 'views/home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
