@@ -14,7 +14,13 @@ class ThirdPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [Text("Last Page")],
+          children: [
+            const Text("Last Page"),
+            ElevatedButton(
+                onPressed: () =>
+                    Navigator.popUntil(context, (route) => route.isFirst),
+                child: const Text("最初に戻る"))
+          ],
         ),
       ),
     );
