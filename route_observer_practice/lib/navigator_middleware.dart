@@ -12,12 +12,12 @@ NavigatorMiddleware<PageRoute> navigatorMiddleware =
     if (route.settings.name == FirstPage.routeName ||
         route.settings.name == SecondPage.routeName ||
         route.settings.name == ThirdPage.routeName) {
-      debugPrint('WakeLock is enabled');
+      debugPrint('コールバック処理：WakeLock is enabled');
     }
   },
   onDidPopCallback: (route, previousRoute) {
     if (previousRoute?.settings.name == HomePage.routeName) {
-      debugPrint('WakeLock is disabled');
+      debugPrint('コールバック処理：WakeLock is disabled');
     }
   },
 );
@@ -42,9 +42,9 @@ class NavigatorMiddleware<R extends Route<dynamic>> extends RouteObserver<R> {
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
     _routeStack.add(route);
-    onDidPushCallback(route, previousRoute);
     debugPrint(
         'イベント名：didPush\n今ページ: ${route.settings.name}\n前ページ: ${previousRoute?.settings.name}');
+    onDidPushCallback(route, previousRoute);
     _printRouteStack();
   }
 
@@ -52,9 +52,9 @@ class NavigatorMiddleware<R extends Route<dynamic>> extends RouteObserver<R> {
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     _routeStack.removeLast();
-    onDidPopCallback(route, previousRoute);
     debugPrint(
         'イベント名：didPop\n前ページ: ${route.settings.name}\n今ページ: ${previousRoute?.settings.name}');
+    onDidPopCallback(route, previousRoute);
     _printRouteStack();
   }
 
