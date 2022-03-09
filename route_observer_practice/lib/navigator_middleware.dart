@@ -36,6 +36,8 @@ class NavigatorMiddleware<R extends Route<dynamic>> extends RouteObserver<R> {
   final OnRouteChange<R> onDidPushCallback;
   final OnRouteChange<R> onDidPopCallback;
 
+  get currentPageName => _routeStack.last.settings.name;
+
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
