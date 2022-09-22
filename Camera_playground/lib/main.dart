@@ -128,44 +128,46 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Camera example'),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                border: Border.all(
-                  color:
-                      controller != null && controller!.value.isRecordingVideo
-                          ? Colors.redAccent
-                          : Colors.grey,
-                  width: 3.0,
+    // 参考資料: https://stackoverflow.com/a/61487358
+    final size = MediaQuery.of(context).size;
+    var scale = size.aspectRatio * controller!.value.aspectRatio;
+    if (scale < 1) {
+      scale = 1 / scale;
+    }
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 2.0,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Center(
-                  child: _cameraPreviewWidget(),
+                child: Transform.scale(
+                  scale: scale,
+                  child: Center(
+                    child: _cameraPreviewWidget(),
+                  ),
                 ),
               ),
             ),
-          ),
-          _captureControlRowWidget(),
-          _modeControlRowWidget(),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              children: <Widget>[
-                _cameraTogglesRowWidget(),
-                _thumbnailWidget(),
-              ],
-            ),
-          ),
-        ],
+            // _captureControlRowWidget(),
+            // _modeControlRowWidget(),
+            // Padding(
+            //   padding: const EdgeInsets.all(5.0),
+            //   child: Row(
+            //     children: <Widget>[
+            //       _cameraTogglesRowWidget(),
+            //       _thumbnailWidget(),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -1062,6 +1064,7 @@ class CameraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: CameraExampleHome(),
     );
   }
