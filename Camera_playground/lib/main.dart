@@ -98,6 +98,19 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
       parent: _focusModeControlRowAnimationController,
       curve: Curves.easeInCubic,
     );
+
+    Future(() async {
+      // デバイスで使用可能なカメラのリストを取得
+      final cameras = await availableCameras();
+
+      // 利用可能なカメラのリストから特定のカメラを取得
+      final firstCamera = cameras.first;
+      controller = CameraController(
+        firstCamera,
+        ResolutionPreset.medium,
+      );
+      onNewCameraSelected(controller!.description);
+    });
   }
 
   @override
@@ -130,31 +143,63 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   Widget build(BuildContext context) {
     // 参考資料: https://stackoverflow.com/a/61487358
     final size = MediaQuery.of(context).size;
-    var scale = size.aspectRatio * controller!.value.aspectRatio;
+    // var scale = size.aspectRatio * controller!.value.aspectRatio;
+    var scale = 1.0;
     if (scale < 1) {
       scale = 1 / scale;
     }
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
           children: <Widget>[
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 2.0,
-                  ),
-                ),
-                child: Transform.scale(
-                  scale: scale,
-                  child: Center(
-                    child: _cameraPreviewWidget(),
-                  ),
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+              child: Transform.scale(
+                scale: scale,
+                child: Center(
+                  child: _cameraPreviewWidget(),
                 ),
               ),
             ),
+            Positioned(
+              width: screenWidth,
+              bottom: 100,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: const [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: true,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  height: 200,
+                  width: screenWidth,
+                  child: DecoratedBox(
+                    decoration:
+                        BoxDecoration(color: Colors.black.withOpacity(0.4)),
+                  ),
+                ),
+              ),
+            )
             // _captureControlRowWidget(),
             // _modeControlRowWidget(),
             // Padding(
