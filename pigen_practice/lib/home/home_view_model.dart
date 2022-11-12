@@ -29,6 +29,7 @@ class HomeViewModel extends StateNotifier<Home> {
     }
   }
 
+  /// 受け取るデータが List<Comment?>? comments のための対応
   List<UserComment> _parseComments(List<Comment?>? comments) {
     if (comments == null) {
       return [];
