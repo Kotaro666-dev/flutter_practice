@@ -2,15 +2,42 @@
 
 A new Flutter project.
 
-## Getting Started
+## Pigeon CLI でスキーマからファイル生成する
 
-This project is a starting point for a Flutter application.
+```
+flutter pub run pigeon \
+    --input pigeons/story.dart \
+    --dart_out lib/pigeons_output/story.dart \
+    --objc_header_out ios/Runner/story.h \
+    --objc_source_out ios/Runner/story.m \
+    --experimental_swift_out ios/Runner/Story.swift
+```
 
-A few resources to get you started if this is your first Flutter project:
+## 開発メモ
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+最新の`freezed` と 最新の`pigeon` で依存している `analyzer` のバージョン不一致で、コンフリクトが発生する
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- `freezed`: ^2.2.1
+  - analyzer: ^5.2.0
+- `pigeon`: ^4.2.5
+  - analyzer: ">=4.4.0 <5.0.0"
+
+```
+Running "flutter pub get" in pigen_practice...                  
+Because no versions of pigeon match >4.2.5 <5.0.0 and pigeon 4.2.5 depends on analyzer ^4.4.0, pigeon ^4.2.5 requires analyzer ^4.4.0.
+And because freezed >=2.2.1 depends on analyzer ^5.2.0, pigeon ^4.2.5 is incompatible with freezed >=2.2.1.
+So, because pigen_practice depends on both freezed ^2.2.1 and pigeon ^4.2.5, version solving failed.
+pub get failed (1; So, because pigen_practice depends on both freezed ^2.2.1 and pigeon ^4.2.5, version solving failed.)
+```
+
+### 対応方法
+
+`freezed` のバージョンを一時的にダウングレードして対応した。
+
+```
+flutter_riverpod: ^2.1.1
+freezed: ^2.0.0
+freezed_annotation: ^2.2.0
+```
+
+
