@@ -57,9 +57,11 @@ class _CameraPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(cameraPreviewProvider.notifier);
     final provider = ref.watch(cameraPreviewProvider);
-    final focusPositionTop =
-        provider.focusCoordinates.y - _upperSettingHeight - focusWidgetSize / 2;
-    final focusPositionLeft = provider.focusCoordinates.x - focusWidgetSize / 2;
+    final focusPositionTop = provider.focusModel.coordinateY -
+        _upperSettingHeight -
+        focusWidgetSize / 2;
+    final focusPositionLeft =
+        provider.focusModel.coordinateX - focusWidgetSize / 2;
     return GestureDetector(
       onTapDown: viewModel.onTapDown,
       onTapUp: (TapUpDetails details) {

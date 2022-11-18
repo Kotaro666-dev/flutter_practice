@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:camera_with_focus_and_exposure/camera_preview/exposure/exposure_coordinates.dart';
-import 'package:camera_with_focus_and_exposure/camera_preview/focus/focus_coordinates.dart';
+import 'package:camera_with_focus_and_exposure/camera_preview/exposure/exposure_model.dart';
+import 'package:camera_with_focus_and_exposure/camera_preview/focus/focus_model.dart';
 import 'package:camera_with_focus_and_exposure/camera_preview/widgets/focus_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +18,8 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
   CameraPreviewViewModel()
       : super(
           CameraPreviewModel(
-            focusCoordinates: FocusCoordinates(),
-            exposureCoordinates: ExposureCoordinates(),
+            focusModel: FocusModel(),
+            exposureModel: ExposureModel(),
           ),
         ) {
     _hideStatusBar();
@@ -61,12 +61,14 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
       await _cameraController.initialize();
 
       /// 露出の最大許容値と最低許容値を取得する
-      final minExposureValue = await _cameraController.getMinExposureOffset();
-      final maxExposureValue = await _cameraController.getMaxExposureOffset();
+      final minValue = await _cameraController.getMinExposureOffset();
+      final maxValue = await _cameraController.getMaxExposureOffset();
       state = state.copyWith(
         isCameraReady: true,
-        minExposureValue: minExposureValue,
-        maxExposureValue: maxExposureValue,
+        exposureModel: state.exposureModel.copyWith(
+          minValue: minValue,
+          maxValue: maxValue,
+        ),
       );
     } on CameraException catch (error) {
       debugPrint(error.toString());
@@ -77,14 +79,14 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
   Future<void> onTapDown(TapDownDetails details) async {
     debugPrint('【onTapDown】');
     final focusCenterCoordinateY =
-        state.focusCoordinates.y - (focusWidgetSize / 2);
+        state.focusModel.coordinateY - (focusWidgetSize / 2);
     final exposureBarTopCoordinateY =
         focusCenterCoordinateY - (focusWidgetSize / 2);
 
     state = state.copyWith(
-      exposureCoordinates: state.exposureCoordinates.copyWith(
+      exposureModel: state.exposureModel.copyWith(
         isUpdated: false,
-        exposureBarTopCoordinateY: exposureBarTopCoordinateY,
+        barTopCoordinateY: exposureBarTopCoordinateY,
       ),
     );
 
@@ -94,7 +96,9 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
       return;
     }
     state = state.copyWith(
-      currentExposureValue: 0,
+      exposureModel: state.exposureModel.copyWith(
+        currentValue: 0,
+      ),
     );
   }
 
@@ -156,7 +160,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     required double newCoordinateX,
     required double newCoordinateY,
   }) {
-    if (state.exposureCoordinates.isUpdated) {
+    if (state.exposureModel.isUpdated) {
       _hideFocusAfterSeconds();
       return;
     }
@@ -165,14 +169,14 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
         _isTappedRightFourthScreen(newCoordinateX);
 
     state = state.copyWith(
-      isFocusVisible: true,
-      focusCoordinates: state.focusCoordinates.copyWith(
-        x: newCoordinateX,
-        y: newCoordinateY,
+      focusModel: state.focusModel.copyWith(
+        isVisible: true,
+        coordinateX: newCoordinateX,
+        coordinateY: newCoordinateY,
       ),
-      exposureCoordinates: state.exposureCoordinates.copyWith(
+      exposureModel: state.exposureModel.copyWith(
         /// 露出調整アイコンを初期位置に戻す
-        y: exposureCoordinatorBarHeight / 2,
+        coordinateY: exposureCoordinatorBarHeight / 2,
 
         /// スクリーン上でタップされた場所によって、露出調整バーの表示する左右の側を決める
         /// 左側をタップされた場合: 露出調整バーをフォーカス右側に表示する
@@ -184,7 +188,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
 
   Future<void> onVerticalDragUpdate(DragUpdateDetails details) async {
     /// フォーカスが表示されていない場合は、露出変更はできない
-    if (!state.isFocusVisible) {
+    if (!state.focusModel.isVisible) {
       return;
     }
 
@@ -211,16 +215,16 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
   }
 
   void _updateExposureCoordinates(double movingDistanceY) {
-    final currentExposureCoordinateY = state.exposureCoordinates.y;
+    final currentExposureCoordinateY = state.exposureModel.coordinateY;
     final newCoordinateY = currentExposureCoordinateY + movingDistanceY;
     if (newCoordinateY < 0 || exposureCoordinatorBarHeight < newCoordinateY) {
       return;
     }
 
     state = state.copyWith(
-      exposureCoordinates: state.exposureCoordinates.copyWith(
+      exposureModel: state.exposureModel.copyWith(
         isUpdated: true,
-        y: newCoordinateY,
+        coordinateY: newCoordinateY,
       ),
     );
   }
@@ -234,17 +238,18 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     final isMovingUp = movingDistanceY <= 0.0;
     const distanceToEdge = exposureCoordinatorBarHeight / 2;
     if (isMovingUp) {
-      relativeWeight = distanceToEdge / state.maxExposureValue;
+      relativeWeight = distanceToEdge / state.exposureModel.maxValue;
     } else {
-      relativeWeight = distanceToEdge / state.minExposureValue;
+      relativeWeight = distanceToEdge / state.exposureModel.minValue;
     }
 
     final movingExposureValue = -movingDistanceY / relativeWeight;
-    final newExposureValue = state.currentExposureValue + movingExposureValue;
+    final newExposureValue =
+        state.exposureModel.currentValue + movingExposureValue;
 
     final isNewExposureValueWithinAvailableRange =
-        (state.minExposureValue <= newExposureValue) &&
-            (newExposureValue <= state.maxExposureValue);
+        (state.exposureModel.minValue <= newExposureValue) &&
+            (newExposureValue <= state.exposureModel.maxValue);
     if (!isNewExposureValueWithinAvailableRange) {
       return CameraException(
         'setExposurePointFailed',
@@ -257,8 +262,11 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     } on CameraException catch (error) {
       return error;
     }
+
     state = state.copyWith(
-      currentExposureValue: newExposureValue,
+      exposureModel: state.exposureModel.copyWith(
+        currentValue: newExposureValue,
+      ),
     );
     return null;
   }
@@ -285,7 +293,9 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     _focusAutoHidingTimer =
         Timer(const Duration(milliseconds: _focusAutoHidingTime), () {
       state = state.copyWith(
-        isFocusVisible: false,
+        focusModel: state.focusModel.copyWith(
+          isVisible: false,
+        ),
       );
     });
   }

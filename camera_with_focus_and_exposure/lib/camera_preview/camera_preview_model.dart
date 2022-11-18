@@ -1,19 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'exposure/exposure_coordinates.dart';
-import 'focus/focus_coordinates.dart';
+import 'exposure/exposure_model.dart';
+import 'focus/focus_model.dart';
 
 part 'camera_preview_model.freezed.dart';
 
 @freezed
 class CameraPreviewModel with _$CameraPreviewModel {
   factory CameraPreviewModel({
-    required FocusCoordinates focusCoordinates,
-    @Default(false) bool isFocusVisible,
-    required ExposureCoordinates exposureCoordinates,
-    @Default(0) double currentExposureValue,
-    @Default(0) double minExposureValue,
-    @Default(0) double maxExposureValue,
+    required FocusModel focusModel,
+    required ExposureModel exposureModel,
     @Default(false) bool isCameraReady,
   }) = _CameraPreviewModel;
 }

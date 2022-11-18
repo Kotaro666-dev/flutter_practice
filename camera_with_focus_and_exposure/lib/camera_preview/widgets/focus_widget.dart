@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../camera_preview_provider.dart';
-import '../exposure/exposure_coordinates.dart';
+import '../exposure/exposure_model.dart';
 
 const focusIconSize = 100.0;
 const exposureCoordinatorArea = 50.0;
@@ -20,14 +20,14 @@ class FocusWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(cameraPreviewProvider);
     return Visibility(
-      visible: provider.isFocusVisible,
+      visible: provider.focusModel.isVisible,
       child: SizedBox(
         height: focusWidgetSize,
         width: focusWidgetSize,
         child: Stack(
           children: [
             Visibility(
-              visible: provider.exposureCoordinates.position == Position.left,
+              visible: provider.exposureModel.position == Position.left,
               child: const Align(
                 alignment: Alignment.centerLeft,
                 child: _ExposureCoordinator(),
@@ -44,7 +44,7 @@ class FocusWidget extends ConsumerWidget {
               ),
             ),
             Visibility(
-              visible: provider.exposureCoordinates.position == Position.right,
+              visible: provider.exposureModel.position == Position.right,
               child: const Align(
                 alignment: Alignment.centerRight,
                 child: _ExposureCoordinator(),
@@ -83,7 +83,7 @@ class _ExposureCoordinator extends ConsumerWidget {
             ),
           ),
           Positioned(
-            top: provider.exposureCoordinates.y,
+            top: provider.exposureModel.coordinateY,
             left: 5,
             child: SizedBox(
               width: exposureCoordinatorSize,
