@@ -1,8 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:camera_with_focus_and_exposure/camera_preview/camera_preview_provider.dart';
-import 'package:camera_with_focus_and_exposure/camera_preview/camera_preview_view_model.dart';
+import 'package:camera_with_focus_and_exposure/camera_preview/widgets/focus_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+const _upperSettingHeight = 50.0;
 
 class CameraPreviewPage extends StatelessWidget {
   const CameraPreviewPage({
@@ -54,10 +57,28 @@ class _CameraPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(cameraPreviewProvider.notifier);
-    return AspectRatio(
-      aspectRatio: 1 / viewModel.cameraController.value.aspectRatio,
-      child: CameraPreview(
-        viewModel.cameraController,
+    final provider = ref.watch(cameraPreviewProvider);
+    final focusPositionTop =
+        provider.focusCoordinates.y - _upperSettingHeight - focusWidgetSize / 2;
+    final focusPositionLeft = provider.focusCoordinates.x - focusWidgetSize / 2;
+    return Listener(
+      onPointerDown: viewModel.onPointerDown,
+      onPointerMove: viewModel.onPointerMoveUpdateExposureCoordinates,
+      onPointerUp: viewModel.onPointerUpUpdateFocusCoordinates,
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 1 / viewModel.cameraController.value.aspectRatio,
+            child: CameraPreview(
+              viewModel.cameraController,
+            ),
+          ),
+          Positioned(
+            top: focusPositionTop,
+            left: focusPositionLeft,
+            child: const FocusWidget(),
+          ),
+        ],
       ),
     );
   }
@@ -71,7 +92,7 @@ class _UpperSettingArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: _upperSettingHeight,
       width: MediaQuery.of(context).size.width,
       child: DecoratedBox(
         decoration: const BoxDecoration(

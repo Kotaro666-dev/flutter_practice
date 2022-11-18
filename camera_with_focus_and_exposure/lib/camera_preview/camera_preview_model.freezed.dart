@@ -16,8 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CameraPreviewModel {
-  double get focusPositionX => throw _privateConstructorUsedError;
-  double get focusPositionY => throw _privateConstructorUsedError;
+  FocusCoordinates get focusCoordinates => throw _privateConstructorUsedError;
+  bool get isFocusVisible => throw _privateConstructorUsedError;
+  ExposureCoordinates get exposureCoordinates =>
+      throw _privateConstructorUsedError;
   double get exposure => throw _privateConstructorUsedError;
   bool get isCameraReady => throw _privateConstructorUsedError;
 
@@ -33,10 +35,14 @@ abstract class $CameraPreviewModelCopyWith<$Res> {
       _$CameraPreviewModelCopyWithImpl<$Res, CameraPreviewModel>;
   @useResult
   $Res call(
-      {double focusPositionX,
-      double focusPositionY,
+      {FocusCoordinates focusCoordinates,
+      bool isFocusVisible,
+      ExposureCoordinates exposureCoordinates,
       double exposure,
       bool isCameraReady});
+
+  $FocusCoordinatesCopyWith<$Res> get focusCoordinates;
+  $ExposureCoordinatesCopyWith<$Res> get exposureCoordinates;
 }
 
 /// @nodoc
@@ -52,20 +58,25 @@ class _$CameraPreviewModelCopyWithImpl<$Res, $Val extends CameraPreviewModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? focusPositionX = null,
-    Object? focusPositionY = null,
+    Object? focusCoordinates = null,
+    Object? isFocusVisible = null,
+    Object? exposureCoordinates = null,
     Object? exposure = null,
     Object? isCameraReady = null,
   }) {
     return _then(_value.copyWith(
-      focusPositionX: null == focusPositionX
-          ? _value.focusPositionX
-          : focusPositionX // ignore: cast_nullable_to_non_nullable
-              as double,
-      focusPositionY: null == focusPositionY
-          ? _value.focusPositionY
-          : focusPositionY // ignore: cast_nullable_to_non_nullable
-              as double,
+      focusCoordinates: null == focusCoordinates
+          ? _value.focusCoordinates
+          : focusCoordinates // ignore: cast_nullable_to_non_nullable
+              as FocusCoordinates,
+      isFocusVisible: null == isFocusVisible
+          ? _value.isFocusVisible
+          : isFocusVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      exposureCoordinates: null == exposureCoordinates
+          ? _value.exposureCoordinates
+          : exposureCoordinates // ignore: cast_nullable_to_non_nullable
+              as ExposureCoordinates,
       exposure: null == exposure
           ? _value.exposure
           : exposure // ignore: cast_nullable_to_non_nullable
@@ -75,6 +86,23 @@ class _$CameraPreviewModelCopyWithImpl<$Res, $Val extends CameraPreviewModel>
           : isCameraReady // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $FocusCoordinatesCopyWith<$Res> get focusCoordinates {
+    return $FocusCoordinatesCopyWith<$Res>(_value.focusCoordinates, (value) {
+      return _then(_value.copyWith(focusCoordinates: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ExposureCoordinatesCopyWith<$Res> get exposureCoordinates {
+    return $ExposureCoordinatesCopyWith<$Res>(_value.exposureCoordinates,
+        (value) {
+      return _then(_value.copyWith(exposureCoordinates: value) as $Val);
+    });
   }
 }
 
@@ -87,10 +115,16 @@ abstract class _$$_CameraPreviewModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {double focusPositionX,
-      double focusPositionY,
+      {FocusCoordinates focusCoordinates,
+      bool isFocusVisible,
+      ExposureCoordinates exposureCoordinates,
       double exposure,
       bool isCameraReady});
+
+  @override
+  $FocusCoordinatesCopyWith<$Res> get focusCoordinates;
+  @override
+  $ExposureCoordinatesCopyWith<$Res> get exposureCoordinates;
 }
 
 /// @nodoc
@@ -104,20 +138,25 @@ class __$$_CameraPreviewModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? focusPositionX = null,
-    Object? focusPositionY = null,
+    Object? focusCoordinates = null,
+    Object? isFocusVisible = null,
+    Object? exposureCoordinates = null,
     Object? exposure = null,
     Object? isCameraReady = null,
   }) {
     return _then(_$_CameraPreviewModel(
-      focusPositionX: null == focusPositionX
-          ? _value.focusPositionX
-          : focusPositionX // ignore: cast_nullable_to_non_nullable
-              as double,
-      focusPositionY: null == focusPositionY
-          ? _value.focusPositionY
-          : focusPositionY // ignore: cast_nullable_to_non_nullable
-              as double,
+      focusCoordinates: null == focusCoordinates
+          ? _value.focusCoordinates
+          : focusCoordinates // ignore: cast_nullable_to_non_nullable
+              as FocusCoordinates,
+      isFocusVisible: null == isFocusVisible
+          ? _value.isFocusVisible
+          : isFocusVisible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      exposureCoordinates: null == exposureCoordinates
+          ? _value.exposureCoordinates
+          : exposureCoordinates // ignore: cast_nullable_to_non_nullable
+              as ExposureCoordinates,
       exposure: null == exposure
           ? _value.exposure
           : exposure // ignore: cast_nullable_to_non_nullable
@@ -134,17 +173,19 @@ class __$$_CameraPreviewModelCopyWithImpl<$Res>
 
 class _$_CameraPreviewModel implements _CameraPreviewModel {
   _$_CameraPreviewModel(
-      {this.focusPositionX = 0,
-      this.focusPositionY = 0,
+      {required this.focusCoordinates,
+      this.isFocusVisible = false,
+      required this.exposureCoordinates,
       this.exposure = 0,
       this.isCameraReady = false});
 
   @override
-  @JsonKey()
-  final double focusPositionX;
+  final FocusCoordinates focusCoordinates;
   @override
   @JsonKey()
-  final double focusPositionY;
+  final bool isFocusVisible;
+  @override
+  final ExposureCoordinates exposureCoordinates;
   @override
   @JsonKey()
   final double exposure;
@@ -154,7 +195,7 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
 
   @override
   String toString() {
-    return 'CameraPreviewModel(focusPositionX: $focusPositionX, focusPositionY: $focusPositionY, exposure: $exposure, isCameraReady: $isCameraReady)';
+    return 'CameraPreviewModel(focusCoordinates: $focusCoordinates, isFocusVisible: $isFocusVisible, exposureCoordinates: $exposureCoordinates, exposure: $exposure, isCameraReady: $isCameraReady)';
   }
 
   @override
@@ -162,10 +203,12 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CameraPreviewModel &&
-            (identical(other.focusPositionX, focusPositionX) ||
-                other.focusPositionX == focusPositionX) &&
-            (identical(other.focusPositionY, focusPositionY) ||
-                other.focusPositionY == focusPositionY) &&
+            (identical(other.focusCoordinates, focusCoordinates) ||
+                other.focusCoordinates == focusCoordinates) &&
+            (identical(other.isFocusVisible, isFocusVisible) ||
+                other.isFocusVisible == isFocusVisible) &&
+            (identical(other.exposureCoordinates, exposureCoordinates) ||
+                other.exposureCoordinates == exposureCoordinates) &&
             (identical(other.exposure, exposure) ||
                 other.exposure == exposure) &&
             (identical(other.isCameraReady, isCameraReady) ||
@@ -173,8 +216,8 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, focusPositionX, focusPositionY, exposure, isCameraReady);
+  int get hashCode => Object.hash(runtimeType, focusCoordinates, isFocusVisible,
+      exposureCoordinates, exposure, isCameraReady);
 
   @JsonKey(ignore: true)
   @override
@@ -186,15 +229,18 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
 
 abstract class _CameraPreviewModel implements CameraPreviewModel {
   factory _CameraPreviewModel(
-      {final double focusPositionX,
-      final double focusPositionY,
+      {required final FocusCoordinates focusCoordinates,
+      final bool isFocusVisible,
+      required final ExposureCoordinates exposureCoordinates,
       final double exposure,
       final bool isCameraReady}) = _$_CameraPreviewModel;
 
   @override
-  double get focusPositionX;
+  FocusCoordinates get focusCoordinates;
   @override
-  double get focusPositionY;
+  bool get isFocusVisible;
+  @override
+  ExposureCoordinates get exposureCoordinates;
   @override
   double get exposure;
   @override
