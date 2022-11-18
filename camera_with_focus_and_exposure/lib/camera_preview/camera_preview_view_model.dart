@@ -65,8 +65,9 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     }
   }
 
-  void onPointerDown(PointerEvent details) {
-    debugPrint('【onPointerDown】');
+  /// 状態を初期化する
+  void onTapDown(TapDownDetails details) {
+    debugPrint('【onTapDown】');
     final focusCenterCoordinateY =
         state.focusCoordinates.y - (focusWidgetSize / 2);
     final exposureBarTopCoordinateY =
@@ -80,18 +81,37 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     );
   }
 
-  void onPointerUpUpdateFocusCoordinates(PointerEvent details) {
+  void onLongPressStart(LongPressStartDetails details) {
     debugPrint(
-        '【onPointerUpdate】positionX: ${details.position.dx}, positionY: ${details.position.dy}');
+        '【onLongPressStart】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
+    _updateFocusCoordinates(
+      newCoordinateX: details.globalPosition.dx,
+      newCoordinateY: details.globalPosition.dy,
+    );
+    _hideFocusAfterSeconds();
+  }
+
+  void onTapUp(TapUpDetails details) {
+    debugPrint(
+        '【onTapUp】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
+    _updateFocusCoordinates(
+      newCoordinateX: details.globalPosition.dx,
+      newCoordinateY: details.globalPosition.dy,
+    );
+    _hideFocusAfterSeconds();
+  }
+
+  void _updateFocusCoordinates({
+    required double newCoordinateX,
+    required double newCoordinateY,
+  }) {
     if (state.exposureCoordinates.isUpdated) {
       _hideFocusAfterSeconds();
       return;
     }
 
-    final newCoordinateX = details.position.dx;
-    final newCoordinateY = details.position.dy;
     final isTappedRightFourthScreen =
-        _isTappedRightFourthScreen(details.position.dx);
+        _isTappedRightFourthScreen(newCoordinateX);
 
     state = state.copyWith(
       isFocusVisible: true,
@@ -109,22 +129,32 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
         position: isTappedRightFourthScreen ? Position.left : Position.right,
       ),
     );
+  }
+
+  void onVerticalDragUpdate(DragUpdateDetails details) {
+    /// フォーカスが表示されていない場合は、露出変更はできない
+    if (!state.isFocusVisible) {
+      return;
+    }
+
+    /// タイマーが起動していた場合には、キャンセルする
+    if (_focusAutoHidingTimer != null) {
+      _focusAutoHidingTimer?.cancel();
+    }
+    debugPrint(
+        '【onPointerMove】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
+
+    /// Delta:
+    /// The amount the pointer has moved in the coordinate space of the event
+    /// receiver since the previous update.
+    _updateExposureCoordinates(details.delta.dy);
 
     _hideFocusAfterSeconds();
   }
 
-  void onPointerMoveUpdateExposureCoordinates(PointerEvent details) {
-    debugPrint(
-        '【onPointerMove】positionX: ${details.position.dx}, positionY: ${details.position.dy}');
-    if (!state.isFocusVisible) {
-      return;
-    }
-    if (_focusAutoHidingTimer != null) {
-      _focusAutoHidingTimer?.cancel();
-    }
-
+  void _updateExposureCoordinates(double deltaDistanceY) {
     final currentExposureCoordinateY = state.exposureCoordinates.y;
-    final movementY = details.delta.dy / _movementWeight;
+    final movementY = deltaDistanceY / _movementWeight;
     final newCoordinateY = currentExposureCoordinateY + movementY;
     if (newCoordinateY < 0 || exposureCoordinatorBarHeight < newCoordinateY) {
       return;

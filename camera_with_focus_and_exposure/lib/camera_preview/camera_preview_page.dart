@@ -61,10 +61,11 @@ class _CameraPreview extends ConsumerWidget {
     final focusPositionTop =
         provider.focusCoordinates.y - _upperSettingHeight - focusWidgetSize / 2;
     final focusPositionLeft = provider.focusCoordinates.x - focusWidgetSize / 2;
-    return Listener(
-      onPointerDown: viewModel.onPointerDown,
-      onPointerMove: viewModel.onPointerMoveUpdateExposureCoordinates,
-      onPointerUp: viewModel.onPointerUpUpdateFocusCoordinates,
+    return GestureDetector(
+      onTapDown: viewModel.onTapDown,
+      onTapUp: viewModel.onTapUp,
+      onVerticalDragUpdate: viewModel.onVerticalDragUpdate,
+      onLongPressStart: viewModel.onLongPressStart,
       child: Stack(
         children: [
           AspectRatio(
