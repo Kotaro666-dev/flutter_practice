@@ -11,7 +11,9 @@ class CameraPreviewModel with _$CameraPreviewModel {
     required FocusCoordinates focusCoordinates,
     @Default(false) bool isFocusVisible,
     required ExposureCoordinates exposureCoordinates,
-    @Default(0) double exposure,
+    @Default(0) double currentExposureValue,
+    @Default(0) double minExposureValue,
+    @Default(0) double maxExposureValue,
     @Default(false) bool isCameraReady,
   }) = _CameraPreviewModel;
 }

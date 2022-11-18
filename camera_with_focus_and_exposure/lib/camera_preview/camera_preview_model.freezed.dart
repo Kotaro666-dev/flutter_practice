@@ -20,7 +20,9 @@ mixin _$CameraPreviewModel {
   bool get isFocusVisible => throw _privateConstructorUsedError;
   ExposureCoordinates get exposureCoordinates =>
       throw _privateConstructorUsedError;
-  double get exposure => throw _privateConstructorUsedError;
+  double get currentExposureValue => throw _privateConstructorUsedError;
+  double get minExposureValue => throw _privateConstructorUsedError;
+  double get maxExposureValue => throw _privateConstructorUsedError;
   bool get isCameraReady => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -38,7 +40,9 @@ abstract class $CameraPreviewModelCopyWith<$Res> {
       {FocusCoordinates focusCoordinates,
       bool isFocusVisible,
       ExposureCoordinates exposureCoordinates,
-      double exposure,
+      double currentExposureValue,
+      double minExposureValue,
+      double maxExposureValue,
       bool isCameraReady});
 
   $FocusCoordinatesCopyWith<$Res> get focusCoordinates;
@@ -61,7 +65,9 @@ class _$CameraPreviewModelCopyWithImpl<$Res, $Val extends CameraPreviewModel>
     Object? focusCoordinates = null,
     Object? isFocusVisible = null,
     Object? exposureCoordinates = null,
-    Object? exposure = null,
+    Object? currentExposureValue = null,
+    Object? minExposureValue = null,
+    Object? maxExposureValue = null,
     Object? isCameraReady = null,
   }) {
     return _then(_value.copyWith(
@@ -77,9 +83,17 @@ class _$CameraPreviewModelCopyWithImpl<$Res, $Val extends CameraPreviewModel>
           ? _value.exposureCoordinates
           : exposureCoordinates // ignore: cast_nullable_to_non_nullable
               as ExposureCoordinates,
-      exposure: null == exposure
-          ? _value.exposure
-          : exposure // ignore: cast_nullable_to_non_nullable
+      currentExposureValue: null == currentExposureValue
+          ? _value.currentExposureValue
+          : currentExposureValue // ignore: cast_nullable_to_non_nullable
+              as double,
+      minExposureValue: null == minExposureValue
+          ? _value.minExposureValue
+          : minExposureValue // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxExposureValue: null == maxExposureValue
+          ? _value.maxExposureValue
+          : maxExposureValue // ignore: cast_nullable_to_non_nullable
               as double,
       isCameraReady: null == isCameraReady
           ? _value.isCameraReady
@@ -118,7 +132,9 @@ abstract class _$$_CameraPreviewModelCopyWith<$Res>
       {FocusCoordinates focusCoordinates,
       bool isFocusVisible,
       ExposureCoordinates exposureCoordinates,
-      double exposure,
+      double currentExposureValue,
+      double minExposureValue,
+      double maxExposureValue,
       bool isCameraReady});
 
   @override
@@ -141,7 +157,9 @@ class __$$_CameraPreviewModelCopyWithImpl<$Res>
     Object? focusCoordinates = null,
     Object? isFocusVisible = null,
     Object? exposureCoordinates = null,
-    Object? exposure = null,
+    Object? currentExposureValue = null,
+    Object? minExposureValue = null,
+    Object? maxExposureValue = null,
     Object? isCameraReady = null,
   }) {
     return _then(_$_CameraPreviewModel(
@@ -157,9 +175,17 @@ class __$$_CameraPreviewModelCopyWithImpl<$Res>
           ? _value.exposureCoordinates
           : exposureCoordinates // ignore: cast_nullable_to_non_nullable
               as ExposureCoordinates,
-      exposure: null == exposure
-          ? _value.exposure
-          : exposure // ignore: cast_nullable_to_non_nullable
+      currentExposureValue: null == currentExposureValue
+          ? _value.currentExposureValue
+          : currentExposureValue // ignore: cast_nullable_to_non_nullable
+              as double,
+      minExposureValue: null == minExposureValue
+          ? _value.minExposureValue
+          : minExposureValue // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxExposureValue: null == maxExposureValue
+          ? _value.maxExposureValue
+          : maxExposureValue // ignore: cast_nullable_to_non_nullable
               as double,
       isCameraReady: null == isCameraReady
           ? _value.isCameraReady
@@ -176,7 +202,9 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
       {required this.focusCoordinates,
       this.isFocusVisible = false,
       required this.exposureCoordinates,
-      this.exposure = 0,
+      this.currentExposureValue = 0,
+      this.minExposureValue = 0,
+      this.maxExposureValue = 0,
       this.isCameraReady = false});
 
   @override
@@ -188,14 +216,20 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
   final ExposureCoordinates exposureCoordinates;
   @override
   @JsonKey()
-  final double exposure;
+  final double currentExposureValue;
+  @override
+  @JsonKey()
+  final double minExposureValue;
+  @override
+  @JsonKey()
+  final double maxExposureValue;
   @override
   @JsonKey()
   final bool isCameraReady;
 
   @override
   String toString() {
-    return 'CameraPreviewModel(focusCoordinates: $focusCoordinates, isFocusVisible: $isFocusVisible, exposureCoordinates: $exposureCoordinates, exposure: $exposure, isCameraReady: $isCameraReady)';
+    return 'CameraPreviewModel(focusCoordinates: $focusCoordinates, isFocusVisible: $isFocusVisible, exposureCoordinates: $exposureCoordinates, currentExposureValue: $currentExposureValue, minExposureValue: $minExposureValue, maxExposureValue: $maxExposureValue, isCameraReady: $isCameraReady)';
   }
 
   @override
@@ -209,15 +243,26 @@ class _$_CameraPreviewModel implements _CameraPreviewModel {
                 other.isFocusVisible == isFocusVisible) &&
             (identical(other.exposureCoordinates, exposureCoordinates) ||
                 other.exposureCoordinates == exposureCoordinates) &&
-            (identical(other.exposure, exposure) ||
-                other.exposure == exposure) &&
+            (identical(other.currentExposureValue, currentExposureValue) ||
+                other.currentExposureValue == currentExposureValue) &&
+            (identical(other.minExposureValue, minExposureValue) ||
+                other.minExposureValue == minExposureValue) &&
+            (identical(other.maxExposureValue, maxExposureValue) ||
+                other.maxExposureValue == maxExposureValue) &&
             (identical(other.isCameraReady, isCameraReady) ||
                 other.isCameraReady == isCameraReady));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, focusCoordinates, isFocusVisible,
-      exposureCoordinates, exposure, isCameraReady);
+  int get hashCode => Object.hash(
+      runtimeType,
+      focusCoordinates,
+      isFocusVisible,
+      exposureCoordinates,
+      currentExposureValue,
+      minExposureValue,
+      maxExposureValue,
+      isCameraReady);
 
   @JsonKey(ignore: true)
   @override
@@ -232,7 +277,9 @@ abstract class _CameraPreviewModel implements CameraPreviewModel {
       {required final FocusCoordinates focusCoordinates,
       final bool isFocusVisible,
       required final ExposureCoordinates exposureCoordinates,
-      final double exposure,
+      final double currentExposureValue,
+      final double minExposureValue,
+      final double maxExposureValue,
       final bool isCameraReady}) = _$_CameraPreviewModel;
 
   @override
@@ -242,7 +289,11 @@ abstract class _CameraPreviewModel implements CameraPreviewModel {
   @override
   ExposureCoordinates get exposureCoordinates;
   @override
-  double get exposure;
+  double get currentExposureValue;
+  @override
+  double get minExposureValue;
+  @override
+  double get maxExposureValue;
   @override
   bool get isCameraReady;
   @override

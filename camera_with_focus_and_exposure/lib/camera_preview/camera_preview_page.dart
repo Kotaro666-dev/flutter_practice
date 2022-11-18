@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:camera_with_focus_and_exposure/camera_preview/camera_preview_provider.dart';
 import 'package:camera_with_focus_and_exposure/camera_preview/widgets/focus_widget.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
