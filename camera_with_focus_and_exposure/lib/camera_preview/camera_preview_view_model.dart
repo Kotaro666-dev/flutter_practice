@@ -53,7 +53,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     }
     _cameraController = CameraController(
       _cameras[_backCameraIndex],
-      ResolutionPreset.medium,
+      ResolutionPreset.max,
     );
     try {
       await _cameraController.initialize();
@@ -81,24 +81,48 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     );
   }
 
-  void onLongPressStart(LongPressStartDetails details) {
+  void onLongPressStart(LongPressStartDetails details, BuildContext context) {
     debugPrint(
         '【onLongPressStart】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
     _updateFocusCoordinates(
       newCoordinateX: details.globalPosition.dx,
       newCoordinateY: details.globalPosition.dy,
     );
+    _setFocusPointOnDevice(
+      distanceX: details.globalPosition.dx,
+      distanceY: details.globalPosition.dy,
+      context: context,
+    );
     _hideFocusAfterSeconds();
   }
 
-  void onTapUp(TapUpDetails details) {
+  void onTapUp(TapUpDetails details, BuildContext context) {
     debugPrint(
         '【onTapUp】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
     _updateFocusCoordinates(
       newCoordinateX: details.globalPosition.dx,
       newCoordinateY: details.globalPosition.dy,
     );
+    _setFocusPointOnDevice(
+      distanceX: details.globalPosition.dx,
+      distanceY: details.globalPosition.dy,
+      context: context,
+    );
     _hideFocusAfterSeconds();
+  }
+
+  void _setFocusPointOnDevice({
+    required double distanceX,
+    required double distanceY,
+    required BuildContext context,
+  }) {
+    final size = MediaQuery.of(context).size;
+    _cameraController.setFocusPoint(
+      Offset(
+        distanceX / size.width,
+        distanceY / size.height,
+      ),
+    );
   }
 
   void _updateFocusCoordinates({

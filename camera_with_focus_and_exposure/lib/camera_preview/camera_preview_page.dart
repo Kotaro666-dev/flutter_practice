@@ -63,13 +63,17 @@ class _CameraPreview extends ConsumerWidget {
     final focusPositionLeft = provider.focusCoordinates.x - focusWidgetSize / 2;
     return GestureDetector(
       onTapDown: viewModel.onTapDown,
-      onTapUp: viewModel.onTapUp,
+      onTapUp: (TapUpDetails details) {
+        viewModel.onTapUp(details, context);
+      },
       onVerticalDragUpdate: viewModel.onVerticalDragUpdate,
-      onLongPressStart: viewModel.onLongPressStart,
+      onLongPressStart: (LongPressStartDetails details) {
+        viewModel.onLongPressStart(details, context);
+      },
       child: Stack(
         children: [
           AspectRatio(
-            aspectRatio: 1 / viewModel.cameraController.value.aspectRatio,
+            aspectRatio: 10 / 16,
             child: CameraPreview(
               viewModel.cameraController,
             ),
