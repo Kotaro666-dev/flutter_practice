@@ -40,7 +40,7 @@ class _Body extends ConsumerWidget {
         : Center(
             child: ElevatedButton(
               onPressed: () {
-                viewModel.initializeCamera();
+                ref.read(cameraPreviewProvider.notifier).initializeCamera();
               },
               child: const Text('Activate Camera'),
             ),
@@ -55,7 +55,6 @@ class _CameraPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(cameraPreviewProvider.notifier);
     final provider = ref.watch(cameraPreviewProvider);
     final focusPositionTop = provider.focusModel.coordinateY -
         _upperSettingHeight -
@@ -63,20 +62,23 @@ class _CameraPreview extends ConsumerWidget {
     final focusPositionLeft =
         provider.focusModel.coordinateX - focusWidgetSize / 2;
     return GestureDetector(
-      onTapDown: viewModel.onTapDown,
+      onTapDown: ref.read(cameraPreviewProvider.notifier).onTapDown,
       onTapUp: (TapUpDetails details) {
-        viewModel.onTapUp(details, context);
+        ref.read(cameraPreviewProvider.notifier).onTapUp(details, context);
       },
-      onVerticalDragUpdate: viewModel.onVerticalDragUpdate,
+      onVerticalDragUpdate:
+          ref.read(cameraPreviewProvider.notifier).onVerticalDragUpdate,
       onLongPressStart: (LongPressStartDetails details) {
-        viewModel.onLongPressStart(details, context);
+        ref
+            .read(cameraPreviewProvider.notifier)
+            .onLongPressStart(details, context);
       },
       child: Stack(
         children: [
           AspectRatio(
             aspectRatio: 10 / 16,
             child: CameraPreview(
-              viewModel.cameraController,
+              ref.read(cameraPreviewProvider.notifier).cameraController,
             ),
           ),
           Positioned(
