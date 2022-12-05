@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'camera_preview_model.dart';
 
 const _backCameraIndex = 0;
-const _focusAutoHidingTime = 3000;
+const _focusAutoHidingTimeInMiliseconds = 3000;
 const _movementWeight = 10;
 
 class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
@@ -75,6 +75,10 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     }
   }
 
+  // A pointer that might cause a tap with a primary button has contacted the
+  /// screen at a particular location.
+
+  /// スクリーン上でタップされた時のイベントに呼ばれるコールバック関数
   /// 状態を初期化する
   Future<void> onTapDown(TapDownDetails details) async {
     debugPrint('【onTapDown】');
@@ -102,39 +106,57 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     );
   }
 
-  void onLongPressStart(LongPressStartDetails details, BuildContext context) {
+  /// タップされたスクリーンとの接地が終了したイベントに呼ばれるコールバック関数
+  /// ネイティブで管理するフォーカス地点と Flutter 上で描写されるフォーカス位置の設定をする
+  Future<void> onTapUp(TapUpDetails details, BuildContext context) async {
     debugPrint(
-        '【onLongPressStart】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
-    _updateFocusCoordinates(
-      newCoordinateX: details.globalPosition.dx,
-      newCoordinateY: details.globalPosition.dy,
-    );
-    _setFocusPointOnDevice(
+        '【onTapUp】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
+    await _setFocus(
       distanceX: details.globalPosition.dx,
       distanceY: details.globalPosition.dy,
       context: context,
     );
+
     _hideFocusAfterSeconds();
   }
 
-  Future<void> onTapUp(TapUpDetails details, BuildContext context) async {
+  /// ロングプレス押下イベントに呼ばれるコールバック関数
+  /// フォーカス地点のネイティブと描写される位置の設定をする
+  Future<void> onLongPressStart(
+    LongPressStartDetails details,
+    BuildContext context,
+  ) async {
     debugPrint(
-        '【onTapUp】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
-    final error = await _setFocusPointOnDevice(
+        '【onLongPressStart】positionX: ${details.globalPosition.dx}, positionY: ${details.globalPosition.dy}');
+
+    await _setFocus(
       distanceX: details.globalPosition.dx,
       distanceY: details.globalPosition.dy,
+      context: context,
+    );
+
+    _hideFocusAfterSeconds();
+  }
+
+  Future<void> _setFocus({
+    required double distanceX,
+    required double distanceY,
+    required BuildContext context,
+  }) async {
+    final error = await _setFocusPointOnDevice(
+      distanceX: distanceX,
+      distanceY: distanceY,
       context: context,
     );
     if (error != null) {
       debugPrint(error.toString());
-    } else {
-      _updateFocusCoordinates(
-        newCoordinateX: details.globalPosition.dx,
-        newCoordinateY: details.globalPosition.dy,
-      );
+      return;
     }
 
-    _hideFocusAfterSeconds();
+    _updateFocusCoordinates(
+      newCoordinateX: distanceX,
+      newCoordinateY: distanceY,
+    );
   }
 
   Future<CameraException?> _setFocusPointOnDevice({
@@ -186,6 +208,8 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     );
   }
 
+  /// 垂直方向のドラッグ移動イベントに呼ばれるコールバック関数
+  /// ネイティブで管理する露出値と Flutter 上で描写される露出座標位置の設定をする
   Future<void> onVerticalDragUpdate(DragUpdateDetails details) async {
     /// フォーカスが表示されていない場合は、露出変更はできない
     if (!state.focusModel.isVisible) {
@@ -272,6 +296,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
   }
 
   /// スクリーンの右側部をタップされたかを判定する
+  /// なぜ？: タップされた位置に応じて、表示する露出バーの位置を変更する必要があるため
   bool _isTappedRightFourthScreen(double positionX) {
     final pixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
     final logicalScreenSize =
@@ -290,13 +315,15 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     if (_focusAutoHidingTimer != null) {
       _focusAutoHidingTimer?.cancel();
     }
-    _focusAutoHidingTimer =
-        Timer(const Duration(milliseconds: _focusAutoHidingTime), () {
-      state = state.copyWith(
-        focusModel: state.focusModel.copyWith(
-          isVisible: false,
-        ),
-      );
-    });
+    _focusAutoHidingTimer = Timer(
+      const Duration(milliseconds: _focusAutoHidingTimeInMiliseconds),
+      () {
+        state = state.copyWith(
+          focusModel: state.focusModel.copyWith(
+            isVisible: false,
+          ),
+        );
+      },
+    );
   }
 }
