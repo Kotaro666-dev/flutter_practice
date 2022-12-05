@@ -28,11 +28,15 @@ class _Body extends ConsumerWidget {
     final viewModel = ref.watch(cameraPreviewProvider.notifier);
     return provider.isCameraReady &&
             viewModel.cameraController.value.isInitialized
-        ? Column(
+        ? Stack(
             children: const [
-              _UpperSettingArea(),
               _CameraPreview(),
-              Expanded(
+              Align(
+                alignment: Alignment.topCenter,
+                child: _UpperSettingArea(),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: _LowerSettingArea(),
               )
             ],
@@ -76,7 +80,7 @@ class _CameraPreview extends ConsumerWidget {
       child: Stack(
         children: [
           AspectRatio(
-            aspectRatio: 10 / 16,
+            aspectRatio: 9 / 16,
             child: CameraPreview(
               ref.read(cameraPreviewProvider.notifier).cameraController,
             ),
@@ -134,17 +138,20 @@ class _LowerSettingArea extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.black,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            'Lower setting area',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
-          )
-        ],
+      child: SizedBox(
+        height: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'Lower Setting Area',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
