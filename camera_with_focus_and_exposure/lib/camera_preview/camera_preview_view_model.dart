@@ -238,9 +238,9 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     final isMovingUp = movingDistanceY <= 0.0;
     const distanceToEdge = exposureCoordinatorBarHeight / 2;
     if (isMovingUp) {
-      relativeWeight = distanceToEdge / state.exposureModel.maxValue;
+      relativeWeight = distanceToEdge / (state.exposureModel.maxValue).abs();
     } else {
-      relativeWeight = distanceToEdge / state.exposureModel.minValue;
+      relativeWeight = distanceToEdge / (state.exposureModel.minValue).abs();
     }
 
     final movingExposureValue = -movingDistanceY / relativeWeight;
