@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'camera_preview_model.dart';
 
 const _backCameraIndex = 0;
-const _focusAutoHidingTimeInMiliseconds = 3000;
+const _focusAutoHidingTimeInMilliseconds = 3000;
 const _movementWeight = 10;
 
 class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
@@ -316,7 +316,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
       _focusAutoHidingTimer?.cancel();
     }
     _focusAutoHidingTimer = Timer(
-      const Duration(milliseconds: _focusAutoHidingTimeInMiliseconds),
+      const Duration(milliseconds: _focusAutoHidingTimeInMilliseconds),
       () {
         state = state.copyWith(
           focusModel: state.focusModel.copyWith(
