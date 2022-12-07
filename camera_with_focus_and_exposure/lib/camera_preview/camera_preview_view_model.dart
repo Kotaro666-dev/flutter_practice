@@ -140,7 +140,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     required double distanceY,
     required BuildContext context,
   }) async {
-    final error = await _setFocusPointOnDevice(
+    final error = await _tryOrSetFocusPointOnDevice(
       distanceX: distanceX,
       distanceY: distanceY,
       context: context,
@@ -156,7 +156,7 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     );
   }
 
-  Future<CameraException?> _setFocusPointOnDevice({
+  Future<CameraException?> _tryOrSetFocusPointOnDevice({
     required double distanceX,
     required double distanceY,
     required BuildContext context,
