@@ -75,9 +75,6 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
     }
   }
 
-  // A pointer that might cause a tap with a primary button has contacted the
-  /// screen at a particular location.
-
   /// スクリーン上でタップされた時のイベントに呼ばれるコールバック関数
   /// 状態を初期化する
   Future<void> onTapDown(TapDownDetails details) async {
