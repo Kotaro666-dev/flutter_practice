@@ -14,7 +14,6 @@ class ExposureModel with _$ExposureModel {
     @Default(Position.left) Position position,
     @Default(0) double coordinateX,
     @Default(0) double coordinateY,
-    @Default(0) double barTopCoordinateY,
     @Default(0) double currentValue,
     @Default(0) double minValue,
     @Default(0) double maxValue,

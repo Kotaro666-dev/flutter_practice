@@ -20,7 +20,6 @@ mixin _$ExposureModel {
   Position get position => throw _privateConstructorUsedError;
   double get coordinateX => throw _privateConstructorUsedError;
   double get coordinateY => throw _privateConstructorUsedError;
-  double get barTopCoordinateY => throw _privateConstructorUsedError;
   double get currentValue => throw _privateConstructorUsedError;
   double get minValue => throw _privateConstructorUsedError;
   double get maxValue => throw _privateConstructorUsedError;
@@ -41,7 +40,6 @@ abstract class $ExposureModelCopyWith<$Res> {
       Position position,
       double coordinateX,
       double coordinateY,
-      double barTopCoordinateY,
       double currentValue,
       double minValue,
       double maxValue});
@@ -64,7 +62,6 @@ class _$ExposureModelCopyWithImpl<$Res, $Val extends ExposureModel>
     Object? position = null,
     Object? coordinateX = null,
     Object? coordinateY = null,
-    Object? barTopCoordinateY = null,
     Object? currentValue = null,
     Object? minValue = null,
     Object? maxValue = null,
@@ -85,10 +82,6 @@ class _$ExposureModelCopyWithImpl<$Res, $Val extends ExposureModel>
       coordinateY: null == coordinateY
           ? _value.coordinateY
           : coordinateY // ignore: cast_nullable_to_non_nullable
-              as double,
-      barTopCoordinateY: null == barTopCoordinateY
-          ? _value.barTopCoordinateY
-          : barTopCoordinateY // ignore: cast_nullable_to_non_nullable
               as double,
       currentValue: null == currentValue
           ? _value.currentValue
@@ -119,7 +112,6 @@ abstract class _$$_ExposureModelCopyWith<$Res>
       Position position,
       double coordinateX,
       double coordinateY,
-      double barTopCoordinateY,
       double currentValue,
       double minValue,
       double maxValue});
@@ -140,7 +132,6 @@ class __$$_ExposureModelCopyWithImpl<$Res>
     Object? position = null,
     Object? coordinateX = null,
     Object? coordinateY = null,
-    Object? barTopCoordinateY = null,
     Object? currentValue = null,
     Object? minValue = null,
     Object? maxValue = null,
@@ -158,10 +149,6 @@ class __$$_ExposureModelCopyWithImpl<$Res>
       coordinateY: null == coordinateY
           ? _value.coordinateY
           : coordinateY // ignore: cast_nullable_to_non_nullable
-              as double,
-      barTopCoordinateY: null == barTopCoordinateY
-          ? _value.barTopCoordinateY
-          : barTopCoordinateY // ignore: cast_nullable_to_non_nullable
               as double,
       currentValue: null == currentValue
           ? _value.currentValue
@@ -187,7 +174,6 @@ class _$_ExposureModel implements _ExposureModel {
       this.position = Position.left,
       this.coordinateX = 0,
       this.coordinateY = 0,
-      this.barTopCoordinateY = 0,
       this.currentValue = 0,
       this.minValue = 0,
       this.maxValue = 0});
@@ -206,9 +192,6 @@ class _$_ExposureModel implements _ExposureModel {
   final double coordinateY;
   @override
   @JsonKey()
-  final double barTopCoordinateY;
-  @override
-  @JsonKey()
   final double currentValue;
   @override
   @JsonKey()
@@ -219,7 +202,7 @@ class _$_ExposureModel implements _ExposureModel {
 
   @override
   String toString() {
-    return 'ExposureModel(isUpdated: $isUpdated, position: $position, coordinateX: $coordinateX, coordinateY: $coordinateY, barTopCoordinateY: $barTopCoordinateY, currentValue: $currentValue, minValue: $minValue, maxValue: $maxValue)';
+    return 'ExposureModel(isUpdated: $isUpdated, position: $position, coordinateX: $coordinateX, coordinateY: $coordinateY, currentValue: $currentValue, minValue: $minValue, maxValue: $maxValue)';
   }
 
   @override
@@ -234,8 +217,6 @@ class _$_ExposureModel implements _ExposureModel {
                 other.coordinateX == coordinateX) &&
             (identical(other.coordinateY, coordinateY) ||
                 other.coordinateY == coordinateY) &&
-            (identical(other.barTopCoordinateY, barTopCoordinateY) ||
-                other.barTopCoordinateY == barTopCoordinateY) &&
             (identical(other.currentValue, currentValue) ||
                 other.currentValue == currentValue) &&
             (identical(other.minValue, minValue) ||
@@ -251,7 +232,6 @@ class _$_ExposureModel implements _ExposureModel {
       position,
       coordinateX,
       coordinateY,
-      barTopCoordinateY,
       currentValue,
       minValue,
       maxValue);
@@ -269,7 +249,6 @@ abstract class _ExposureModel implements ExposureModel {
       final Position position,
       final double coordinateX,
       final double coordinateY,
-      final double barTopCoordinateY,
       final double currentValue,
       final double minValue,
       final double maxValue}) = _$_ExposureModel;
@@ -282,8 +261,6 @@ abstract class _ExposureModel implements ExposureModel {
   double get coordinateX;
   @override
   double get coordinateY;
-  @override
-  double get barTopCoordinateY;
   @override
   double get currentValue;
   @override

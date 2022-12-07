@@ -79,15 +79,10 @@ class CameraPreviewViewModel extends StateNotifier<CameraPreviewModel> {
   /// 状態を初期化する
   Future<void> onTapDown(TapDownDetails details) async {
     debugPrint('【onTapDown】');
-    final focusCenterCoordinateY =
-        state.focusModel.coordinateY - (focusWidgetSize / 2);
-    final exposureBarTopCoordinateY =
-        focusCenterCoordinateY - (focusWidgetSize / 2);
 
     state = state.copyWith(
       exposureModel: state.exposureModel.copyWith(
         isUpdated: false,
-        barTopCoordinateY: exposureBarTopCoordinateY,
       ),
     );
 
