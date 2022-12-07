@@ -60,9 +60,8 @@ class _CameraPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(cameraPreviewProvider);
-    final focusPositionTop = provider.focusModel.coordinateY -
-        _upperSettingHeight -
-        focusWidgetSize / 2;
+    final focusPositionTop =
+        provider.focusModel.coordinateY - focusWidgetSize / 2;
     final focusPositionLeft =
         provider.focusModel.coordinateX - focusWidgetSize / 2;
     return GestureDetector(
