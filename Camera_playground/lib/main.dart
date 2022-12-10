@@ -151,66 +151,130 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                color: Colors.black,
-              ),
-              child: Transform.scale(
-                scale: scale,
-                child: Center(
-                  child: _cameraPreviewWidget(),
-                ),
-              ),
-            ),
-            Positioned(
-              width: screenWidth,
-              bottom: 100,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 10,
+              child: Stack(
+                children: <Widget>[
+                  DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                    child: Transform.scale(
+                      scale: scale,
+                      child: Center(
+                        child: _cameraPreviewWidget(),
+                      ),
+                    ),
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
+                  Visibility(
+                    visible: false,
+                    child: Positioned(
+                      width: screenWidth,
+                      bottom: 100,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: const [
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                  ),
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                  ),
+                  Visibility(
+                    visible: false,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        height: 200,
+                        width: screenWidth,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
             Visibility(
               visible: true,
-              child: Align(
-                alignment: Alignment.bottomCenter,
+              child: Expanded(
+                flex: 5,
                 child: SizedBox(
-                  height: 200,
                   width: screenWidth,
                   child: DecoratedBox(
-                    decoration:
-                        BoxDecoration(color: Colors.black.withOpacity(0.4)),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                    ),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: DecoratedBox(
+                            decoration: const BoxDecoration(color: Colors.grey),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 4.0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "カメラ設定",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => {},
+                                    icon: const Icon(
+                                      Icons.add_circle_outline,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SliverFixedExtentList(
+                          itemExtent: 50.0,
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return Container(
+                                alignment: Alignment.center,
+                                color: Colors.lightBlue[100 * (index % 9)],
+                                child: Text(
+                                  'list item $index',
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             )
-            // _captureControlRowWidget(),
-            // _modeControlRowWidget(),
-            // Padding(
-            //   padding: const EdgeInsets.all(5.0),
-            //   child: Row(
-            //     children: <Widget>[
-            //       _cameraTogglesRowWidget(),
-            //       _thumbnailWidget(),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
