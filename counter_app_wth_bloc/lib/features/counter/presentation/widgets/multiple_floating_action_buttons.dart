@@ -8,12 +8,12 @@ class MultipleFloatingActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         FloatingActionButton(
-          onPressed: () =>
-              context.read<CounterBloc>().add(const CounterEvent.increment()),
+          onPressed: () => counterBloc.add(const CounterEvent.increment()),
           tooltip: 'Increment',
           child: const Icon(
             Icons.add,
@@ -21,15 +21,13 @@ class MultipleFloatingActionButtons extends StatelessWidget {
         ),
         const SizedBox(height: 20.0),
         FloatingActionButton(
-          onPressed: () =>
-              context.read<CounterBloc>().add(const CounterEvent.decrement()),
+          onPressed: () => counterBloc.add(const CounterEvent.decrement()),
           tooltip: 'Decrement',
           child: const Icon(Icons.remove),
         ),
         const SizedBox(height: 20.0),
         FloatingActionButton(
-          onPressed: () =>
-              context.read<CounterBloc>().add(const CounterEvent.reset()),
+          onPressed: () => counterBloc.add(const CounterEvent.reset()),
           tooltip: 'Reset',
           child: const Text(
             "0",
