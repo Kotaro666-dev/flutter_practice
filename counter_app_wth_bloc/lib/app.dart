@@ -1,5 +1,7 @@
+import 'package:counter_app_wth_bloc/features/counter/presentation/bloc/counter_bloc.dart';
 import 'package:counter_app_wth_bloc/features/counter/presentation/pages/counter_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,7 +15,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const CounterPage(),
+      home: BlocProvider(
+          create: (_) => CounterBloc(), child: const CounterPage()),
     );
   }
 }

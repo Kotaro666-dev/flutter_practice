@@ -1,5 +1,8 @@
+import 'package:counter_app_wth_bloc/features/counter/presentation/bloc/counter_bloc.dart';
+import 'package:counter_app_wth_bloc/features/counter/presentation/bloc/counter_state.dart';
 import 'package:counter_app_wth_bloc/features/counter/presentation/widgets/multiple_floating_action_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
@@ -28,9 +31,11 @@ class _Body extends StatelessWidget {
           const Text(
             'You have pushed the button this many times:',
           ),
-          Text(
-            '0',
-            style: Theme.of(context).textTheme.headlineMedium,
+          BlocBuilder<CounterBloc, CounterState>(
+            builder: (context, state) => Text(
+              "${state.value}",
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ),
         ],
       ),
